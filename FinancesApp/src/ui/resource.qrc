@@ -1,0 +1,18 @@
+<RCC>
+  <qresource prefix="root">
+    <file>imgs/dark-left-arrow.svg</file>
+    <file>imgs/dark-right-arrow.svg</file>
+    <file>imgs/light-left-arrow.svg</file>
+    <file>imgs/light-right-arrow.svg</file>
+    <file>imgs/light-filter.svg</file>
+    <file>imgs/dark-filter.svg</file>
+    <file>imgs/light-params.svg</file>
+    <file>imgs/dark-params.svg</file>
+    <file>imgs/light-pen.svg</file>
+    <file>imgs/dark-pen.svg</file>
+    <file>imgs/light-plus.svg</file>
+    <file>imgs/dark-plus.svg</file>
+    <file>imgs/light-trash.svg</file>
+    <file>imgs/dark-trash.svg</file>
+  </qresource>
+</RCC>

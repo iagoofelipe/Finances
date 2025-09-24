@@ -1,11 +1,14 @@
 from PySide6.QtWidgets import QWidget, QDialog, QApplication
-from PySide6.QtCharts import QChart, QChartView, QPieSeries, QBarSet, QHorizontalStackedBarSeries, QLineSeries, QDateTimeAxis, QValueAxis
+from PySide6.QtCharts import QChart, QChartView, QPieSeries, QLineSeries, QDateTimeAxis, QValueAxis
 from PySide6.QtCore import Qt, QMargins, QDateTime, Signal
-from PySide6.QtGui import QPainter, QPalette, QColor
+from PySide6.QtGui import QPainter, QPalette, QIcon
+from typing import Sequence
 
 from ..src.ui.auto.ui_DashForm import Ui_DashForm
 from .dashParamsView import DashParamsView
+from .components.HBarTwoValues import HBarTwoValues
 from ..models.structs import RegType, DashParams
+from ..models.tools import isDark
 from ..models.consts import DASH_DATE_START, DASH_DATE_END
 
 class DashView(QWidget):
@@ -13,14 +16,20 @@ class DashView(QWidget):
 
     def __init__(self, parent:QWidget = None):
         super().__init__(parent)
-        self.__textColor = QApplication.instance().palette().color(QPalette.ColorRole.Text)
+        palette = QApplication.instance().palette()
+        self.__textColor = palette.color(QPalette.ColorRole.Text)
         self.__ui = Ui_DashForm()
         self.__params = None
 
         self.__ui.setupUi(self)
         self.setParams(DashParams(True, DASH_DATE_START, DASH_DATE_END, RegType.IN))
-        self.__generateValuesCharts()
-        self.__generateDateChart()
+        self.setRegValues(110, 50.5)
+        self.setCardValues(10, 90)
+        self.setRegDateValues({
+            (QDateTime(2025, 9, 1, 0, 0, 0), 100),
+            (QDateTime(2025, 9, 13, 0, 0, 0), 10),
+            (QDateTime(2025, 9, 20, 0, 0, 0), 50.5),
+        }, 160.5)
 
         self.setCategories({
             ('Jacob', 1), 
@@ -30,7 +39,11 @@ class DashView(QWidget):
             ('Arrow', 5),
         })
 
+
         self.__ui.btnParams.clicked.connect(self.on_btnParams_clicked)
+
+        # updating icons
+        if isDark(): self.__ui.btnParams.setIcon(QIcon(u":/root/imgs/dark-params.svg"))
 
     def setParams(self, params:DashParams):
         regType = "Entradas" if params.regType == RegType.IN else "Saídas"
@@ -51,9 +64,7 @@ class DashView(QWidget):
 
     def setCategories(self, values:set[tuple[str, float]]):
         series = QPieSeries()
-
-        for v in values:
-            series.append(*v)
+        for v in values: series.append(*v)
 
         chart = QChart()
         chart.addSeries(series)
@@ -72,43 +83,25 @@ class DashView(QWidget):
         widOld.deleteLater()
         self.__ui.layoutCategory.replaceWidget(widOld, chartView)
 
-    def __generateValuesCharts(self):
-        set1 = QBarSet("Contabilizado")
-        set2 = QBarSet("Pendente")
-
-        set1 << 90
-        set2 << 10
-
-        set1.setColor(QColor("#125B7F"))
-        set2.setColor(QColor("#1B88BF"))
-        self.__ui.lbValRight.setText("R$ 90,00")
-        self.__ui.lbValLeft.setText("R$ 10,00")
-
-        serie = QHorizontalStackedBarSeries()
-        serie.append(set1)
-        serie.append(set2)
-
-        chart = QChart()
-        chart.addSeries(serie)
-        chart.setMargins(QMargins(0, 0, 0, 0))
-        chart.setBackgroundVisible(False)
-        chart.legend().hide()
-
-        widOld = self.__ui.widChartPercent
-        chartView = self.__ui.widChartPercent = QChartView(chart)
-        chartView.setRenderHint(QPainter.Antialiasing)
-        chartView.setStyleSheet("background-color: transparent")
-
+    def setRegValues(self, accounted:float, pending:float):
+        widOld = self.__ui.widRegsPercent
+        widNew = self.__ui.widRegsPercent = HBarTwoValues(accounted, pending, 'Contabilizado', 'Pendente', self.__ui.frameRegs)
+        self.__ui.layoutRegs.replaceWidget(widOld, widNew)
         widOld.deleteLater()
-        self.__ui.layoutPercent.replaceWidget(widOld, chartView)
 
-    def __generateDateChart(self):
+    def setCardValues(self, used:float, available:float):
+        widOld = self.__ui.widCardChart
+        widNew = self.__ui.widCardChart = HBarTwoValues(10, 90, 'Utilizado', 'Disponível', self.__ui.frameCard)
+        self.__ui.cardLayout.replaceWidget(widOld, widNew)
+        widOld.deleteLater()
+
+    def setRegDateValues(self, dates:Sequence[tuple[QDateTime, float]], total:float): 
+        self.__ui.lbValue.setText(f"R$ {total:.2f}")
+
         # Criar série de linha com datas
         serie = QLineSeries()
-        serie.append(QDateTime.fromString("2025-01-01", "yyyy-MM-dd").toMSecsSinceEpoch(), 10)
-        serie.append(QDateTime.fromString("2025-02-01", "yyyy-MM-dd").toMSecsSinceEpoch(), 20)
-        serie.append(QDateTime.fromString("2025-03-01", "yyyy-MM-dd").toMSecsSinceEpoch(), 15)
         serie.setPointsVisible(True)
+        for dt, val in dates: serie.append(dt.toMSecsSinceEpoch(), val)
 
         # Criar gráfico
         chart = QChart()
@@ -142,4 +135,4 @@ class DashView(QWidget):
         chartView.setStyleSheet("background-color: transparent")
 
         widOld.deleteLater()
-        self.__ui.layoutValues.replaceWidget(widOld, chartView)
+        self.__ui.layoutRegs.replaceWidget(widOld, chartView)

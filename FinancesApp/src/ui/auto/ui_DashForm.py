@@ -15,9 +15,10 @@ from PySide6.QtGui import (QBrush, QColor, QConicalGradient, QCursor,
     QFont, QFontDatabase, QGradient, QIcon,
     QImage, QKeySequence, QLinearGradient, QPainter,
     QPalette, QPixmap, QRadialGradient, QTransform)
-from PySide6.QtWidgets import (QApplication, QFrame, QGridLayout, QHBoxLayout,
+from PySide6.QtWidgets import (QApplication, QComboBox, QFrame, QHBoxLayout,
     QLabel, QPushButton, QSizePolicy, QSpacerItem,
     QVBoxLayout, QWidget)
+from . import resource_rc
 
 class Ui_DashForm(object):
     def setupUi(self, DashForm):
@@ -59,6 +60,12 @@ class Ui_DashForm(object):
 
         self.btnParams = QPushButton(self.widget)
         self.btnParams.setObjectName(u"btnParams")
+        self.btnParams.setStyleSheet(u"background-color: transparent; padding: 5")
+        icon = QIcon()
+        icon.addFile(u":/root/imgs/light-params.svg", QSize(), QIcon.Mode.Normal, QIcon.State.Off)
+        self.btnParams.setIcon(icon)
+        self.btnParams.setIconSize(QSize(25, 25))
+        self.btnParams.setFlat(True)
 
         self.horizontalLayout.addWidget(self.btnParams)
 
@@ -71,13 +78,13 @@ class Ui_DashForm(object):
         self.horizontalLayout_2.setSpacing(10)
         self.horizontalLayout_2.setObjectName(u"horizontalLayout_2")
         self.horizontalLayout_2.setContentsMargins(0, 0, 0, 0)
-        self.frame = QFrame(self.widget_2)
-        self.frame.setObjectName(u"frame")
-        self.frame.setFrameShape(QFrame.StyledPanel)
-        self.frame.setFrameShadow(QFrame.Raised)
-        self.layoutValues = QVBoxLayout(self.frame)
-        self.layoutValues.setObjectName(u"layoutValues")
-        self.widget_4 = QWidget(self.frame)
+        self.frameRegs = QFrame(self.widget_2)
+        self.frameRegs.setObjectName(u"frameRegs")
+        self.frameRegs.setFrameShape(QFrame.StyledPanel)
+        self.frameRegs.setFrameShadow(QFrame.Raised)
+        self.layoutRegs = QVBoxLayout(self.frameRegs)
+        self.layoutRegs.setObjectName(u"layoutRegs")
+        self.widget_4 = QWidget(self.frameRegs)
         self.widget_4.setObjectName(u"widget_4")
         self.horizontalLayout_3 = QHBoxLayout(self.widget_4)
         self.horizontalLayout_3.setSpacing(0)
@@ -97,70 +104,31 @@ class Ui_DashForm(object):
         self.horizontalLayout_3.addWidget(self.lbValue)
 
 
-        self.layoutValues.addWidget(self.widget_4)
+        self.layoutRegs.addWidget(self.widget_4)
 
-        self.widChartDate = QFrame(self.frame)
+        self.widChartDate = QFrame(self.frameRegs)
         self.widChartDate.setObjectName(u"widChartDate")
         self.widChartDate.setFrameShape(QFrame.StyledPanel)
         self.widChartDate.setFrameShadow(QFrame.Raised)
 
-        self.layoutValues.addWidget(self.widChartDate)
+        self.layoutRegs.addWidget(self.widChartDate)
 
-        self.widPercent = QWidget(self.frame)
-        self.widPercent.setObjectName(u"widPercent")
-        self.layoutPercent = QGridLayout(self.widPercent)
-        self.layoutPercent.setObjectName(u"layoutPercent")
-        self.layoutPercent.setHorizontalSpacing(0)
-        self.layoutPercent.setVerticalSpacing(10)
-        self.layoutPercent.setContentsMargins(0, 0, 0, 0)
-        self.label_5 = QLabel(self.widPercent)
-        self.label_5.setObjectName(u"label_5")
-        sizePolicy = QSizePolicy(QSizePolicy.Policy.Preferred, QSizePolicy.Policy.Fixed)
-        sizePolicy.setHorizontalStretch(0)
-        sizePolicy.setVerticalStretch(0)
-        sizePolicy.setHeightForWidth(self.label_5.sizePolicy().hasHeightForWidth())
-        self.label_5.setSizePolicy(sizePolicy)
-        self.label_5.setAlignment(Qt.AlignRight|Qt.AlignTrailing|Qt.AlignVCenter)
+        self.widRegsPercent = QWidget(self.frameRegs)
+        self.widRegsPercent.setObjectName(u"widRegsPercent")
 
-        self.layoutPercent.addWidget(self.label_5, 0, 1, 1, 1)
+        self.layoutRegs.addWidget(self.widRegsPercent)
 
-        self.label_4 = QLabel(self.widPercent)
-        self.label_4.setObjectName(u"label_4")
-        sizePolicy.setHeightForWidth(self.label_4.sizePolicy().hasHeightForWidth())
-        self.label_4.setSizePolicy(sizePolicy)
+        self.layoutRegs.setStretch(1, 1)
 
-        self.layoutPercent.addWidget(self.label_4, 0, 0, 1, 1)
+        self.horizontalLayout_2.addWidget(self.frameRegs)
 
-        self.widChartPercent = QFrame(self.widPercent)
-        self.widChartPercent.setObjectName(u"widChartPercent")
-        self.widChartPercent.setFrameShape(QFrame.StyledPanel)
-        self.widChartPercent.setFrameShadow(QFrame.Raised)
-
-        self.layoutPercent.addWidget(self.widChartPercent, 1, 0, 1, 2)
-
-        self.lbValRight = QLabel(self.widPercent)
-        self.lbValRight.setObjectName(u"lbValRight")
-        sizePolicy.setHeightForWidth(self.lbValRight.sizePolicy().hasHeightForWidth())
-        self.lbValRight.setSizePolicy(sizePolicy)
-
-        self.layoutPercent.addWidget(self.lbValRight, 2, 0, 1, 1)
-
-        self.lbValLeft = QLabel(self.widPercent)
-        self.lbValLeft.setObjectName(u"lbValLeft")
-        sizePolicy.setHeightForWidth(self.lbValLeft.sizePolicy().hasHeightForWidth())
-        self.lbValLeft.setSizePolicy(sizePolicy)
-        self.lbValLeft.setAlignment(Qt.AlignRight|Qt.AlignTrailing|Qt.AlignVCenter)
-
-        self.layoutPercent.addWidget(self.lbValLeft, 2, 1, 1, 1)
-
-
-        self.layoutValues.addWidget(self.widPercent)
-
-        self.layoutValues.setStretch(1, 1)
-
-        self.horizontalLayout_2.addWidget(self.frame)
-
-        self.frameCategory = QFrame(self.widget_2)
+        self.widget_3 = QWidget(self.widget_2)
+        self.widget_3.setObjectName(u"widget_3")
+        self.verticalLayout_2 = QVBoxLayout(self.widget_3)
+        self.verticalLayout_2.setSpacing(10)
+        self.verticalLayout_2.setObjectName(u"verticalLayout_2")
+        self.verticalLayout_2.setContentsMargins(0, 0, 0, 0)
+        self.frameCategory = QFrame(self.widget_3)
         self.frameCategory.setObjectName(u"frameCategory")
         self.frameCategory.setFrameShape(QFrame.StyledPanel)
         self.frameCategory.setFrameShadow(QFrame.Raised)
@@ -168,6 +136,9 @@ class Ui_DashForm(object):
         self.layoutCategory.setObjectName(u"layoutCategory")
         self.label_6 = QLabel(self.frameCategory)
         self.label_6.setObjectName(u"label_6")
+        sizePolicy = QSizePolicy(QSizePolicy.Policy.Preferred, QSizePolicy.Policy.Fixed)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
         sizePolicy.setHeightForWidth(self.label_6.sizePolicy().hasHeightForWidth())
         self.label_6.setSizePolicy(sizePolicy)
         self.label_6.setFont(font1)
@@ -180,10 +151,73 @@ class Ui_DashForm(object):
         self.layoutCategory.addWidget(self.widChartCategory)
 
 
-        self.horizontalLayout_2.addWidget(self.frameCategory)
+        self.verticalLayout_2.addWidget(self.frameCategory)
 
-        self.horizontalLayout_2.setStretch(0, 3)
-        self.horizontalLayout_2.setStretch(1, 2)
+        self.frameCard = QFrame(self.widget_3)
+        self.frameCard.setObjectName(u"frameCard")
+        self.frameCard.setFrameShape(QFrame.StyledPanel)
+        self.frameCard.setFrameShadow(QFrame.Raised)
+        self.cardLayout = QVBoxLayout(self.frameCard)
+        self.cardLayout.setObjectName(u"cardLayout")
+        self.widget_5 = QWidget(self.frameCard)
+        self.widget_5.setObjectName(u"widget_5")
+        sizePolicy.setHeightForWidth(self.widget_5.sizePolicy().hasHeightForWidth())
+        self.widget_5.setSizePolicy(sizePolicy)
+        self.horizontalLayout_4 = QHBoxLayout(self.widget_5)
+        self.horizontalLayout_4.setSpacing(10)
+        self.horizontalLayout_4.setObjectName(u"horizontalLayout_4")
+        self.horizontalLayout_4.setContentsMargins(0, 0, 0, 0)
+        self.label_2 = QLabel(self.widget_5)
+        self.label_2.setObjectName(u"label_2")
+        self.label_2.setFont(font1)
+
+        self.horizontalLayout_4.addWidget(self.label_2)
+
+        self.cbCard = QComboBox(self.widget_5)
+        self.cbCard.addItem("")
+        self.cbCard.addItem("")
+        self.cbCard.addItem("")
+        self.cbCard.setObjectName(u"cbCard")
+        sizePolicy1 = QSizePolicy(QSizePolicy.Policy.Fixed, QSizePolicy.Policy.Fixed)
+        sizePolicy1.setHorizontalStretch(0)
+        sizePolicy1.setVerticalStretch(0)
+        sizePolicy1.setHeightForWidth(self.cbCard.sizePolicy().hasHeightForWidth())
+        self.cbCard.setSizePolicy(sizePolicy1)
+
+        self.horizontalLayout_4.addWidget(self.cbCard)
+
+
+        self.cardLayout.addWidget(self.widget_5)
+
+        self.widCardChart = QWidget(self.frameCard)
+        self.widCardChart.setObjectName(u"widCardChart")
+
+        self.cardLayout.addWidget(self.widCardChart)
+
+        self.lbCardLimit = QLabel(self.frameCard)
+        self.lbCardLimit.setObjectName(u"lbCardLimit")
+
+        self.cardLayout.addWidget(self.lbCardLimit)
+
+        self.lbCurrentInvoice = QLabel(self.frameCard)
+        self.lbCurrentInvoice.setObjectName(u"lbCurrentInvoice")
+
+        self.cardLayout.addWidget(self.lbCurrentInvoice)
+
+        self.lbInvoiceExpected = QLabel(self.frameCard)
+        self.lbInvoiceExpected.setObjectName(u"lbInvoiceExpected")
+
+        self.cardLayout.addWidget(self.lbInvoiceExpected)
+
+        self.cardLayout.setStretch(1, 1)
+
+        self.verticalLayout_2.addWidget(self.frameCard)
+
+        self.verticalLayout_2.setStretch(0, 1)
+        self.verticalLayout_2.setStretch(1, 1)
+
+        self.horizontalLayout_2.addWidget(self.widget_3)
+
 
         self.verticalLayout.addWidget(self.widget_2)
 
@@ -198,13 +232,19 @@ class Ui_DashForm(object):
         DashForm.setWindowTitle(QCoreApplication.translate("DashForm", u"Form", None))
         self.label.setText(QCoreApplication.translate("DashForm", u"Dashboard", None))
         self.lbDesc.setText(QCoreApplication.translate("DashForm", u"<DT_START> - <DT_END>", None))
-        self.btnParams.setText(QCoreApplication.translate("DashForm", u"par\u00e2metros", None))
+#if QT_CONFIG(tooltip)
+        self.btnParams.setToolTip(QCoreApplication.translate("DashForm", u"par\u00e2metros", None))
+#endif // QT_CONFIG(tooltip)
         self.lbRegType.setText(QCoreApplication.translate("DashForm", u"<REG_TYPE>", None))
         self.lbValue.setText(QCoreApplication.translate("DashForm", u"R$ 0,00", None))
-        self.label_5.setText(QCoreApplication.translate("DashForm", u"Pendente", None))
-        self.label_4.setText(QCoreApplication.translate("DashForm", u"Contabilizado", None))
-        self.lbValRight.setText(QCoreApplication.translate("DashForm", u"R$ 0,00", None))
-        self.lbValLeft.setText(QCoreApplication.translate("DashForm", u"R$ 0,00", None))
         self.label_6.setText(QCoreApplication.translate("DashForm", u"Categorias", None))
+        self.label_2.setText(QCoreApplication.translate("DashForm", u"Cart\u00f5es", None))
+        self.cbCard.setItemText(0, QCoreApplication.translate("DashForm", u"Nubank", None))
+        self.cbCard.setItemText(1, QCoreApplication.translate("DashForm", u"Will", None))
+        self.cbCard.setItemText(2, QCoreApplication.translate("DashForm", u"Santander", None))
+
+        self.lbCardLimit.setText(QCoreApplication.translate("DashForm", u"Limite Total R$ 0,00", None))
+        self.lbCurrentInvoice.setText(QCoreApplication.translate("DashForm", u"Fatura Atual R$ 0,00", None))
+        self.lbInvoiceExpected.setText(QCoreApplication.translate("DashForm", u"Fatura Prevista R$0,00", None))
     # retranslateUi
 

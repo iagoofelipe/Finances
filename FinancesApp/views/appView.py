@@ -3,6 +3,7 @@ from PySide6.QtCore import QObject, Signal
 
 from ..src.ui.auto.ui_HomeForm import Ui_HomeForm
 from .dashView import DashView
+from .regView import RegView
 from ..models.appModel import AppModel
 from ..models.structs import AppViewMode
 
@@ -37,7 +38,7 @@ class AppView(QObject):
                 btnNav = self.__ui.btnDash
 
             case mode.REGISTRIES:
-                widNew = QWidget()
+                widNew = RegView(self.__wid)
                 btnNav = self.__ui.btnReg
 
             case _:
