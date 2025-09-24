@@ -1,5 +1,13 @@
 <RCC>
   <qresource prefix="root">
+    <file>imgs/dark-pie.svg</file>
+    <file>imgs/dark-table.svg</file>
+    <file>imgs/light-pie.svg</file>
+    <file>imgs/light-table.svg</file>
+    <file>imgs/dark-eye.svg</file>
+    <file>imgs/dark-eye-slash.svg</file>
+    <file>imgs/light-eye.svg</file>
+    <file>imgs/light-eye-slash.svg</file>
     <file>imgs/dark-left-arrow.svg</file>
     <file>imgs/dark-right-arrow.svg</file>
     <file>imgs/light-left-arrow.svg</file>

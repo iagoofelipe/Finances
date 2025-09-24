@@ -22,7 +22,7 @@ class DashView(QWidget):
         self.__params = None
 
         self.__ui.setupUi(self)
-        self.setParams(DashParams(True, DASH_DATE_START, DASH_DATE_END, RegType.IN))
+        self.setParams(DashParams(DASH_DATE_START, DASH_DATE_END, RegType.IN))
         self.setRegValues(110, 50.5)
         self.setCardValues(10, 90)
         self.setRegDateValues({
@@ -91,7 +91,7 @@ class DashView(QWidget):
 
     def setCardValues(self, used:float, available:float):
         widOld = self.__ui.widCardChart
-        widNew = self.__ui.widCardChart = HBarTwoValues(10, 90, 'Utilizado', 'Disponível', self.__ui.frameCard)
+        widNew = self.__ui.widCardChart = HBarTwoValues(used, available, 'Utilizado', 'Disponível', self.__ui.frameCard)
         self.__ui.cardLayout.replaceWidget(widOld, widNew)
         widOld.deleteLater()
 

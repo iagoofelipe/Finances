@@ -11,8 +11,14 @@ class RegType(Enum):
     OUT = auto()
 
 @dataclass
+class RegCategory:
+    id: int
+    name: str
+
+@dataclass
 class DashParams:
-    thirdParties: bool
     start: QDate
     end: QDate
     regType: RegType
+    # allCategories: bool
+    # categories: set[RegCategory] | None

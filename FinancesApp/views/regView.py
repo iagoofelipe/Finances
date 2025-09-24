@@ -18,3 +18,7 @@ class RegView(QWidget):
             self.__ui.btnAdd.setIcon(QIcon(u":/root/imgs/dark-plus.svg"))
             self.__ui.btnPrev.setIcon(QIcon(u":/root/imgs/dark-left-arrow.svg"))
             self.__ui.btnNext.setIcon(QIcon(u":/root/imgs/dark-right-arrow.svg"))
+            self.__ui.btnAddCard.setIcon(QIcon(u":/root/imgs/dark-plus.svg"))
+            self.__ui.btnAddCat.setIcon(QIcon(u":/root/imgs/dark-plus.svg"))
+            self.__ui.btnDetails.setIcon(QIcon(u":/root/imgs/dark-eye.svg"))
+            self.__ui.btnHide.setIcon(QIcon(u":/root/imgs/dark-eye-slash.svg"))

@@ -38,6 +38,9 @@
    <item>
     <widget class="QWidget" name="widget" native="true">
      <layout class="QHBoxLayout" name="horizontalLayout">
+      <property name="spacing">
+       <number>2</number>
+      </property>
       <property name="leftMargin">
        <number>0</number>
       </property>
@@ -333,6 +336,11 @@
             </item>
             <item>
              <widget class="QLabel" name="lbCardLimit">
+              <property name="font">
+               <font>
+                <pointsize>9</pointsize>
+               </font>
+              </property>
               <property name="text">
                <string>Limite Total R$ 0,00</string>
               </property>
@@ -340,6 +348,11 @@
             </item>
             <item>
              <widget class="QLabel" name="lbCurrentInvoice">
+              <property name="font">
+               <font>
+                <pointsize>9</pointsize>
+               </font>
+              </property>
               <property name="text">
                <string>Fatura Atual R$ 0,00</string>
               </property>
@@ -347,6 +360,11 @@
             </item>
             <item>
              <widget class="QLabel" name="lbInvoiceExpected">
+              <property name="font">
+               <font>
+                <pointsize>9</pointsize>
+               </font>
+              </property>
               <property name="text">
                <string>Fatura Prevista R$0,00</string>
               </property>

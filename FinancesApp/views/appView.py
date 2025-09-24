@@ -1,11 +1,13 @@
 from PySide6.QtWidgets import QMainWindow, QWidget
 from PySide6.QtCore import QObject, Signal
+from PySide6.QtGui import QIcon
 
 from ..src.ui.auto.ui_HomeForm import Ui_HomeForm
 from .dashView import DashView
 from .regView import RegView
 from ..models.appModel import AppModel
 from ..models.structs import AppViewMode
+from ..models.tools import isDark
 
 class AppView(QObject):
     def __init__(self, model:AppModel):
@@ -25,7 +27,12 @@ class AppView(QObject):
         self.__ui.btnReg.clicked.connect(lambda: self.setMode(AppViewMode.REGISTRIES))
 
         self.__win.setCentralWidget(self.__wid)
-        self.setMode(AppViewMode.DASHBOARD)
+        self.setMode(AppViewMode.REGISTRIES)
+
+        if isDark():
+            self.__ui.btnDash.setIcon(QIcon(u":/root/imgs/dark-pie.svg"))
+            self.__ui.btnReg.setIcon(QIcon(u":/root/imgs/dark-table.svg"))
+
         self.__win.show()
 
     def setMode(self, mode:AppViewMode):

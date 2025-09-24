@@ -9,11 +9,10 @@ class DashParamsView(QDialog):
         self.__ui = Ui_DashParamsForm()
 
         self.__ui.setupUi(self)
-        self.setFixedSize(450, 190)
+        self.setFixedSize(558, 412)
 
         # setting params
         if params:
-            self.__ui.cbThird.setChecked(params.thirdParties)
             self.__ui.dtStart.setDate(params.start)
             self.__ui.dtEnd.setDate(params.end)
             
@@ -23,12 +22,10 @@ class DashParamsView(QDialog):
                 self.__ui.rbOut.setChecked(True)
 
         else:
-            self.__ui.cbThird.setChecked(True)
             self.__ui.rbIn.setChecked(True)
 
     def getParams(self) -> DashParams:
         return DashParams(
-            self.__ui.cbThird.isChecked(),
             self.__ui.dtStart.date(),
             self.__ui.dtEnd.date(),
             RegType.IN if self.__ui.rbIn.isChecked() else RegType.OUT

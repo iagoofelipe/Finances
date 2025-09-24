@@ -36,6 +36,7 @@ class Ui_DashForm(object):
         self.widget = QWidget(DashForm)
         self.widget.setObjectName(u"widget")
         self.horizontalLayout = QHBoxLayout(self.widget)
+        self.horizontalLayout.setSpacing(2)
         self.horizontalLayout.setObjectName(u"horizontalLayout")
         self.horizontalLayout.setContentsMargins(0, 0, 0, 0)
         self.label = QLabel(self.widget)
@@ -196,16 +197,21 @@ class Ui_DashForm(object):
 
         self.lbCardLimit = QLabel(self.frameCard)
         self.lbCardLimit.setObjectName(u"lbCardLimit")
+        font3 = QFont()
+        font3.setPointSize(9)
+        self.lbCardLimit.setFont(font3)
 
         self.cardLayout.addWidget(self.lbCardLimit)
 
         self.lbCurrentInvoice = QLabel(self.frameCard)
         self.lbCurrentInvoice.setObjectName(u"lbCurrentInvoice")
+        self.lbCurrentInvoice.setFont(font3)
 
         self.cardLayout.addWidget(self.lbCurrentInvoice)
 
         self.lbInvoiceExpected = QLabel(self.frameCard)
         self.lbInvoiceExpected.setObjectName(u"lbInvoiceExpected")
+        self.lbInvoiceExpected.setFont(font3)
 
         self.cardLayout.addWidget(self.lbInvoiceExpected)
 
