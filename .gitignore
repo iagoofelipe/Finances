@@ -1,3 +1,5 @@
 *__pycache__
 *.cfg
 *.ini
+*.sqlite3
+*.db
