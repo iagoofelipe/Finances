@@ -1,5 +1,11 @@
 <RCC>
   <qresource prefix="root">
+    <file>imgs/dark-card.svg</file>
+    <file>imgs/light-card.svg</file>
+    <file>imgs/dark-gear.svg</file>
+    <file>imgs/dark-user.svg</file>
+    <file>imgs/light-gear.svg</file>
+    <file>imgs/light-user.svg</file>
     <file>imgs/dark-pie.svg</file>
     <file>imgs/dark-table.svg</file>
     <file>imgs/light-pie.svg</file>

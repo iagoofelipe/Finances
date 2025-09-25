@@ -57,19 +57,6 @@
        <number>2</number>
       </property>
       <item>
-       <spacer name="verticalSpacer">
-        <property name="orientation">
-         <enum>Qt::Vertical</enum>
-        </property>
-        <property name="sizeHint" stdset="0">
-         <size>
-          <width>20</width>
-          <height>141</height>
-         </size>
-        </property>
-       </spacer>
-      </item>
-      <item>
        <widget class="QPushButton" name="btnDash">
         <property name="font">
          <font>
@@ -78,7 +65,7 @@
          </font>
         </property>
         <property name="text">
-         <string>Dashboard</string>
+         <string>Dashboard        </string>
         </property>
         <property name="icon">
          <iconset resource="resource.qrc">
@@ -104,11 +91,37 @@
          </font>
         </property>
         <property name="text">
-         <string>Registros   </string>
+         <string>Registros           </string>
         </property>
         <property name="icon">
          <iconset resource="resource.qrc">
           <normaloff>:/root/imgs/light-table.svg</normaloff>:/root/imgs/light-table.svg</iconset>
+        </property>
+        <property name="iconSize">
+         <size>
+          <width>25</width>
+          <height>25</height>
+         </size>
+        </property>
+        <property name="flat">
+         <bool>true</bool>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QPushButton" name="btnCard">
+        <property name="font">
+         <font>
+          <family>Segoe UI</family>
+          <pointsize>11</pointsize>
+         </font>
+        </property>
+        <property name="text">
+         <string>Banco e Cartões</string>
+        </property>
+        <property name="icon">
+         <iconset resource="resource.qrc">
+          <normaloff>:/root/imgs/light-card.svg</normaloff>:/root/imgs/light-card.svg</iconset>
         </property>
         <property name="iconSize">
          <size>
@@ -133,6 +146,58 @@
          </size>
         </property>
        </spacer>
+      </item>
+      <item>
+       <widget class="QPushButton" name="btnUser">
+        <property name="font">
+         <font>
+          <family>Segoe UI</family>
+          <pointsize>11</pointsize>
+         </font>
+        </property>
+        <property name="text">
+         <string>Usuário              </string>
+        </property>
+        <property name="icon">
+         <iconset resource="resource.qrc">
+          <normaloff>:/root/imgs/light-user.svg</normaloff>:/root/imgs/light-user.svg</iconset>
+        </property>
+        <property name="iconSize">
+         <size>
+          <width>25</width>
+          <height>25</height>
+         </size>
+        </property>
+        <property name="flat">
+         <bool>true</bool>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QPushButton" name="btnConfig">
+        <property name="font">
+         <font>
+          <family>Segoe UI</family>
+          <pointsize>11</pointsize>
+         </font>
+        </property>
+        <property name="text">
+         <string>Configurações   </string>
+        </property>
+        <property name="icon">
+         <iconset resource="resource.qrc">
+          <normaloff>:/root/imgs/light-gear.svg</normaloff>:/root/imgs/light-gear.svg</iconset>
+        </property>
+        <property name="iconSize">
+         <size>
+          <width>25</width>
+          <height>25</height>
+         </size>
+        </property>
+        <property name="flat">
+         <bool>true</bool>
+        </property>
+       </widget>
       </item>
      </layout>
     </widget>

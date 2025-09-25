@@ -25,6 +25,9 @@ class AppView(QObject):
 
         self.__ui.btnDash.clicked.connect(lambda: self.setMode(AppViewMode.DASHBOARD))
         self.__ui.btnReg.clicked.connect(lambda: self.setMode(AppViewMode.REGISTRIES))
+        self.__ui.btnCard.clicked.connect(lambda: self.setMode(AppViewMode.CARD))
+        self.__ui.btnUser.clicked.connect(lambda: self.setMode(AppViewMode.USER))
+        self.__ui.btnConfig.clicked.connect(lambda: self.setMode(AppViewMode.CONFIG))
 
         self.__win.setCentralWidget(self.__wid)
         self.setMode(AppViewMode.REGISTRIES)
@@ -32,6 +35,9 @@ class AppView(QObject):
         if isDark():
             self.__ui.btnDash.setIcon(QIcon(u":/root/imgs/dark-pie.svg"))
             self.__ui.btnReg.setIcon(QIcon(u":/root/imgs/dark-table.svg"))
+            self.__ui.btnCard.setIcon(QIcon(u":/root/imgs/dark-card.svg"))
+            self.__ui.btnUser.setIcon(QIcon(u":/root/imgs/dark-user.svg"))
+            self.__ui.btnConfig.setIcon(QIcon(u":/root/imgs/dark-gear.svg"))
 
         self.__win.show()
 
@@ -48,8 +54,17 @@ class AppView(QObject):
                 widNew = RegView(self.__wid)
                 btnNav = self.__ui.btnReg
 
-            case _:
-                return
+            case mode.CARD:
+                widNew = QWidget(self.__wid)
+                btnNav = self.__ui.btnCard
+
+            case mode.USER:
+                widNew = QWidget(self.__wid)
+                btnNav = self.__ui.btnUser
+
+            case mode.CONFIG:
+                widNew = QWidget(self.__wid)
+                btnNav = self.__ui.btnConfig
 
         if self.__btnNav:
             self.__btnNav.setDisabled(False)

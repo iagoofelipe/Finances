@@ -41,10 +41,6 @@ class Ui_HomeForm(object):
         self.verticalLayout = QVBoxLayout(self.frame)
         self.verticalLayout.setSpacing(2)
         self.verticalLayout.setObjectName(u"verticalLayout")
-        self.verticalSpacer = QSpacerItem(20, 141, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Expanding)
-
-        self.verticalLayout.addItem(self.verticalSpacer)
-
         self.btnDash = QPushButton(self.frame)
         self.btnDash.setObjectName(u"btnDash")
         self.btnDash.setFont(font)
@@ -67,9 +63,42 @@ class Ui_HomeForm(object):
 
         self.verticalLayout.addWidget(self.btnReg)
 
+        self.btnCard = QPushButton(self.frame)
+        self.btnCard.setObjectName(u"btnCard")
+        self.btnCard.setFont(font)
+        icon2 = QIcon()
+        icon2.addFile(u":/root/imgs/light-card.svg", QSize(), QIcon.Mode.Normal, QIcon.State.Off)
+        self.btnCard.setIcon(icon2)
+        self.btnCard.setIconSize(QSize(25, 25))
+        self.btnCard.setFlat(True)
+
+        self.verticalLayout.addWidget(self.btnCard)
+
         self.verticalSpacer_2 = QSpacerItem(20, 141, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Expanding)
 
         self.verticalLayout.addItem(self.verticalSpacer_2)
+
+        self.btnUser = QPushButton(self.frame)
+        self.btnUser.setObjectName(u"btnUser")
+        self.btnUser.setFont(font)
+        icon3 = QIcon()
+        icon3.addFile(u":/root/imgs/light-user.svg", QSize(), QIcon.Mode.Normal, QIcon.State.Off)
+        self.btnUser.setIcon(icon3)
+        self.btnUser.setIconSize(QSize(25, 25))
+        self.btnUser.setFlat(True)
+
+        self.verticalLayout.addWidget(self.btnUser)
+
+        self.btnConfig = QPushButton(self.frame)
+        self.btnConfig.setObjectName(u"btnConfig")
+        self.btnConfig.setFont(font)
+        icon4 = QIcon()
+        icon4.addFile(u":/root/imgs/light-gear.svg", QSize(), QIcon.Mode.Normal, QIcon.State.Off)
+        self.btnConfig.setIcon(icon4)
+        self.btnConfig.setIconSize(QSize(25, 25))
+        self.btnConfig.setFlat(True)
+
+        self.verticalLayout.addWidget(self.btnConfig)
 
 
         self.mainLayout.addWidget(self.frame)
@@ -88,7 +117,10 @@ class Ui_HomeForm(object):
 
     def retranslateUi(self, HomeForm):
         HomeForm.setWindowTitle(QCoreApplication.translate("HomeForm", u"Form", None))
-        self.btnDash.setText(QCoreApplication.translate("HomeForm", u"Dashboard", None))
-        self.btnReg.setText(QCoreApplication.translate("HomeForm", u"Registros   ", None))
+        self.btnDash.setText(QCoreApplication.translate("HomeForm", u"Dashboard        ", None))
+        self.btnReg.setText(QCoreApplication.translate("HomeForm", u"Registros           ", None))
+        self.btnCard.setText(QCoreApplication.translate("HomeForm", u"Banco e Cart\u00f5es", None))
+        self.btnUser.setText(QCoreApplication.translate("HomeForm", u"Usu\u00e1rio              ", None))
+        self.btnConfig.setText(QCoreApplication.translate("HomeForm", u"Configura\u00e7\u00f5es   ", None))
     # retranslateUi
 

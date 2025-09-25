@@ -5,6 +5,9 @@ from PySide6.QtCore import QDate
 class AppViewMode(Enum):
     DASHBOARD = auto()
     REGISTRIES = auto()
+    CARD = auto()
+    USER = auto()
+    CONFIG = auto()
 
 class RegType(Enum):
     IN = auto()
