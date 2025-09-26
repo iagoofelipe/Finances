@@ -1,78 +1,55 @@
-from PySide6.QtWidgets import QMainWindow, QWidget
+from PySide6.QtWidgets import QMainWindow
 from PySide6.QtCore import QObject, Signal
-from PySide6.QtGui import QIcon
 
-from ..src.ui.auto.ui_HomeForm import Ui_HomeForm
-from .dashView import DashView
-from .regView import RegView
 from ..models.appModel import AppModel
-from ..models.structs import AppViewMode
-from ..models.tools import isDark
+from .homeView import HomeView
+from .loginView import LoginView
+
+from enum import Enum, auto
 
 class AppView(QObject):
+    displayModeChanged = Signal(object)
+
+    class DisplayMode(Enum):
+        Home = auto()
+        Login = auto()
+
     def __init__(self, model:AppModel):
         super().__init__()
         self.__model = model
         self.__win = QMainWindow()
-        self.__wid = QWidget()
-        self.__ui = Ui_HomeForm()
-        self.__btnNav = None
+        self.__currentDisplay = None
 
     def initialize(self):
         self.__win.setMinimumSize(900, 550)
         self.__win.setWindowTitle('Finances')
-        self.__ui.setupUi(self.__wid)
-
-        self.__ui.btnDash.clicked.connect(lambda: self.setMode(AppViewMode.DASHBOARD))
-        self.__ui.btnReg.clicked.connect(lambda: self.setMode(AppViewMode.REGISTRIES))
-        self.__ui.btnCard.clicked.connect(lambda: self.setMode(AppViewMode.CARD))
-        self.__ui.btnUser.clicked.connect(lambda: self.setMode(AppViewMode.USER))
-        self.__ui.btnConfig.clicked.connect(lambda: self.setMode(AppViewMode.CONFIG))
-
-        self.__win.setCentralWidget(self.__wid)
-        self.setMode(AppViewMode.REGISTRIES)
-
-        if isDark():
-            self.__ui.btnDash.setIcon(QIcon(u":/root/imgs/dark-pie.svg"))
-            self.__ui.btnReg.setIcon(QIcon(u":/root/imgs/dark-table.svg"))
-            self.__ui.btnCard.setIcon(QIcon(u":/root/imgs/dark-card.svg"))
-            self.__ui.btnUser.setIcon(QIcon(u":/root/imgs/dark-user.svg"))
-            self.__ui.btnConfig.setIcon(QIcon(u":/root/imgs/dark-gear.svg"))
-
+        self.setDisplayMode(self.DisplayMode.Login)
+        self.__loginView.setDisabled(True)
         self.__win.show()
 
-    def setMode(self, mode:AppViewMode):
-        widOld = self.__ui.widContent
-        # print('mode changed to', mode.name)
-        
+    def setDisplayMode(self, mode:DisplayMode):
+        if self.__currentDisplay == mode:
+            return
+
         match mode:
-            case mode.DASHBOARD:
-                widNew = DashView(self.__wid)
-                btnNav = self.__ui.btnDash
+            case self.DisplayMode.Home:
+                self.__homeView = wid = HomeView(self.__model)
 
-            case mode.REGISTRIES:
-                widNew = RegView(self.__wid)
-                btnNav = self.__ui.btnReg
+            case self.DisplayMode.Login:
+                self.__loginView = wid = LoginView(self.__model)
 
-            case mode.CARD:
-                widNew = QWidget(self.__wid)
-                btnNav = self.__ui.btnCard
+            case _:
+                raise ValueError(f'{mode} is not a valid display mode to AppView')
 
-            case mode.USER:
-                widNew = QWidget(self.__wid)
-                btnNav = self.__ui.btnUser
+        self.__currentDisplay = mode
+        self.__win.setCentralWidget(wid)
+        
+        self.displayModeChanged.emit(mode)
 
-            case mode.CONFIG:
-                widNew = QWidget(self.__wid)
-                btnNav = self.__ui.btnConfig
-
-        if self.__btnNav:
-            self.__btnNav.setDisabled(False)
-
-        if btnNav:
-            self.__btnNav = btnNav
-            btnNav.setDisabled(True)
-
-        self.__ui.widContent = widNew
-        self.__ui.mainLayout.replaceWidget(widOld, widNew)
-        widOld.deleteLater()
+    def loginView(self) -> LoginView | None:
+        if self.__currentDisplay == self.DisplayMode.Login:
+            return self.__loginView
+        
+    def homeView(self) -> HomeView | None:
+        if self.__currentDisplay == self.DisplayMode.Home:
+            return self.__homeView

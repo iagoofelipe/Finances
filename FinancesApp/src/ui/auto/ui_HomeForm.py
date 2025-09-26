@@ -74,6 +74,13 @@ class Ui_HomeForm(object):
 
         self.verticalLayout.addWidget(self.btnCard)
 
+        self.line_2 = QFrame(self.frame)
+        self.line_2.setObjectName(u"line_2")
+        self.line_2.setFrameShape(QFrame.Shape.HLine)
+        self.line_2.setFrameShadow(QFrame.Shadow.Sunken)
+
+        self.verticalLayout.addWidget(self.line_2)
+
         self.verticalSpacer_2 = QSpacerItem(20, 141, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Expanding)
 
         self.verticalLayout.addItem(self.verticalSpacer_2)
@@ -100,6 +107,24 @@ class Ui_HomeForm(object):
 
         self.verticalLayout.addWidget(self.btnConfig)
 
+        self.line = QFrame(self.frame)
+        self.line.setObjectName(u"line")
+        self.line.setFrameShape(QFrame.Shape.HLine)
+        self.line.setFrameShadow(QFrame.Shadow.Sunken)
+
+        self.verticalLayout.addWidget(self.line)
+
+        self.btnLogout = QPushButton(self.frame)
+        self.btnLogout.setObjectName(u"btnLogout")
+        self.btnLogout.setFont(font)
+        icon5 = QIcon()
+        icon5.addFile(u":/root/imgs/light-logout.svg", QSize(), QIcon.Mode.Normal, QIcon.State.Off)
+        self.btnLogout.setIcon(icon5)
+        self.btnLogout.setIconSize(QSize(25, 25))
+        self.btnLogout.setFlat(True)
+
+        self.verticalLayout.addWidget(self.btnLogout)
+
 
         self.mainLayout.addWidget(self.frame)
 
@@ -122,5 +147,6 @@ class Ui_HomeForm(object):
         self.btnCard.setText(QCoreApplication.translate("HomeForm", u"Banco e Cart\u00f5es", None))
         self.btnUser.setText(QCoreApplication.translate("HomeForm", u"Usu\u00e1rio              ", None))
         self.btnConfig.setText(QCoreApplication.translate("HomeForm", u"Configura\u00e7\u00f5es   ", None))
+        self.btnLogout.setText(QCoreApplication.translate("HomeForm", u"Sair                    ", None))
     # retranslateUi
 

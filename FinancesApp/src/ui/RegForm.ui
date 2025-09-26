@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>698</width>
-    <height>469</height>
+    <width>823</width>
+    <height>465</height>
    </rect>
   </property>
   <property name="font">
@@ -145,26 +145,6 @@
           </widget>
          </item>
          <item>
-          <widget class="QPushButton" name="btnEdit">
-           <property name="toolTip">
-            <string>editar registro selecionado</string>
-           </property>
-           <property name="icon">
-            <iconset resource="resource.qrc">
-             <normaloff>:/root/imgs/light-pen.svg</normaloff>:/root/imgs/light-pen.svg</iconset>
-           </property>
-           <property name="iconSize">
-            <size>
-             <width>25</width>
-             <height>25</height>
-            </size>
-           </property>
-           <property name="flat">
-            <bool>true</bool>
-           </property>
-          </widget>
-         </item>
-         <item>
           <widget class="QPushButton" name="btnAdd">
            <property name="toolTip">
             <string>adicionar novos registros</string>
@@ -184,31 +164,24 @@
            </property>
           </widget>
          </item>
-         <item>
-          <widget class="QPushButton" name="btnDetails">
-           <property name="styleSheet">
-            <string notr="true"/>
-           </property>
-           <property name="icon">
-            <iconset resource="resource.qrc">
-             <normaloff>:/root/imgs/light-eye.svg</normaloff>:/root/imgs/light-eye.svg</iconset>
-           </property>
-           <property name="iconSize">
-            <size>
-             <width>25</width>
-             <height>25</height>
-            </size>
-           </property>
-           <property name="flat">
-            <bool>true</bool>
-           </property>
-          </widget>
-         </item>
         </layout>
        </widget>
       </item>
       <item>
-       <widget class="QTableWidget" name="tableWidget"/>
+       <widget class="QTableWidget" name="widTable">
+        <property name="editTriggers">
+         <set>QAbstractItemView::NoEditTriggers</set>
+        </property>
+        <property name="alternatingRowColors">
+         <bool>true</bool>
+        </property>
+        <property name="selectionMode">
+         <enum>QAbstractItemView::ExtendedSelection</enum>
+        </property>
+        <property name="selectionBehavior">
+         <enum>QAbstractItemView::SelectRows</enum>
+        </property>
+       </widget>
       </item>
       <item>
        <widget class="QWidget" name="widget" native="true">
@@ -257,12 +230,12 @@
             </size>
            </property>
            <property name="flat">
-            <bool>true</bool>
+            <bool>false</bool>
            </property>
           </widget>
          </item>
          <item>
-          <widget class="QLabel" name="label_2">
+          <widget class="QLabel" name="lbTableNav">
            <property name="font">
             <font>
              <family>Segoe UI</family>
@@ -290,7 +263,7 @@
             </size>
            </property>
            <property name="flat">
-            <bool>true</bool>
+            <bool>false</bool>
            </property>
           </widget>
          </item>
@@ -314,7 +287,7 @@
     </widget>
    </item>
    <item>
-    <widget class="QWidget" name="widget_4" native="true">
+    <widget class="QWidget" name="widDetails" native="true">
      <layout class="QVBoxLayout" name="verticalLayout_2" stretch="0,1">
       <property name="spacing">
        <number>10</number>
@@ -338,7 +311,7 @@
         </property>
         <layout class="QHBoxLayout" name="horizontalLayout_5">
          <property name="spacing">
-          <number>10</number>
+          <number>2</number>
          </property>
          <property name="leftMargin">
           <number>0</number>
@@ -367,7 +340,7 @@
             </font>
            </property>
            <property name="text">
-            <string>TITLE</string>
+            <string>Detalhamento</string>
            </property>
           </widget>
          </item>
@@ -383,6 +356,46 @@
             </size>
            </property>
           </spacer>
+         </item>
+         <item>
+          <widget class="QPushButton" name="btnEdit">
+           <property name="text">
+            <string/>
+           </property>
+           <property name="icon">
+            <iconset resource="resource.qrc">
+             <normaloff>:/root/imgs/light-pen.svg</normaloff>:/root/imgs/light-pen.svg</iconset>
+           </property>
+           <property name="iconSize">
+            <size>
+             <width>25</width>
+             <height>25</height>
+            </size>
+           </property>
+           <property name="flat">
+            <bool>true</bool>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QPushButton" name="btnDeleteDetails">
+           <property name="toolTip">
+            <string>deletar registros selecionados</string>
+           </property>
+           <property name="icon">
+            <iconset resource="resource.qrc">
+             <normaloff>:/root/imgs/light-trash.svg</normaloff>:/root/imgs/light-trash.svg</iconset>
+           </property>
+           <property name="iconSize">
+            <size>
+             <width>25</width>
+             <height>25</height>
+            </size>
+           </property>
+           <property name="flat">
+            <bool>true</bool>
+           </property>
+          </widget>
          </item>
          <item>
           <widget class="QPushButton" name="btnHide">
@@ -528,17 +541,23 @@
           </widget>
          </item>
          <item row="4" column="2">
-          <widget class="QComboBox" name="comboBox_2">
+          <widget class="QComboBox" name="cbCard">
+           <property name="enabled">
+            <bool>true</bool>
+           </property>
            <property name="font">
             <font>
              <family>Segoe UI</family>
              <pointsize>11</pointsize>
             </font>
            </property>
+           <property name="editable">
+            <bool>false</bool>
+           </property>
           </widget>
          </item>
          <item row="5" column="2">
-          <widget class="QComboBox" name="comboBox">
+          <widget class="QComboBox" name="cbCat">
            <property name="font">
             <font>
              <family>Segoe UI</family>
@@ -561,7 +580,7 @@
           </widget>
          </item>
          <item row="1" column="1" colspan="2">
-          <widget class="QLineEdit" name="lineEdit">
+          <widget class="QLineEdit" name="leTitle">
            <property name="font">
             <font>
              <family>Segoe UI</family>
@@ -571,12 +590,15 @@
           </widget>
          </item>
          <item row="3" column="1" colspan="2">
-          <widget class="QDateTimeEdit" name="dateTimeEdit">
+          <widget class="QDateTimeEdit" name="dtDatetime">
            <property name="font">
             <font>
              <family>Segoe UI</family>
              <pointsize>11</pointsize>
             </font>
+           </property>
+           <property name="readOnly">
+            <bool>false</bool>
            </property>
           </widget>
          </item>
@@ -607,12 +629,15 @@
           </widget>
          </item>
          <item row="2" column="1" colspan="2">
-          <widget class="QDoubleSpinBox" name="doubleSpinBox">
+          <widget class="QDoubleSpinBox" name="dsVal">
            <property name="font">
             <font>
              <family>Segoe UI</family>
              <pointsize>11</pointsize>
             </font>
+           </property>
+           <property name="maximum">
+            <double>999999999999.000000000000000</double>
            </property>
           </widget>
          </item>
@@ -630,7 +655,7 @@
           </widget>
          </item>
          <item row="8" column="0" colspan="3">
-          <widget class="QWidget" name="widget_7" native="true">
+          <widget class="QWidget" name="widDetailBtns" native="true">
            <property name="sizePolicy">
             <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
              <horstretch>0</horstretch>
@@ -721,7 +746,7 @@
              <number>0</number>
             </property>
             <item>
-             <widget class="QRadioButton" name="radioButton">
+             <widget class="QRadioButton" name="rbIn">
               <property name="font">
                <font>
                 <family>Segoe UI</family>
@@ -734,7 +759,7 @@
              </widget>
             </item>
             <item>
-             <widget class="QRadioButton" name="radioButton_2">
+             <widget class="QRadioButton" name="rbOut">
               <property name="font">
                <font>
                 <family>Segoe UI</family>
@@ -763,7 +788,7 @@
           </widget>
          </item>
          <item row="6" column="1" rowspan="2" colspan="2">
-          <widget class="QPlainTextEdit" name="plainTextEdit">
+          <widget class="QPlainTextEdit" name="ptDesc">
            <property name="font">
             <font>
              <family>Segoe UI</family>
