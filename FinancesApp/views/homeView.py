@@ -51,8 +51,6 @@ class HomeView(QWidget):
             self.__ui.btnConfig.setIcon(QIcon(u":/root/imgs/dark-gear.svg"))
             self.__ui.btnLogout.setIcon(QIcon(u":/root/imgs/dark-logout.svg"))
 
-        self.setDisplayMode(self.DisplayMode.Reg)
-
     def setDisplayMode(self, mode:DisplayMode):
         if self.__currentDisplay == mode:
             return
@@ -93,4 +91,5 @@ class HomeView(QWidget):
         self.__ui.mainLayout.replaceWidget(widOld, widNew)
         widOld.deleteLater()
 
+        self.__currentDisplay = mode
         self.displayModeChanged.emit(mode)

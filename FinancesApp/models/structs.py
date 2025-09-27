@@ -39,6 +39,16 @@ class DashParams:
     # allCategories: bool
     # categories: set[Category] | None
 
+@dataclass
+class TableParams:
+    orderByColumn: str
+    alphabetically: bool = True
+
+@dataclass
+class RegTableParams(TableParams):
+    titleContains: str = ''
+    type: RegType | None = None
+
 class NavigableData(Generic[T]):
     def __init__(self, data:Iterable[T], maxLen:int):
         if maxLen < 1:

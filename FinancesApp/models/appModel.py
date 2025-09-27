@@ -1,11 +1,11 @@
 from PySide6.QtCore import QObject, Signal, QDateTime
 from threading import Thread
-from time import sleep
 from configparser import ConfigParser
 from cryptography.fernet import Fernet
 import os
 import logging as log
 from uuid import uuid4
+from typing import Iterable
 
 from .consts import FILE_TMP
 from .structs import Card, Category, Registry, RegType
@@ -13,8 +13,7 @@ from .structs import Card, Category, Registry, RegType
 class AppModel(QObject):
     initializationFinished = Signal(bool, str)
     authFinished = Signal(bool)
-    regsChanged = Signal(tuple[Registry])
-
+    regsChanged = Signal(tuple)
 
     def __init__(self):
         super().__init__()
@@ -36,13 +35,32 @@ class AppModel(QObject):
             '0': Registry('0', RegType.IN, 'salário', 2000, QDateTime(2025, 9, 1, 6, 0, 0), category=self.__categories['2']),
             '1': Registry('1', RegType.OUT, 'Uber', 12, QDateTime(2025, 9, 10, 11, 48, 0), category=self.__categories['1']),
             '2': Registry('2', RegType.OUT, 'onibus', 5.5, QDateTime(2025, 9, 11, 11, 48, 0), category=self.__categories['1']),
+            '3': Registry('3', RegType.OUT, 'onibus', 5.5, QDateTime(2025, 9, 11, 11, 48, 0), category=self.__categories['1']),
+            '4': Registry('4', RegType.OUT, 'onibus', 5.5, QDateTime(2025, 9, 11, 11, 48, 0), category=self.__categories['1']),
+            '5': Registry('5', RegType.OUT, 'onibus', 5.5, QDateTime(2025, 9, 11, 11, 48, 0), category=self.__categories['1']),
+            '6': Registry('6', RegType.OUT, 'onibus', 5.5, QDateTime(2025, 9, 11, 11, 48, 0), category=self.__categories['1']),
+            '7': Registry('7', RegType.OUT, 'onibus', 5.5, QDateTime(2025, 9, 11, 11, 48, 0), category=self.__categories['1']),
+            '8': Registry('8', RegType.OUT, 'onibus', 5.5, QDateTime(2025, 9, 11, 11, 48, 0), category=self.__categories['1']),
+            '9': Registry('9', RegType.OUT, 'onibus', 5.5, QDateTime(2025, 9, 11, 11, 48, 0), category=self.__categories['1']),
+            '10': Registry('10', RegType.OUT, 'onibus', 5.5, QDateTime(2025, 9, 11, 11, 48, 0), category=self.__categories['1']),
+            '11': Registry('11', RegType.OUT, 'onibus', 5.5, QDateTime(2025, 9, 11, 11, 48, 0), category=self.__categories['1']),
+            '12': Registry('12', RegType.OUT, 'onibus', 5.5, QDateTime(2025, 9, 11, 11, 48, 0), category=self.__categories['1']),
+            '13': Registry('13', RegType.OUT, 'onibus', 5.5, QDateTime(2025, 9, 11, 11, 48, 0), category=self.__categories['1']),
+            '14': Registry('14', RegType.OUT, 'onibus', 5.5, QDateTime(2025, 9, 11, 11, 48, 0), category=self.__categories['1']),
+            '15': Registry('15', RegType.OUT, 'onibus', 5.5, QDateTime(2025, 9, 11, 11, 48, 0), category=self.__categories['1']),
+            '16': Registry('16', RegType.OUT, 'onibus', 5.5, QDateTime(2025, 9, 11, 11, 48, 0), category=self.__categories['1']),
+            '17': Registry('17', RegType.OUT, 'onibus', 5.5, QDateTime(2025, 9, 11, 11, 48, 0), category=self.__categories['1']),
+            '18': Registry('18', RegType.OUT, 'onibus', 5.5, QDateTime(2025, 9, 11, 11, 48, 0), category=self.__categories['1']),
+            '19': Registry('19', RegType.OUT, 'onibus', 5.5, QDateTime(2025, 9, 11, 11, 48, 0), category=self.__categories['1']),
+            '20': Registry('20', RegType.OUT, 'onibus', 5.5, QDateTime(2025, 9, 11, 11, 48, 0), category=self.__categories['1']),
+            '21': Registry('21', RegType.OUT, 'onibus', 5.5, QDateTime(2025, 9, 11, 11, 48, 0), category=self.__categories['1']),
+            '22': Registry('22', RegType.OUT, 'onibus', 5.5, QDateTime(2025, 9, 11, 11, 48, 0), category=self.__categories['1']),
         }
-        self.__tupleCategories = tuple(self.__categories.values())
-        self.__tupleCards = tuple(self.__cards.values())
-        self.__tupleRegs = tuple(self.__regs.values())
-        
+
+        self.__updateStructs()
+    
     #----------------------------------------------------------
-    # Public Methods
+    #region Public Methods
     def initialize(self):
         def func():
             # sleep(3)
@@ -147,14 +165,14 @@ class AppModel(QObject):
         
         reg.id = str(uuid4())
         self.__regs[reg.id] = reg
-        self.__tupleRegs = tuple(self.__regs.values())
+        self.__updateStructRegs()
 
         self.regsChanged.emit(self.__tupleRegs)
         return True
     
     def updateRegistry(self, reg:Registry) -> bool:
         self.__regs[reg.id] = reg
-        self.__tupleRegs = tuple(self.__regs.values())
+        self.__updateStructRegs()
 
         self.regsChanged.emit(self.__tupleRegs)
         return True
@@ -164,7 +182,19 @@ class AppModel(QObject):
             return False
         
         self.__regs.pop(id)
-        self.__tupleRegs = tuple(self.__regs.values())
+        self.__updateStructRegs()
+
+        self.regsChanged.emit(self.__tupleRegs)
+        return True
+
+    def deleteRegistries(self, ids:Iterable[str]) -> bool:
+        for _id in ids:
+            if _id not in self.__regs:
+                return False
+            
+            self.__regs.pop(_id)
+
+        self.__updateStructRegs()
 
         self.regsChanged.emit(self.__tupleRegs)
         return True
@@ -179,21 +209,43 @@ class AppModel(QObject):
     
     #region Card
 
-    def getCardById(self, id:str) -> Card | None:
-        return self.__cards.get(id)
+    def getCardById(self, id:str): return self.__cards.get(id)
     
-    def getCards(self) -> tuple[Card]:
-        return self.__tupleCards
+    def getCardByName(self, name:str): return self.__cardsByName.get(name)
     
-    def getCategoryById(self, id:str) -> Category | None:
-        return self.__categories.get(id)
-    
-    def getCategories(self) -> tuple[Category]:
-        return self.__tupleCategories
+    def getCards(self): return self.__tupleCards
     
     #endregion
 
-    #----------------------------------------------------------
-    # Private Methods
+    #region Category
 
+    def getCategoryById(self, id:str): return self.__categories.get(id)
+    
+    def getCategories(self): return self.__tupleCategories
+    
+    def getCategoryByName(self, name:str): return self.__catsByName.get(name)
+
+    #endregion
+
+    #endregion
+    #----------------------------------------------------------
+    #region Private Methods
+    def __updateStructs(self):
+        self.__updateStructRegs()
+        self.__updateStructCards()
+        self.__updateStructCats()
+
+    def __updateStructRegs(self):
+        self.__tupleRegs = tuple(self.__regs.values())
+
+    def __updateStructCards(self):
+        self.__tupleCards = tuple(self.__cards.values())
+        self.__cardsByName = { c.name: c for c in self.__tupleCards }
+
+    def __updateStructCats(self):
+        self.__tupleCategories = tuple(self.__categories.values())
+        self.__catsByName = { c.name: c for c in self.__tupleCategories }
+
+
+    #endregion
     #----------------------------------------------------------

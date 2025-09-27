@@ -1,9 +1,9 @@
 from PySide6.QtWidgets import QWidget, QDialog
 
-from ..models.structs import DashParams, RegType
-from ..src.ui.auto.ui_DashParamsForm import Ui_DashParamsForm
+from ...models.structs import DashParams, RegType
+from ...src.ui.auto.ui_DashParamsForm import Ui_DashParamsForm
 
-class DashParamsView(QDialog):
+class DashParamsDialog(QDialog):
     def __init__(self, params:DashParams=None, parent:QWidget=None):
         super().__init__(parent, modal=True)
         self.__ui = Ui_DashParamsForm()

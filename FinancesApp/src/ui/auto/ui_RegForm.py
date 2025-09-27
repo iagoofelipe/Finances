@@ -18,8 +18,8 @@ from PySide6.QtGui import (QBrush, QColor, QConicalGradient, QCursor,
 from PySide6.QtWidgets import (QAbstractItemView, QApplication, QComboBox, QDateTimeEdit,
     QDoubleSpinBox, QFrame, QGridLayout, QHBoxLayout,
     QHeaderView, QLabel, QLineEdit, QPlainTextEdit,
-    QPushButton, QRadioButton, QSizePolicy, QSpacerItem,
-    QTableWidget, QTableWidgetItem, QVBoxLayout, QWidget)
+    QPushButton, QSizePolicy, QSpacerItem, QTableWidget,
+    QTableWidgetItem, QVBoxLayout, QWidget)
 from . import resource_rc
 
 class Ui_RegForm(object):
@@ -63,15 +63,15 @@ class Ui_RegForm(object):
 
         self.horizontalLayout_2.addItem(self.horizontalSpacer_3)
 
-        self.btnFilter = QPushButton(self.widget_2)
-        self.btnFilter.setObjectName(u"btnFilter")
+        self.btnParams = QPushButton(self.widget_2)
+        self.btnParams.setObjectName(u"btnParams")
         icon = QIcon()
-        icon.addFile(u":/root/imgs/light-filter.svg", QSize(), QIcon.Mode.Normal, QIcon.State.Off)
-        self.btnFilter.setIcon(icon)
-        self.btnFilter.setIconSize(QSize(25, 25))
-        self.btnFilter.setFlat(True)
+        icon.addFile(u":/root/imgs/light-params.svg", QSize(), QIcon.Mode.Normal, QIcon.State.Off)
+        self.btnParams.setIcon(icon)
+        self.btnParams.setIconSize(QSize(25, 25))
+        self.btnParams.setFlat(True)
 
-        self.horizontalLayout_2.addWidget(self.btnFilter)
+        self.horizontalLayout_2.addWidget(self.btnParams)
 
         self.btnDelete = QPushButton(self.widget_2)
         self.btnDelete.setObjectName(u"btnDelete")
@@ -214,108 +214,28 @@ class Ui_RegForm(object):
 
         self.verticalLayout_2.addWidget(self.widget_6)
 
-        self.frame = QFrame(self.widDetails)
-        self.frame.setObjectName(u"frame")
-        self.frame.setFrameShape(QFrame.StyledPanel)
-        self.frame.setFrameShadow(QFrame.Raised)
-        self.gridLayout = QGridLayout(self.frame)
+        self.frameDetails = QFrame(self.widDetails)
+        self.frameDetails.setObjectName(u"frameDetails")
+        self.frameDetails.setFrameShape(QFrame.StyledPanel)
+        self.frameDetails.setFrameShadow(QFrame.Raised)
+        self.gridLayout = QGridLayout(self.frameDetails)
         self.gridLayout.setObjectName(u"gridLayout")
         self.gridLayout.setHorizontalSpacing(5)
         self.gridLayout.setVerticalSpacing(10)
         self.gridLayout.setContentsMargins(10, 10, 10, 10)
-        self.label_7 = QLabel(self.frame)
-        self.label_7.setObjectName(u"label_7")
-        sizePolicy.setHeightForWidth(self.label_7.sizePolicy().hasHeightForWidth())
-        self.label_7.setSizePolicy(sizePolicy)
-        self.label_7.setFont(font)
+        self.label_2 = QLabel(self.frameDetails)
+        self.label_2.setObjectName(u"label_2")
 
-        self.gridLayout.addWidget(self.label_7, 6, 0, 1, 1)
+        self.gridLayout.addWidget(self.label_2, 0, 0, 1, 1)
 
-        self.btnAddCard = QPushButton(self.frame)
-        self.btnAddCard.setObjectName(u"btnAddCard")
-        self.btnAddCard.setFont(font)
-        self.btnAddCard.setStyleSheet(u"background-color: transparent")
-        self.btnAddCard.setIcon(icon2)
-        self.btnAddCard.setIconSize(QSize(25, 25))
-        self.btnAddCard.setFlat(True)
+        self.cbType = QComboBox(self.frameDetails)
+        self.cbType.addItem("")
+        self.cbType.addItem("")
+        self.cbType.setObjectName(u"cbType")
 
-        self.gridLayout.addWidget(self.btnAddCard, 4, 1, 1, 1)
+        self.gridLayout.addWidget(self.cbType, 0, 1, 1, 3)
 
-        self.label_9 = QLabel(self.frame)
-        self.label_9.setObjectName(u"label_9")
-        self.label_9.setFont(font)
-
-        self.gridLayout.addWidget(self.label_9, 5, 0, 1, 1)
-
-        self.btnAddCat = QPushButton(self.frame)
-        self.btnAddCat.setObjectName(u"btnAddCat")
-        self.btnAddCat.setFont(font)
-        self.btnAddCat.setStyleSheet(u"background-color: transparent")
-        self.btnAddCat.setIcon(icon2)
-        self.btnAddCat.setIconSize(QSize(25, 25))
-        self.btnAddCat.setFlat(True)
-
-        self.gridLayout.addWidget(self.btnAddCat, 5, 1, 1, 1)
-
-        self.cbCard = QComboBox(self.frame)
-        self.cbCard.setObjectName(u"cbCard")
-        self.cbCard.setEnabled(True)
-        self.cbCard.setFont(font)
-        self.cbCard.setEditable(False)
-
-        self.gridLayout.addWidget(self.cbCard, 4, 2, 1, 1)
-
-        self.cbCat = QComboBox(self.frame)
-        self.cbCat.setObjectName(u"cbCat")
-        self.cbCat.setFont(font)
-
-        self.gridLayout.addWidget(self.cbCat, 5, 2, 1, 1)
-
-        self.label_5 = QLabel(self.frame)
-        self.label_5.setObjectName(u"label_5")
-        self.label_5.setFont(font)
-
-        self.gridLayout.addWidget(self.label_5, 1, 0, 1, 1)
-
-        self.leTitle = QLineEdit(self.frame)
-        self.leTitle.setObjectName(u"leTitle")
-        self.leTitle.setFont(font)
-
-        self.gridLayout.addWidget(self.leTitle, 1, 1, 1, 2)
-
-        self.dtDatetime = QDateTimeEdit(self.frame)
-        self.dtDatetime.setObjectName(u"dtDatetime")
-        self.dtDatetime.setFont(font)
-        self.dtDatetime.setReadOnly(False)
-
-        self.gridLayout.addWidget(self.dtDatetime, 3, 1, 1, 2)
-
-        self.label_8 = QLabel(self.frame)
-        self.label_8.setObjectName(u"label_8")
-        self.label_8.setFont(font)
-
-        self.gridLayout.addWidget(self.label_8, 4, 0, 1, 1)
-
-        self.label_4 = QLabel(self.frame)
-        self.label_4.setObjectName(u"label_4")
-        self.label_4.setFont(font)
-
-        self.gridLayout.addWidget(self.label_4, 2, 0, 1, 1)
-
-        self.dsVal = QDoubleSpinBox(self.frame)
-        self.dsVal.setObjectName(u"dsVal")
-        self.dsVal.setFont(font)
-        self.dsVal.setMaximum(999999999999.000000000000000)
-
-        self.gridLayout.addWidget(self.dsVal, 2, 1, 1, 2)
-
-        self.label_6 = QLabel(self.frame)
-        self.label_6.setObjectName(u"label_6")
-        self.label_6.setFont(font)
-
-        self.gridLayout.addWidget(self.label_6, 3, 0, 1, 1)
-
-        self.widDetailBtns = QWidget(self.frame)
+        self.widDetailBtns = QWidget(self.frameDetails)
         self.widDetailBtns.setObjectName(u"widDetailBtns")
         sizePolicy.setHeightForWidth(self.widDetailBtns.sizePolicy().hasHeightForWidth())
         self.widDetailBtns.setSizePolicy(sizePolicy)
@@ -342,44 +262,129 @@ class Ui_RegForm(object):
         self.horizontalLayout_6.addItem(self.horizontalSpacer_7)
 
 
-        self.gridLayout.addWidget(self.widDetailBtns, 8, 0, 1, 3)
+        self.gridLayout.addWidget(self.widDetailBtns, 8, 0, 1, 4)
 
-        self.widget_5 = QWidget(self.frame)
-        self.widget_5.setObjectName(u"widget_5")
-        sizePolicy.setHeightForWidth(self.widget_5.sizePolicy().hasHeightForWidth())
-        self.widget_5.setSizePolicy(sizePolicy)
-        self.horizontalLayout_3 = QHBoxLayout(self.widget_5)
-        self.horizontalLayout_3.setSpacing(10)
-        self.horizontalLayout_3.setObjectName(u"horizontalLayout_3")
-        self.horizontalLayout_3.setContentsMargins(0, 0, 0, 0)
-        self.rbIn = QRadioButton(self.widget_5)
-        self.rbIn.setObjectName(u"rbIn")
-        self.rbIn.setFont(font)
+        self.label_7 = QLabel(self.frameDetails)
+        self.label_7.setObjectName(u"label_7")
+        sizePolicy.setHeightForWidth(self.label_7.sizePolicy().hasHeightForWidth())
+        self.label_7.setSizePolicy(sizePolicy)
+        self.label_7.setFont(font)
 
-        self.horizontalLayout_3.addWidget(self.rbIn)
+        self.gridLayout.addWidget(self.label_7, 6, 0, 1, 1)
 
-        self.rbOut = QRadioButton(self.widget_5)
-        self.rbOut.setObjectName(u"rbOut")
-        self.rbOut.setFont(font)
+        self.btnAddCat = QPushButton(self.frameDetails)
+        self.btnAddCat.setObjectName(u"btnAddCat")
+        self.btnAddCat.setFont(font)
+        self.btnAddCat.setStyleSheet(u"background-color: transparent")
+        self.btnAddCat.setIcon(icon2)
+        self.btnAddCat.setIconSize(QSize(25, 25))
+        self.btnAddCat.setFlat(True)
 
-        self.horizontalLayout_3.addWidget(self.rbOut)
+        self.gridLayout.addWidget(self.btnAddCat, 5, 1, 1, 1)
 
-        self.horizontalSpacer_4 = QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
+        self.btnAddCard = QPushButton(self.frameDetails)
+        self.btnAddCard.setObjectName(u"btnAddCard")
+        self.btnAddCard.setFont(font)
+        self.btnAddCard.setStyleSheet(u"background-color: transparent")
+        self.btnAddCard.setIcon(icon2)
+        self.btnAddCard.setIconSize(QSize(25, 25))
+        self.btnAddCard.setFlat(True)
 
-        self.horizontalLayout_3.addItem(self.horizontalSpacer_4)
+        self.gridLayout.addWidget(self.btnAddCard, 4, 1, 1, 1)
 
+        self.cbCard = QComboBox(self.frameDetails)
+        self.cbCard.setObjectName(u"cbCard")
+        self.cbCard.setEnabled(True)
+        self.cbCard.setFont(font)
+        self.cbCard.setEditable(False)
 
-        self.gridLayout.addWidget(self.widget_5, 0, 0, 1, 3)
+        self.gridLayout.addWidget(self.cbCard, 4, 3, 1, 1)
 
-        self.ptDesc = QPlainTextEdit(self.frame)
+        self.label_9 = QLabel(self.frameDetails)
+        self.label_9.setObjectName(u"label_9")
+        self.label_9.setFont(font)
+
+        self.gridLayout.addWidget(self.label_9, 5, 0, 1, 1)
+
+        self.leTitle = QLineEdit(self.frameDetails)
+        self.leTitle.setObjectName(u"leTitle")
+        self.leTitle.setFont(font)
+
+        self.gridLayout.addWidget(self.leTitle, 1, 1, 1, 3)
+
+        self.cbCat = QComboBox(self.frameDetails)
+        self.cbCat.setObjectName(u"cbCat")
+        self.cbCat.setFont(font)
+
+        self.gridLayout.addWidget(self.cbCat, 5, 3, 1, 1)
+
+        self.dtDatetime = QDateTimeEdit(self.frameDetails)
+        self.dtDatetime.setObjectName(u"dtDatetime")
+        self.dtDatetime.setFont(font)
+        self.dtDatetime.setReadOnly(False)
+
+        self.gridLayout.addWidget(self.dtDatetime, 3, 1, 1, 3)
+
+        self.label_5 = QLabel(self.frameDetails)
+        self.label_5.setObjectName(u"label_5")
+        self.label_5.setFont(font)
+
+        self.gridLayout.addWidget(self.label_5, 1, 0, 1, 1)
+
+        self.dsVal = QDoubleSpinBox(self.frameDetails)
+        self.dsVal.setObjectName(u"dsVal")
+        self.dsVal.setFont(font)
+        self.dsVal.setMaximum(999999999999.000000000000000)
+
+        self.gridLayout.addWidget(self.dsVal, 2, 1, 1, 3)
+
+        self.label_8 = QLabel(self.frameDetails)
+        self.label_8.setObjectName(u"label_8")
+        self.label_8.setFont(font)
+
+        self.gridLayout.addWidget(self.label_8, 4, 0, 1, 1)
+
+        self.label_6 = QLabel(self.frameDetails)
+        self.label_6.setObjectName(u"label_6")
+        self.label_6.setFont(font)
+
+        self.gridLayout.addWidget(self.label_6, 3, 0, 1, 1)
+
+        self.label_4 = QLabel(self.frameDetails)
+        self.label_4.setObjectName(u"label_4")
+        self.label_4.setFont(font)
+
+        self.gridLayout.addWidget(self.label_4, 2, 0, 1, 1)
+
+        self.ptDesc = QPlainTextEdit(self.frameDetails)
         self.ptDesc.setObjectName(u"ptDesc")
         self.ptDesc.setFont(font)
 
-        self.gridLayout.addWidget(self.ptDesc, 6, 1, 2, 2)
+        self.gridLayout.addWidget(self.ptDesc, 6, 1, 2, 3)
 
-        self.gridLayout.setColumnStretch(2, 1)
+        self.btnEraseCat = QPushButton(self.frameDetails)
+        self.btnEraseCat.setObjectName(u"btnEraseCat")
+        self.btnEraseCat.setStyleSheet(u"background-color: transparent")
+        icon7 = QIcon()
+        icon7.addFile(u":/root/imgs/light-eraser.svg", QSize(), QIcon.Mode.Normal, QIcon.State.Off)
+        self.btnEraseCat.setIcon(icon7)
+        self.btnEraseCat.setIconSize(QSize(25, 25))
+        self.btnEraseCat.setFlat(True)
 
-        self.verticalLayout_2.addWidget(self.frame)
+        self.gridLayout.addWidget(self.btnEraseCat, 5, 2, 1, 1)
+
+        self.btnEraseCard = QPushButton(self.frameDetails)
+        self.btnEraseCard.setObjectName(u"btnEraseCard")
+        self.btnEraseCard.setStyleSheet(u"background-color: transparent")
+        self.btnEraseCard.setIcon(icon7)
+        self.btnEraseCard.setIconSize(QSize(25, 25))
+        self.btnEraseCard.setFlat(True)
+
+        self.gridLayout.addWidget(self.btnEraseCard, 4, 2, 1, 1)
+
+        self.gridLayout.setColumnStretch(3, 1)
+
+        self.verticalLayout_2.addWidget(self.frameDetails)
 
         self.verticalLayout_2.setStretch(1, 1)
 
@@ -397,7 +402,7 @@ class Ui_RegForm(object):
         RegForm.setWindowTitle(QCoreApplication.translate("RegForm", u"Form", None))
         self.label.setText(QCoreApplication.translate("RegForm", u"Registros", None))
 #if QT_CONFIG(tooltip)
-        self.btnFilter.setToolTip(QCoreApplication.translate("RegForm", u"filtrar registros", None))
+        self.btnParams.setToolTip(QCoreApplication.translate("RegForm", u"par\u00e2metros", None))
 #endif // QT_CONFIG(tooltip)
 #if QT_CONFIG(tooltip)
         self.btnDelete.setToolTip(QCoreApplication.translate("RegForm", u"deletar registros selecionados", None))
@@ -420,21 +425,29 @@ class Ui_RegForm(object):
 #if QT_CONFIG(tooltip)
         self.btnHide.setToolTip(QCoreApplication.translate("RegForm", u"ocultar", None))
 #endif // QT_CONFIG(tooltip)
+        self.label_2.setText(QCoreApplication.translate("RegForm", u"Tipo", None))
+        self.cbType.setItemText(0, QCoreApplication.translate("RegForm", u"Entrada", None))
+        self.cbType.setItemText(1, QCoreApplication.translate("RegForm", u"Sa\u00edda", None))
+
+        self.btnClear.setText(QCoreApplication.translate("RegForm", u"limpar", None))
+        self.btnSave.setText(QCoreApplication.translate("RegForm", u"salvar", None))
         self.label_7.setText(QCoreApplication.translate("RegForm", u"Descri\u00e7\u00e3o", None))
+#if QT_CONFIG(tooltip)
+        self.btnAddCat.setToolTip(QCoreApplication.translate("RegForm", u"adicionar nova categoria", None))
+#endif // QT_CONFIG(tooltip)
 #if QT_CONFIG(tooltip)
         self.btnAddCard.setToolTip(QCoreApplication.translate("RegForm", u"adicionar novo cart\u00e3o", None))
 #endif // QT_CONFIG(tooltip)
         self.label_9.setText(QCoreApplication.translate("RegForm", u"Categoria", None))
-#if QT_CONFIG(tooltip)
-        self.btnAddCat.setToolTip(QCoreApplication.translate("RegForm", u"adicionar nova categoria", None))
-#endif // QT_CONFIG(tooltip)
         self.label_5.setText(QCoreApplication.translate("RegForm", u"T\u00edtulo", None))
         self.label_8.setText(QCoreApplication.translate("RegForm", u"Cart\u00e3o", None))
-        self.label_4.setText(QCoreApplication.translate("RegForm", u"Valor", None))
         self.label_6.setText(QCoreApplication.translate("RegForm", u"Data Hora", None))
-        self.btnClear.setText(QCoreApplication.translate("RegForm", u"limpar", None))
-        self.btnSave.setText(QCoreApplication.translate("RegForm", u"salvar", None))
-        self.rbIn.setText(QCoreApplication.translate("RegForm", u"Entrada", None))
-        self.rbOut.setText(QCoreApplication.translate("RegForm", u"Sa\u00edda", None))
+        self.label_4.setText(QCoreApplication.translate("RegForm", u"Valor", None))
+#if QT_CONFIG(tooltip)
+        self.btnEraseCat.setToolTip(QCoreApplication.translate("RegForm", u"deletar registros selecionados", None))
+#endif // QT_CONFIG(tooltip)
+#if QT_CONFIG(tooltip)
+        self.btnEraseCard.setToolTip(QCoreApplication.translate("RegForm", u"deletar registros selecionados", None))
+#endif // QT_CONFIG(tooltip)
     # retranslateUi
 

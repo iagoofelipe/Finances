@@ -16,8 +16,11 @@ class HomeController(QObject):
     # Public Methods
     def setView(self, view:HomeView):
         self.__view = view
+
         view.logoutRequired.connect(self.on_HomeView_logoutRequired)
         view.displayModeChanged.connect(self.on_HomeView_displayModeChanged)
+
+        view.setDisplayMode(HomeView.DisplayMode.Reg)
 
     #----------------------------------------------------------
     # Events

@@ -1,5 +1,7 @@
 <RCC>
   <qresource prefix="root">
+    <file>imgs/dark-eraser.svg</file>
+    <file>imgs/light-eraser.svg</file>
     <file>imgs/dark-logout.svg</file>
     <file>imgs/light-logout.svg</file>
     <file>imgs/dark-card.svg</file>

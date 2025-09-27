@@ -5,7 +5,7 @@ from PySide6.QtGui import QPainter, QPalette, QIcon
 from typing import Sequence
 
 from ..src.ui.auto.ui_DashForm import Ui_DashForm
-from .dashParamsView import DashParamsView
+from .dialog.dashParamsDialog import DashParamsDialog
 from .components.HBarTwoValues import HBarTwoValues
 from ..models.structs import RegType, DashParams
 from ..models.tools import isDark
@@ -57,7 +57,7 @@ class DashView(QWidget):
         return self.__params
 
     def on_btnParams_clicked(self):
-        view = DashParamsView(self.getParams(), self)
+        view = DashParamsDialog(self.getParams(), self)
 
         if QDialog.DialogCode.Accepted == view.exec():
             self.setParams(view.getParams())
