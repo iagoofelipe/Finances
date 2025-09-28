@@ -6,14 +6,15 @@ from typing import TypeVar, Iterable, Generic
 T = TypeVar('T')
 
 class RegType(Enum):
-    IN = auto()
-    OUT = auto()
+    OUT = 0
+    IN = 1
 
 @dataclass
 class Category:
     id: str
     name: str
-    description: str
+    type: RegType
+    description: str = ''
 
 @dataclass
 class Card:

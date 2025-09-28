@@ -5,8 +5,8 @@ from ...models.consts import TABLE_COLS_REG
 from ...models.structs import RegTableParams, RegType
 
 class RegTableParamsDialog(TableParamsDialog):
-    def __init__(self, params:RegTableParams=None, parent:QWidget=None):
-        super().__init__(TABLE_COLS_REG, params, parent, False, False)
+    def __init__(self, data:RegTableParams=None, parent:QWidget=None):
+        super().__init__(TABLE_COLS_REG, data, parent, False, False)
 
         # setting filters' layout
         self.__leTitle = QLineEdit(self)
@@ -16,23 +16,23 @@ class RegTableParamsDialog(TableParamsDialog):
         self._filterLayout.addRow('Título', self.__leTitle)
         self._filterLayout.addRow('Tipo', self.__cbType)
 
-        if params:
-            self.setParams(params)
+        if data:
+            self.setValues(data)
 
         self._setSize()
 
-    def setParams(self, params:RegTableParams):
-        super().setParams(params)
-        self.__leTitle.setText(params.titleContains)
+    def setValues(self, data:RegTableParams):
+        super().setValues(data)
+        self.__leTitle.setText(data.titleContains)
         
-        match params.type:
+        match data.type:
             case RegType.IN: op = 'Entrada'
             case RegType.OUT: op = 'Saída'
             case None: op = 'Ambos'
 
         self.__cbType.setCurrentText(op)
 
-    def getParams(self):
+    def getValues(self):
         match self.__cbType.currentText():
             case 'Ambos': regType = None
             case 'Entrada': regType = RegType.IN

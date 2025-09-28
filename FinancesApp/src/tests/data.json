@@ -1,0 +1,81 @@
+{
+    "categories": [
+        {
+            "id": "0",
+            "name": "Alimentação",
+            "type": "OUT",
+            "description": ""
+        }, {
+            "id": "1",
+            "name": "Transporte",
+            "type": "OUT",
+            "description": ""
+        }, {
+            "id": "2",
+            "name": "Pagamento",
+            "type": "IN",
+            "description": ""
+        }, {
+            "id": "3",
+            "name": "Aulas",
+            "type": "IN",
+            "description": ""
+        }
+    ],
+
+    "cards": [
+        {
+            "id": "0",
+            "name": "Mercado Pago"
+        }, {
+            "id": "1",
+            "name": "Santander"
+        }, {
+            "id": "2",
+            "name": "Will"
+        }, {
+            "id": "3",
+            "name": "Nubank"
+        }
+    ],
+
+    "registries": [
+        {
+            "id": "0",
+            "type": "IN",
+            "title": "Salário Estágio",
+            "value": 2000.00,
+            "datetime": "2025-09-01 06:30:00",
+            "description": "",
+            "cardId": null,
+            "categoryId": "2"
+        }, {
+            "id": "1",
+            "type": "OUT",
+            "title": "Uber",
+            "value": 7.80,
+            "datetime": "2025-09-02 09:32:00",
+            "description": "",
+            "cardId": "3",
+            "categoryId": "1"
+        }, {
+            "id": "2",
+            "type": "OUT",
+            "title": "Uber",
+            "value": 9.89,
+            "datetime": "2025-09-02 11:54:00",
+            "description": "",
+            "cardId": "3",
+            "categoryId": "1"
+        }, {
+            "id": "3",
+            "type": "OUT",
+            "title": "Lanche",
+            "value": 11.50,
+            "datetime": "2025-09-02 10:30:00",
+            "description": "",
+            "cardId": "3",
+            "categoryId": "1"
+        }
+    ]
+}

@@ -1,12 +1,11 @@
 from PySide6.QtCore import QObject, Signal
-from PySide6.QtWidgets import QDialog
+from PySide6.QtWidgets import QMessageBox
 import logging as log
 
 from ..models.appModel import AppModel
 from ..models.regModel import RegModel
 from ..views.appView import AppView
 from ..views.regView import RegView
-from ..views.dialog.regTableParamsDialog import RegTableParamsDialog
 from ..models.structs import Registry
 
 class RegController(QObject):
@@ -27,14 +26,13 @@ class RegController(QObject):
 
         view.previousRequired.connect(model.previous)
         view.nextRequired.connect(model.next)
-        view.paramsRequired.connect(self.on_view_paramsRequired)
         view.deleteRequired.connect(self.__appmodel.deleteRegistries)
         view.editRequired.connect(self.on_view_editRequired)
         view.clearRequired.connect(self.on_view_clearRequired)
         view.saveRequired.connect(self.on_view_saveRequired)
         view.newRequired.connect(self.on_view_newRequired)
-        view.newCategoryRequired.connect(self.on_view_newCategoryRequired)
-        view.newCardRequired.connect(self.on_view_newCardRequired)
+        view.newCategoryRequired.connect(self.__appmodel.newCategory)
+        view.newCardRequired.connect(self.__appmodel.newCard)
         view.tableSelectionChanged.connect(self.on_view_tableSelectionChanged)
 
         model.regsChanged.connect(self.on_model_regsChanged)
@@ -42,17 +40,11 @@ class RegController(QObject):
         
     #----------------------------------------------------------
     # Events
-    def on_view_paramsRequired(self):
-        view = RegTableParamsDialog(self.__model.getTableParams(), self.__view)
-
-        if QDialog.DialogCode.Accepted == view.exec():
-            self.__model.setTableParams(view.getParams())
-
     def on_view_editRequired(self):
         self.__view.setDetailsEditable(True)
 
     def on_view_clearRequired(self):
-        reg = self.__model.getRegistry()
+        reg = self.__view.getNotEdittedData()
         
         if reg:
             self.__view.setDetailsData(reg)
@@ -60,37 +52,37 @@ class RegController(QObject):
             self.__view.clearDetails()
 
     def on_view_saveRequired(self, reg:Registry):
-        old = self.__model.getRegistry()
-        if old: # edit required
-            reg.id = old.id
+        old = self.__view.getNotEdittedData()
+
+        # edit required
+        if old is not None:
+            if old == reg:
+                QMessageBox(QMessageBox.Icon.Information, 'Atualização de Registro', 'Nenhuma alteração encontrada!', parent=self.__view).exec()
+                return
+
+            # saving changes
             self.__appmodel.updateRegistry(reg)
             return
         
-        # save required
+        # new required
         self.__appmodel.newRegistry(reg)
+        self.__view.clearDetails()
+        self.__view.setDetailsVisible(False)
     
     def on_view_newRequired(self):
         self.__view.clearDetails()
-        self.__model.setRegistry(None)
-        self.__view.setDetailsEditable(False)
-
-    def on_view_newCategoryRequired(self): ...
-    def on_view_newCardRequired(self): ...
+        self.__view.setDetailsEditable(True)
 
     def on_view_tableSelectionChanged(self, indexes:set[int]):
         hasData = bool(indexes)
+        reg = self.__model.getRegistries()[tuple(indexes)[0]] if hasData else None
 
         self.__view.setDeleteVisible(hasData)
         self.__view.setDetailsVisible(hasData)
-        
-        if not hasData:
-            self.__model.setRegistry(None)
-            return
-        
-        reg = self.__model.getRegistries()[tuple(indexes)[0]]
-        self.__model.setRegistry(reg)
         self.__view.setDetailsData(reg)
-        self.__view.setDetailsEditable(False)
+        
+        if hasData:
+            self.__view.setDetailsEditable(False)
 
     def on_model_regsChanged(self, data:tuple[Registry]):
         self.__view.setTableData(data)
@@ -103,7 +95,7 @@ class RegController(QObject):
         self.__view.setTableLabel(nav.start, nav.end, len(nav))
         self.__view.setPreviousAvailable(nav.hasPrevious())
         self.__view.setNextAvailable(nav.hasNext())
-        self.__model.setRegistry(None)
+        self.__view.setDetailsData(None)
 
         if setData:
             self.__view.setTableData(self.__model.getRegistries())

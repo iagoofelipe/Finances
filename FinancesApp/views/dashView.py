@@ -8,7 +8,7 @@ from ..src.ui.auto.ui_DashForm import Ui_DashForm
 from .dialog.dashParamsDialog import DashParamsDialog
 from .components.HBarTwoValues import HBarTwoValues
 from ..models.structs import RegType, DashParams
-from ..models.tools import isDark
+from ..models.tools import isDark, updateIcons, checkUpdateIconsNeeded
 from ..models.consts import DASH_DATE_START, DASH_DATE_END
 
 class DashView(QWidget):
@@ -20,6 +20,7 @@ class DashView(QWidget):
         self.__textColor = palette.color(QPalette.ColorRole.Text)
         self.__ui = Ui_DashForm()
         self.__params = None
+        self.__theme = 'light'
 
         self.__ui.setupUi(self)
         self.setParams(DashParams(DASH_DATE_START, DASH_DATE_END, RegType.IN))
@@ -42,8 +43,15 @@ class DashView(QWidget):
 
         self.__ui.btnParams.clicked.connect(self.on_btnParams_clicked)
 
-        # updating icons
-        if isDark(): self.__ui.btnParams.setIcon(QIcon(u":/root/imgs/dark-params.svg"))
+        self.updateIcons()
+
+    def updateIcons(self):
+        if not checkUpdateIconsNeeded(self.__theme):
+            return
+        
+        self.__theme = updateIcons(self.__ui, (
+            ('btnParams', 'params'),
+        ))
 
     def setParams(self, params:DashParams):
         regType = "Entradas" if params.regType == RegType.IN else "Saídas"
@@ -60,7 +68,7 @@ class DashView(QWidget):
         view = DashParamsDialog(self.getParams(), self)
 
         if QDialog.DialogCode.Accepted == view.exec():
-            self.setParams(view.getParams())
+            self.setParams(view.getValues())
 
     def setCategories(self, values:set[tuple[str, float]]):
         series = QPieSeries()

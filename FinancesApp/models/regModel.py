@@ -10,15 +10,17 @@ class RegModel(QObject):
     def __init__(self, model:AppModel, parent:QObject=None):
         super().__init__(parent)
         self.__model = model
-        self.__reg = None
         self.__nav = NavigableData(model.getRegistries(), MAX_ITEMS_TABLE)
-        self.__tableParams = RegTableParams('Data Hora')
+        self.__tableParams = None
         
-        model.regsChanged.connect(self.on_model_regsChanged)
-
+        self.setTableParams(RegTableParams('Data Hora'))
+        
     def navigation(self): return self.__nav
 
     def setTableParams(self, params:RegTableParams):
+        if self.__tableParams == params:
+            return
+        
         self.__tableParams = params
 
         # TODO: change data by params
@@ -32,12 +34,6 @@ class RegModel(QObject):
     
     def getCategoryNames(self) -> list[str]:
         return [ c.name for c in self.__model.getCategories() ]
-    
-    def setRegistry(self, data:Registry|None):
-        self.__reg = data
-
-    def getRegistry(self):
-        return self.__reg
     
     def isEdit(self):
         return self.__reg is None

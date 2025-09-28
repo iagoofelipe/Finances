@@ -1,41 +1,46 @@
-from PySide6.QtWidgets import QWidget, QTableWidgetItem, QMessageBox, QDialog
-from PySide6.QtGui import QIcon
+from PySide6.QtWidgets import QWidget, QTableWidgetItem, QMessageBox
 from PySide6.QtCore import Signal, QDateTime
+from typing import Sequence
 
 from ..src.ui.auto.ui_RegForm import Ui_RegForm
+from .dialog.newCategoryDialog import NewCategoryDialog
+from .dialog.newCardDialog import NewCardDialog
 from .dialog.regTableParamsDialog import RegTableParamsDialog
-from ..models.tools import isDark
-from ..models.structs import Registry, RegType, NavigableData, RegTableParams
+from ..models.tools import checkUpdateIconsNeeded, updateIcons, castToRegType
+from ..models.structs import Registry, RegType, Category
 from ..models.appModel import AppModel
-from ..models.consts import MAX_ITEMS_TABLE, TABLE_COLS_REG
+from ..models.consts import TABLE_COLS_REG
 from ..models.regModel import RegModel
 
 class RegView(QWidget):
     previousRequired = Signal()
     nextRequired = Signal()
-    paramsRequired = Signal()
     deleteRequired = Signal(list) # ids : list[int]
     editRequired = Signal()
     clearRequired = Signal()
     saveRequired = Signal(Registry)
     newRequired = Signal()
-    newCategoryRequired = Signal()
-    newCardRequired = Signal()
+    newCategoryRequired = Signal(object) # Category
+    newCardRequired = Signal(object) # Card
     tableSelectionChanged = Signal(set) # indexes : set[int]
 
     def __init__(self, appmodel:AppModel, parent:QWidget=None):
         super().__init__(parent)
         self.__model = None
         self.__appmodel = appmodel
+        self.__theme = 'light'
         self.__ui = Ui_RegForm()
+        self.__reg = None
+        self.__cats = {}
 
         self.__ui.setupUi(self)
         self.__ui.widTable.setColumnCount(len(TABLE_COLS_REG))
-        self.__ui.cbCard.addItems([ c.name for c in appmodel.getCards() ])
-        self.__ui.cbCat.addItems([ c.name for c in appmodel.getCategories() ])
+        self.__ui.cbCard.addItems(sorted([ c.name for c in appmodel.getCards() ]))
+        self.__ui.cbCat.addItems(sorted([ c.name for c in filter(lambda x: x.type == RegType.IN, self.__cats) ]))
+        self.__ui.cbType.setCurrentText('Entrada')
 
         # Table Buttons
-        self.__ui.btnParams.clicked.connect(self.paramsRequired)
+        self.__ui.btnParams.clicked.connect(self.on_btnParams_clicked)
         self.__ui.btnDelete.clicked.connect(self.on_btnDelete_clicked)
         self.__ui.btnAdd.clicked.connect(self.newRequired)
 
@@ -47,53 +52,77 @@ class RegView(QWidget):
         self.__ui.btnEdit.clicked.connect(self.editRequired)
         self.__ui.btnDeleteDetails.clicked.connect(self.on_btnDeleteDetails_clicked)
         self.__ui.btnHide.clicked.connect(self.__ui.widTable.clearSelection)
-        self.__ui.btnAddCard.clicked.connect(self.newCategoryRequired)
-        self.__ui.btnAddCat.clicked.connect(self.newCardRequired)
+        self.__ui.btnAddCard.clicked.connect(self.on_btnAddCard_clicked)
+        self.__ui.btnAddCat.clicked.connect(self.on_btnAddCat_clicked)
         self.__ui.btnEraseCard.clicked.connect(lambda: self.__ui.cbCard.setCurrentIndex(-1))
         self.__ui.btnEraseCat.clicked.connect(lambda: self.__ui.cbCat.setCurrentIndex(-1))
         self.__ui.btnClear.clicked.connect(self.clearRequired)
         self.__ui.btnSave.clicked.connect(self.on_btnSave_clicked)
 
         self.__ui.widTable.itemSelectionChanged.connect(self.on_widTable_itemSelectionChanged)
+        self.__ui.cbType.currentTextChanged.connect(self.on_cbType_currentTextChanged)
 
-        # updating icons
-        if isDark():
-            self.__ui.btnParams.setIcon(QIcon(u":/root/imgs/dark-params.svg"))
-            self.__ui.btnDelete.setIcon(QIcon(u":/root/imgs/dark-trash.svg"))
-            self.__ui.btnDeleteDetails.setIcon(QIcon(u":/root/imgs/dark-trash.svg"))
-            self.__ui.btnEdit.setIcon(QIcon(u":/root/imgs/dark-pen.svg"))
-            self.__ui.btnAdd.setIcon(QIcon(u":/root/imgs/dark-plus.svg"))
-            self.__ui.btnPrev.setIcon(QIcon(u":/root/imgs/dark-left-arrow.svg"))
-            self.__ui.btnNext.setIcon(QIcon(u":/root/imgs/dark-right-arrow.svg"))
-            self.__ui.btnAddCard.setIcon(QIcon(u":/root/imgs/dark-plus.svg"))
-            self.__ui.btnAddCat.setIcon(QIcon(u":/root/imgs/dark-plus.svg"))
-            self.__ui.btnHide.setIcon(QIcon(u":/root/imgs/dark-eye-slash.svg"))
-            self.__ui.btnEraseCard.setIcon(QIcon(u":/root/imgs/dark-eraser.svg"))
-            self.__ui.btnEraseCat.setIcon(QIcon(u":/root/imgs/dark-eraser.svg"))
+        # connecting external events
+        appmodel.categoriesChanged.connect(self.updateCategories)
+        appmodel.cardsChanged.connect(lambda cards: self.setCards([ c.name for c in cards ]))
 
+        self.updateIcons()
         self.reset()
 
     #----------------------------------------------------------
     # Public Methods
+    def updateIcons(self):
+        if not checkUpdateIconsNeeded(self.__theme):
+            return
+        
+        self.__theme = updateIcons(self.__ui, (
+            ('btnParams', 'params'),
+            ('btnDeleteDetails', 'trash'),
+            ('btnAdd', 'plus'),
+
+            ('btnClear', 'eraser'),
+            ('btnSave', 'save'),
+            ('btnEdit', 'pen'),
+            ('btnDelete', 'trash'),
+            ('btnHide', 'eye-slash'),
+
+            ('btnAddCard', 'plus'),
+            ('btnEraseCard', 'eraser'),
+            ('btnAddCat', 'plus'),
+            ('btnEraseCat', 'eraser'),
+
+            ('btnPrev', 'left-arrow'),
+            ('btnNext', 'right-arrow'),
+        ))
+
+    def updateCategories(self, cats:tuple[Category]=None):
+        if cats is None:
+            cats = self.__appmodel.getCategories()
+
+        self.__cats[RegType.IN] = sorted([ c.name for c in filter(lambda c: c.type == RegType.IN, cats) ])
+        self.__cats[RegType.OUT] = sorted([ c.name for c in filter(lambda c: c.type == RegType.OUT, cats) ])
+
+        self.__updateCatsToCurrentType()
+
     def setModel(self, model:RegModel):
         self.__model = model
 
     def setDetailsEditable(self, arg:bool):
         self.__ui.widDetails.show()
+
+        self.__ui.btnEdit.setVisible(not arg)
+        self.__ui.btnClear.setVisible(arg)
+        self.__ui.btnSave.setVisible(arg)
+
         self.__ui.cbType.setEnabled(arg)
         self.__ui.leTitle.setReadOnly(not arg)
         self.__ui.dsVal.setReadOnly(not arg)
         self.__ui.dtDatetime.setReadOnly(not arg)
         self.__ui.cbCard.setEnabled(arg)
-        self.__ui.cbCat.setEnabled(arg)
-        self.__ui.ptDesc.setReadOnly(not arg)
-        self.__ui.btnEdit.setVisible(arg)
-        self.__ui.widDetailBtns.setVisible(arg)
         self.__ui.btnEraseCard.setEnabled(arg)
+        self.__ui.cbCat.setEnabled(arg)
         self.__ui.btnEraseCat.setEnabled(arg)
-
-        self.__ui.btnEdit.setVisible(not arg)
-        self.__ui.widDetailBtns.setVisible(arg)
+        self.__ui.ptDesc.setReadOnly(not arg)
 
     def setPreviousAvailable(self, arg:bool):
         self.__ui.btnPrev.setEnabled(arg)
@@ -101,7 +130,12 @@ class RegView(QWidget):
     def setNextAvailable(self, arg:bool):
         self.__ui.btnNext.setEnabled(arg)
 
-    def setDetailsData(self, data:Registry):
+    def setDetailsData(self, data:Registry|None):
+        self.__reg = data
+
+        if data is None:
+            return
+
         self.__ui.leTitle.setText(data.title)
         self.__ui.dsVal.setValue(data.value)
         self.__ui.dtDatetime.setDateTime(data.datetime)
@@ -119,6 +153,7 @@ class RegView(QWidget):
             self.__ui.cbCat.setCurrentText(data.category.name)
 
     def clearDetails(self):
+        self.__reg = None
         self.__ui.leTitle.clear()
         self.__ui.dsVal.setValue(0)
         self.__ui.dtDatetime.setDateTime(QDateTime.currentDateTime())
@@ -128,8 +163,10 @@ class RegView(QWidget):
         self.__ui.cbType.setCurrentText('Saída')
 
     def reset(self):
+        self.__reg = None
         self.__ui.widDetails.hide()
         self.__ui.btnDelete.hide()
+        self.updateCategories()
 
     def setTableLabel(self, start:int, end:int, total:int):
         self.__ui.lbTableNav.setText(f'{start} a {end} de {total}')
@@ -148,6 +185,7 @@ class RegView(QWidget):
             self.__ui.widTable.setItem(index, 3, QTableWidgetItem(reg.datetime.toString('dd/MM/yy hh:mm')))
             self.__ui.widTable.setItem(index, 4, QTableWidgetItem(reg.card.name if reg.card else ''))
             self.__ui.widTable.setItem(index, 5, QTableWidgetItem(reg.category.name if reg.category else ''))
+            self.__ui.widTable.setItem(index, 6, QTableWidgetItem(reg.description))
 
         self.__ui.widDetails.hide()
 
@@ -157,8 +195,43 @@ class RegView(QWidget):
     def setDeleteVisible(self, arg:bool):
         self.__ui.btnDelete.setVisible(arg)
 
+    def getNotEdittedData(self) -> Registry | None:
+        return self.__reg
+    
+    def getCurrentData(self) -> Registry:
+        regType = castToRegType(self.__ui.cbType.currentText())
+
+        return Registry(
+            self.__reg.id if self.__reg else None,
+            regType,
+            self.__ui.leTitle.text(),
+            self.__ui.dsVal.value(),
+            self.__ui.dtDatetime.dateTime(),
+            self.__ui.ptDesc.toPlainText(),
+            self.__appmodel.getCardByName(self.__ui.cbCard.currentText()) if self.__ui.cbCard.currentIndex() != -1 else None,
+            self.__appmodel.getCategoryByName(self.__ui.cbCat.currentText(), regType) if self.__ui.cbCat.currentIndex() != -1 else None,
+        )
+
+    def setCards(self, arg:Sequence[str]):
+        wid = self.__ui.cbCard
+
+        text = wid.currentText()
+        wid.clear()
+        wid.addItems(sorted(arg))
+
+        if text:
+            wid.setCurrentText(text)
+        else:
+            wid.setCurrentIndex(-1)
+
     #----------------------------------------------------------
     # Events
+    def on_btnParams_clicked(self):
+        view = RegTableParamsDialog(self.__model.getTableParams(), self)
+
+        if RegTableParamsDialog.Accepted == view.exec():
+            self.__model.setTableParams(view.getValues())
+
     def on_widTable_itemSelectionChanged(self):
         self.tableSelectionChanged.emit({ i.row() for i in self.__ui.widTable.selectedItems() })
 
@@ -169,18 +242,7 @@ class RegView(QWidget):
             QMessageBox(QMessageBox.Icon.Warning, 'Validação de Entradas', 'O título não pode ser vazio!').exec()
             return
         
-        reg = Registry(
-            None,
-            RegType.IN if self.__ui.cbType.currentText() == 'Entrada' else RegType.OUT,
-            title,
-            self.__ui.dsVal.value(),
-            self.__ui.dtDatetime.dateTime(),
-            self.__ui.ptDesc.toPlainText(),
-            self.__appmodel.getCardByName(self.__ui.cbCard.currentText()) if self.__ui.cbCard.currentIndex() != -1 else None,
-            self.__appmodel.getCategoryByName(self.__ui.cbCat.currentText()) if self.__ui.cbCat.currentIndex() != -1 else None,
-        )
-
-        self.saveRequired.emit(reg)
+        self.saveRequired.emit(self.getCurrentData())
 
     def on_btnDelete_clicked(self):
         indexes = { i.row() for i in self.__ui.widTable.selectedIndexes() }
@@ -195,7 +257,22 @@ class RegView(QWidget):
         if not self.__confirmDelete(1):
             return
         
-        self.deleteRequired.emit([self.__model.getRegistry().id])
+        self.deleteRequired.emit([self.__reg.id])
+
+    def on_btnAddCard_clicked(self):
+        view = NewCardDialog(parent=self)
+
+        if view.exec() == NewCardDialog.Accepted:
+            self.newCardRequired.emit(view.getValues())
+
+    def on_btnAddCat_clicked(self):
+        view = NewCategoryDialog(parent=self)
+
+        if view.exec() == NewCategoryDialog.Accepted:
+            self.newCategoryRequired.emit(view.getValues())
+
+    def on_cbType_currentTextChanged(self, text:str):
+        self.__updateCatsToCurrentType()
 
     #----------------------------------------------------------
     # Private Methods
@@ -203,5 +280,17 @@ class RegView(QWidget):
         msg = f'Deseja excluir {count} {'item' if count == 1 else 'itens'}? Esta ação não pode ser desfeita!'
         role = QMessageBox(QMessageBox.Icon.Question, 'Confirmação de Exclusão', msg, QMessageBox.Ok | QMessageBox.Cancel, parent=self).exec()
         return role == QMessageBox.Ok
+    
+    def __updateCatsToCurrentType(self):
+        typeReg = castToRegType(self.__ui.cbType.currentText())
+
+        self.__ui.cbCat.clear()
+        self.__ui.cbCat.addItems(self.__cats[typeReg])
+        
+        if self.__reg and self.__reg.type == typeReg:
+            self.__ui.cbCat.setCurrentText(self.__reg.category.name)
+        
+        else:
+            self.__ui.cbCat.setCurrentIndex(-1)
 
     #----------------------------------------------------------

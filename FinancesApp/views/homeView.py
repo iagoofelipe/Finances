@@ -6,7 +6,7 @@ from ..src.ui.auto.ui_HomeForm import Ui_HomeForm
 from .dashView import DashView
 from .regView import RegView
 from ..models.appModel import AppModel
-from ..models.tools import isDark
+from ..models.tools import checkUpdateIconsNeeded, updateIcons
 
 from enum import Enum, auto
 
@@ -33,6 +33,7 @@ class HomeView(QWidget):
         self.__ui = Ui_HomeForm()
         self.__btnNav = None
         self.__currentDisplay = None
+        self.__theme = 'light'
 
         self.__ui.setupUi(self)
 
@@ -43,13 +44,20 @@ class HomeView(QWidget):
         self.__ui.btnConfig.clicked.connect(lambda: self.setDisplayMode(self.DisplayMode.Config))
         self.__ui.btnLogout.clicked.connect(self.logoutRequired)
 
-        if isDark():
-            self.__ui.btnDash.setIcon(QIcon(u":/root/imgs/dark-pie.svg"))
-            self.__ui.btnReg.setIcon(QIcon(u":/root/imgs/dark-table.svg"))
-            self.__ui.btnCard.setIcon(QIcon(u":/root/imgs/dark-card.svg"))
-            self.__ui.btnUser.setIcon(QIcon(u":/root/imgs/dark-user.svg"))
-            self.__ui.btnConfig.setIcon(QIcon(u":/root/imgs/dark-gear.svg"))
-            self.__ui.btnLogout.setIcon(QIcon(u":/root/imgs/dark-logout.svg"))
+        self.updateIcons()
+
+    def updateIcons(self):
+        if not checkUpdateIconsNeeded(self.__theme):
+            return
+        
+        self.__theme = updateIcons(self.__ui, (
+            ('btnDash', 'pie'),
+            ('btnReg', 'table'),
+            ('btnCard', 'card'),
+            ('btnUser', 'user'),
+            ('btnConfig', 'gear'),
+            ('btnLogout', 'logout'),
+        ))
 
     def setDisplayMode(self, mode:DisplayMode):
         if self.__currentDisplay == mode:

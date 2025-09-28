@@ -22,6 +22,7 @@ class AppView(QObject):
 
     def initialize(self):
         self.__win.setMinimumSize(900, 550)
+        self.__win.resize(1150, 720)
         self.__win.setWindowTitle('Finances')
         self.setDisplayMode(self.DisplayMode.Login)
         self.__loginView.setDisabled(True)

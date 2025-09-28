@@ -6,64 +6,31 @@ import os
 import logging as log
 from uuid import uuid4
 from typing import Iterable
+import json
 
 from .consts import FILE_TMP
 from .structs import Card, Category, Registry, RegType
+from .tools import hasAll, castToRegType
 
 class AppModel(QObject):
     initializationFinished = Signal(bool, str)
     authFinished = Signal(bool)
     regsChanged = Signal(tuple)
+    cardsChanged = Signal(tuple)
+    categoriesChanged = Signal(tuple)
 
     def __init__(self):
         super().__init__()
         log.basicConfig(level=log.DEBUG)
 
-        # temporary data
-        self.__categories = {
-            '0': Category('0', 'Alimentação', ''),
-            '1': Category('1', 'Transporte', ''),
-            '2': Category('2', 'Pagamento', ''),
-        }
-
-        self.__cards = {
-            '0': Card('0', 'Nubank'),
-            '1': Card('1', 'Will'),
-        }
-
-        self.__regs = {
-            '0': Registry('0', RegType.IN, 'salário', 2000, QDateTime(2025, 9, 1, 6, 0, 0), category=self.__categories['2']),
-            '1': Registry('1', RegType.OUT, 'Uber', 12, QDateTime(2025, 9, 10, 11, 48, 0), category=self.__categories['1']),
-            '2': Registry('2', RegType.OUT, 'onibus', 5.5, QDateTime(2025, 9, 11, 11, 48, 0), category=self.__categories['1']),
-            '3': Registry('3', RegType.OUT, 'onibus', 5.5, QDateTime(2025, 9, 11, 11, 48, 0), category=self.__categories['1']),
-            '4': Registry('4', RegType.OUT, 'onibus', 5.5, QDateTime(2025, 9, 11, 11, 48, 0), category=self.__categories['1']),
-            '5': Registry('5', RegType.OUT, 'onibus', 5.5, QDateTime(2025, 9, 11, 11, 48, 0), category=self.__categories['1']),
-            '6': Registry('6', RegType.OUT, 'onibus', 5.5, QDateTime(2025, 9, 11, 11, 48, 0), category=self.__categories['1']),
-            '7': Registry('7', RegType.OUT, 'onibus', 5.5, QDateTime(2025, 9, 11, 11, 48, 0), category=self.__categories['1']),
-            '8': Registry('8', RegType.OUT, 'onibus', 5.5, QDateTime(2025, 9, 11, 11, 48, 0), category=self.__categories['1']),
-            '9': Registry('9', RegType.OUT, 'onibus', 5.5, QDateTime(2025, 9, 11, 11, 48, 0), category=self.__categories['1']),
-            '10': Registry('10', RegType.OUT, 'onibus', 5.5, QDateTime(2025, 9, 11, 11, 48, 0), category=self.__categories['1']),
-            '11': Registry('11', RegType.OUT, 'onibus', 5.5, QDateTime(2025, 9, 11, 11, 48, 0), category=self.__categories['1']),
-            '12': Registry('12', RegType.OUT, 'onibus', 5.5, QDateTime(2025, 9, 11, 11, 48, 0), category=self.__categories['1']),
-            '13': Registry('13', RegType.OUT, 'onibus', 5.5, QDateTime(2025, 9, 11, 11, 48, 0), category=self.__categories['1']),
-            '14': Registry('14', RegType.OUT, 'onibus', 5.5, QDateTime(2025, 9, 11, 11, 48, 0), category=self.__categories['1']),
-            '15': Registry('15', RegType.OUT, 'onibus', 5.5, QDateTime(2025, 9, 11, 11, 48, 0), category=self.__categories['1']),
-            '16': Registry('16', RegType.OUT, 'onibus', 5.5, QDateTime(2025, 9, 11, 11, 48, 0), category=self.__categories['1']),
-            '17': Registry('17', RegType.OUT, 'onibus', 5.5, QDateTime(2025, 9, 11, 11, 48, 0), category=self.__categories['1']),
-            '18': Registry('18', RegType.OUT, 'onibus', 5.5, QDateTime(2025, 9, 11, 11, 48, 0), category=self.__categories['1']),
-            '19': Registry('19', RegType.OUT, 'onibus', 5.5, QDateTime(2025, 9, 11, 11, 48, 0), category=self.__categories['1']),
-            '20': Registry('20', RegType.OUT, 'onibus', 5.5, QDateTime(2025, 9, 11, 11, 48, 0), category=self.__categories['1']),
-            '21': Registry('21', RegType.OUT, 'onibus', 5.5, QDateTime(2025, 9, 11, 11, 48, 0), category=self.__categories['1']),
-            '22': Registry('22', RegType.OUT, 'onibus', 5.5, QDateTime(2025, 9, 11, 11, 48, 0), category=self.__categories['1']),
-        }
-
+        
+        self.useTestData() # temporary data
         self.__updateStructs()
     
     #----------------------------------------------------------
     #region Public Methods
     def initialize(self):
         def func():
-            # sleep(3)
             self.__config = ConfigParser()
             crypto = None
             if os.path.exists(FILE_TMP):
@@ -91,7 +58,7 @@ class AppModel(QObject):
 
             self.__crypto = crypto
 
-            self.initializationFinished.emit(True, 'TEST_ERROR')
+            self.initializationFinished.emit(True, '')
         
         Thread(target=func).start()
 
@@ -157,24 +124,47 @@ class AppModel(QObject):
 
         Thread(target=func).start()
 
+    def useTestData(self):
+        file = 'FinancesApp/src/tests/data.json'
+        
+        if not os.path.exists(file):
+            log.info('[AppModel] data file not available, using data set instead')
+            self.__generateTestData()
+            return
+        
+        with open(file, encoding='utf-8') as f:
+            data = json.load(f)
+
+        self.__categories = { c['id'] : Category(type=castToRegType(c.pop("type")), **c) for c in data['categories'] }
+        self.__cards = { c['id'] : Card(**c) for c in data['cards'] }
+        self.__regs = {}
+
+        for r in data['registries']:
+            card = self.__cards.get(r.pop("cardId"))
+            category = self.__categories.get(r.pop("categoryId"))
+            datetime = QDateTime.fromString(r.pop("datetime"), "yyyy-MM-dd hh:mm:ss")
+
+            self.__regs[r['id']] = Registry(card=card, category=category, datetime=datetime, type=castToRegType(r.pop("type")), **r)
+
     #region Registry
 
     def newRegistry(self, reg:Registry) -> bool:
-        if reg.id in self.__regs:
+        if not reg.title or reg.value <= 0:
             return False
         
         reg.id = str(uuid4())
         self.__regs[reg.id] = reg
         self.__updateStructRegs()
 
-        self.regsChanged.emit(self.__tupleRegs)
         return True
     
     def updateRegistry(self, reg:Registry) -> bool:
+        if reg.id not in self.__regs:
+            return False
+        
         self.__regs[reg.id] = reg
         self.__updateStructRegs()
 
-        self.regsChanged.emit(self.__tupleRegs)
         return True
     
     def deleteRegistry(self, id:str) -> bool:
@@ -184,19 +174,15 @@ class AppModel(QObject):
         self.__regs.pop(id)
         self.__updateStructRegs()
 
-        self.regsChanged.emit(self.__tupleRegs)
         return True
 
     def deleteRegistries(self, ids:Iterable[str]) -> bool:
-        for _id in ids:
-            if _id not in self.__regs:
-                return False
-            
-            self.__regs.pop(_id)
-
+        if not hasAll(ids, self.__regs):
+            return False
+        
+        for _id in ids: self.__regs.pop(_id)
         self.__updateStructRegs()
 
-        self.regsChanged.emit(self.__tupleRegs)
         return True
 
     def getRegistryById(self, id:str) -> Registry | None:
@@ -209,6 +195,43 @@ class AppModel(QObject):
     
     #region Card
 
+    def newCard(self, card:Card) -> bool:
+        if not card.name:
+            return False
+        
+        card.id = str(uuid4())
+        self.__cards[card.id] = card
+        self.__updateStructCards()
+
+        return True
+
+    def updateCard(self, card:Card) -> bool:
+        if card.id not in self.__cards:
+            return False
+    
+        self.__cards[card.id] = card
+        self.__updateStructCards()
+        
+        return True
+
+    def deleteCard(self, id:str) -> bool:
+        if id not in self.__cards:
+            return False
+        
+        self.__cards.pop(id)
+        self.__updateStructCards()
+
+        return True
+
+    def deleteCards(self, ids:Iterable[str]) -> bool:
+        if not hasAll(ids, self.__cards):
+            return False
+
+        for _id in ids: self.__regs.pop(_id)
+        self.__updateStructCats()
+
+        return True
+
     def getCardById(self, id:str): return self.__cards.get(id)
     
     def getCardByName(self, name:str): return self.__cardsByName.get(name)
@@ -219,11 +242,48 @@ class AppModel(QObject):
 
     #region Category
 
+    def newCategory(self, cat:Category) -> bool:
+        if not cat.name:
+            return False
+        
+        cat.id = str(uuid4())
+        self.__categories[cat.id] = cat
+        self.__updateStructCats()
+
+        return True
+
+    def updateCategory(self, cat:Category) -> bool:
+        if cat.id not in self.__categories:
+            return False
+    
+        self.__categories[cat.id] = cat
+        self.__updateStructCats()
+        
+        return True
+
+    def deleteCard(self, id:str) -> bool:
+        if id not in self.__categories:
+            return False
+        
+        self.__categories.pop(id)
+        self.__updateStructCats()
+
+        return True
+
+    def deleteCats(self, ids:Iterable[str]) -> bool:
+        if not hasAll(ids, self.__categories):
+            return False
+
+        for _id in ids: self.__categories.pop(_id)
+        self.__updateStructCats()
+
+        return True
+
     def getCategoryById(self, id:str): return self.__categories.get(id)
     
     def getCategories(self): return self.__tupleCategories
     
-    def getCategoryByName(self, name:str): return self.__catsByName.get(name)
+    def getCategoryByName(self, name:str, regType:RegType): return self.__catsByName[regType].get(name)
 
     #endregion
 
@@ -237,15 +297,59 @@ class AppModel(QObject):
 
     def __updateStructRegs(self):
         self.__tupleRegs = tuple(self.__regs.values())
+        self.regsChanged.emit(self.__tupleRegs)
 
     def __updateStructCards(self):
         self.__tupleCards = tuple(self.__cards.values())
         self.__cardsByName = { c.name: c for c in self.__tupleCards }
+        self.cardsChanged.emit(self.__tupleCards)
 
     def __updateStructCats(self):
         self.__tupleCategories = tuple(self.__categories.values())
-        self.__catsByName = { c.name: c for c in self.__tupleCategories }
+        self.__catsByName = {
+            RegType.IN : { c.name: c for c in filter(lambda x: x.type == RegType.IN, self.__tupleCategories) },
+            RegType.OUT : { c.name: c for c in filter(lambda x: x.type == RegType.OUT, self.__tupleCategories) },
+        }
 
+        self.categoriesChanged.emit(self.__tupleCategories)
+
+    def __generateTestData(self):
+        self.__categories = {
+            '0': Category('0', 'Alimentação', RegType.OUT),
+            '1': Category('1', 'Transporte', RegType.OUT),
+            '2': Category('2', 'Pagamento', RegType.IN),
+        }
+
+        self.__cards = {
+            '0': Card('0', 'Nubank'),
+            '1': Card('1', 'Will'),
+        }
+
+        self.__regs = {
+            '0': Registry('0', RegType.IN, 'salário', 2000, QDateTime(2025, 9, 1, 6, 0, 0), category=self.__categories['2']),
+            '1': Registry('1', RegType.OUT, 'Uber', 12, QDateTime(2025, 9, 10, 11, 48, 0), category=self.__categories['1']),
+            '2': Registry('2', RegType.OUT, 'onibus', 5.5, QDateTime(2025, 9, 11, 11, 48, 0), category=self.__categories['1']),
+            '3': Registry('3', RegType.OUT, 'onibus', 5.5, QDateTime(2025, 9, 11, 11, 48, 0), category=self.__categories['1']),
+            '4': Registry('4', RegType.OUT, 'onibus', 5.5, QDateTime(2025, 9, 11, 11, 48, 0), category=self.__categories['1']),
+            '5': Registry('5', RegType.OUT, 'onibus', 5.5, QDateTime(2025, 9, 11, 11, 48, 0), category=self.__categories['1']),
+            '6': Registry('6', RegType.OUT, 'onibus', 5.5, QDateTime(2025, 9, 11, 11, 48, 0), category=self.__categories['1']),
+            '7': Registry('7', RegType.OUT, 'onibus', 5.5, QDateTime(2025, 9, 11, 11, 48, 0), category=self.__categories['1']),
+            '8': Registry('8', RegType.OUT, 'onibus', 5.5, QDateTime(2025, 9, 11, 11, 48, 0), category=self.__categories['1']),
+            '9': Registry('9', RegType.OUT, 'onibus', 5.5, QDateTime(2025, 9, 11, 11, 48, 0), category=self.__categories['1']),
+            '10': Registry('10', RegType.OUT, 'onibus', 5.5, QDateTime(2025, 9, 11, 11, 48, 0), category=self.__categories['1']),
+            '11': Registry('11', RegType.OUT, 'onibus', 5.5, QDateTime(2025, 9, 11, 11, 48, 0), category=self.__categories['1']),
+            '12': Registry('12', RegType.OUT, 'onibus', 5.5, QDateTime(2025, 9, 11, 11, 48, 0), category=self.__categories['1']),
+            '13': Registry('13', RegType.OUT, 'onibus', 5.5, QDateTime(2025, 9, 11, 11, 48, 0), category=self.__categories['1']),
+            '14': Registry('14', RegType.OUT, 'onibus', 5.5, QDateTime(2025, 9, 11, 11, 48, 0), category=self.__categories['1']),
+            '15': Registry('15', RegType.OUT, 'onibus', 5.5, QDateTime(2025, 9, 11, 11, 48, 0), category=self.__categories['1']),
+            '16': Registry('16', RegType.OUT, 'onibus', 5.5, QDateTime(2025, 9, 11, 11, 48, 0), category=self.__categories['1']),
+            '17': Registry('17', RegType.OUT, 'onibus', 5.5, QDateTime(2025, 9, 11, 11, 48, 0), category=self.__categories['1']),
+            '18': Registry('18', RegType.OUT, 'onibus', 5.5, QDateTime(2025, 9, 11, 11, 48, 0), category=self.__categories['1']),
+            '19': Registry('19', RegType.OUT, 'onibus', 5.5, QDateTime(2025, 9, 11, 11, 48, 0), category=self.__categories['1']),
+            '20': Registry('20', RegType.OUT, 'onibus', 5.5, QDateTime(2025, 9, 11, 11, 48, 0), category=self.__categories['1']),
+            '21': Registry('21', RegType.OUT, 'onibus', 5.5, QDateTime(2025, 9, 11, 11, 48, 0), category=self.__categories['1']),
+            '22': Registry('22', RegType.OUT, 'onibus', 5.5, QDateTime(2025, 9, 11, 11, 48, 0), category=self.__categories['1']),
+        }
 
     #endregion
     #----------------------------------------------------------
