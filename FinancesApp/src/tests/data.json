@@ -1,4 +1,11 @@
 {
+    "users": [
+        {
+            "id": "0",
+            "username": "iago",
+            "password": "1234"
+        }
+    ],
     "categories": [
         {
             "id": "0",
