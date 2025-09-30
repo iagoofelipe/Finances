@@ -10,6 +10,13 @@ class RegType(Enum):
     IN = 1
 
 @dataclass
+class User:
+    id: str
+    name: str
+    username: str
+    password: str
+
+@dataclass
 class Category:
     id: str
     name: str
