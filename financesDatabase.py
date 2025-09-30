@@ -63,6 +63,8 @@ class Registry(AbstractTable):
     __table__ = 'registry'
 
 class FinancesDatabase:
+    __classFields = {}
+
     def __init__(self):
         self.__exists = os.path.exists(FILE_DB)
         self.__user = None
@@ -87,6 +89,19 @@ class FinancesDatabase:
 
         self.__crypto = Fernet(key)
     
+    @staticmethod
+    def tableClassFields(classType:AbstractTable) -> list[str]:
+        cls = __class__.__classFields
+        
+        if classType not in cls:
+            cls[classType] = [ x.name for x in fields(classType) ]
+        
+        return cls[classType]
+    
+    @staticmethod
+    def tableClassHasField(classType:AbstractTable, field:str) -> bool:
+        return field in __class__.tableClassFields(classType)
+
     def auth(self, username:str, password:str) -> bool:
         self.__user = self.get(User, True, username=username)
 
@@ -101,29 +116,40 @@ class FinancesDatabase:
         return True
 
     def createUser(self, name:str, username:str, password:str) -> User | None:
-        # if already exists
-        self.__cursor.execute('SELECT id FROM user WHERE username=?', (username, ))
-        if self.__cursor.fetchone():
+        if self.getCount(User, username=username):
             return
 
         return self.create(User, name=name, username=username, password=password)
     
     def getUser(self) -> User | None:
         return self.__user
+    
+    def getCount(self, classType:AbstractTable, **params) -> int:
+        """ return the number of matches from the table by params """
+
+        sql = f'SELECT COUNT(*) FROM `{classType.__table__}`'
+
+        if params:
+            places, args = self.__getPlaceWithArgs(params)
+            sql += ' WHERE ' + places
+            self.__cursor.execute(sql, args)
+
+        else:
+            self.__cursor.execute(sql)
+
+        return self.__cursor.fetchone()[0]
 
     def create(self, classType:_T, **params) -> _T | None:
         """ insert a new value from a dataclass object. The dataclass must exist in the database, with the same fields """
 
-        _fields = [ x.name for x in fields(classType) ]
-
-        if 'userId' in _fields:
+        if self.tableClassHasField('userId'):
             if not self.__user:
                 return
             
             params['userId'] = self.__user.id
 
         # generating id
-        if 'id' in _fields:
+        if self.tableClassHasField('id'):
             params['id'] = id = str(uuid4())
 
         # encrypting fields
@@ -177,11 +203,11 @@ class FinancesDatabase:
         return obj
 
     def __getPlace(self, data, dataclass=False):
-        return ','.join(['?' for _ in (fields(data) if dataclass else data)])
+        return ','.join(['?' for _ in (self.tableClassFields(type(data)) if dataclass else data)])
 
     def __getPlaceWithArgs(self, data, dataclass=False):
         if dataclass:
-            dataFields = [ x.name for x in fields(data) ]
+            dataFields = self.tableClassFields(type(data))
             places = ['?' for _ in dataFields]
             args = [ getattr(data, field) for field in dataFields ]
 
@@ -213,19 +239,11 @@ if __name__ == '__main__':
             exit()
 
         db.create(Card, name='Nubank')
-        db.create(Card, name='Mercado Pago')
+        db.create(Card, name='Santander')
 
-    print('user connected')
-    print('Users', db.get(User))
-    # print('update', db.update(User, db.getUser().id, name='Iago Carvalho'))
-    # print('Users', db.get(User))
-
-    # id1 = 'f516613e-c1a6-4e8c-8001-1bccd87d6b3e'
-    # id2 = 'aaaaaaa'
-    # print(db.get(Card, userId=id1))                     # [<Card id=...>, ...]
-    # print(db.get(Card, returnsOne=True, userId=id1))    # <Card id=...>
-    # print(db.get(Card, userId=id2))                     # ()
-    # print(db.get(Card, returnsOne=True, userId=id2))    # None
-    # print(db.get(Card))                                 # [<Card id=...>, ...]
-    # print(db.get(Card, returnsOne=True))                # <Card id=...>
-    # print(db.get(User, username='iago'))                # <User>
+    print(f'Welcome, {db.getUser().name}!')
+    print('Users', *db.get(User), sep='\n\t')
+    print('Cards', *db.get(Card), sep='\n\t')
+    print('Categories', *db.get(Category), sep='\n\t')
+    print('Thirds', *db.get(Third), sep='\n\t')
+    print('Registries', *db.get(Registry), sep='\n\t')

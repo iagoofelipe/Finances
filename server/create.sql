@@ -42,3 +42,12 @@ CREATE TABLE `registry` (
     `categoryId` TEXT DEFAULT (NULL) REFERENCES `category`(`id`),
     `thirdId` TEXT DEFAULT (NULL) REFERENCES `third`(`id`)
 );
+
+CREATE TABLE `card_invoice` (
+    `id` TEXT PRIMARY KEY,
+    `month` INTEGER NOT NULL,
+    `year` INTEGER NOT NULL,
+    `payDate` DATE NOT NULL,
+    `limit` INTEGER NOT NULL,
+    `cardId` TEXT NOT NULL REFERENCES `card`(`id`)
+);
