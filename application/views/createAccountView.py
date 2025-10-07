@@ -2,13 +2,13 @@ from PySide6.QtWidgets import QWidget, QMessageBox
 from PySide6.QtCore import Signal
 from dataclasses import fields
 
-from ..ui.auto.ui_CreateAccountForm import Ui_CreateAccountForm
-from ..src.structs import NewAccountData
+from ..src.ui.auto.ui_CreateAccountForm import Ui_CreateAccountForm
+from ..src.structs import User
 from ..src.tools import generateStyleSheet
 
 class CreateAccountView(QWidget):
     backRequired = Signal()
-    continueRequired = Signal(NewAccountData)
+    continueRequired = Signal(User)
 
     def __init__(self, parent:QWidget=None):
         super().__init__(parent)
@@ -40,10 +40,20 @@ class CreateAccountView(QWidget):
         
         self.continueRequired.emit(data)
 
-    def getValues(self) -> NewAccountData:
-        return NewAccountData(
+    def getValues(self) -> User:
+        return User(
+            None,
             self.__ui.leUsername.text(),
             self.__ui.leName.text(),
             self.__ui.leEmail.text(),
             self.__ui.lePassword.text(),
         )
+    
+    def setWaitMode(self, arg:bool):
+        self.__ui.leUsername.setDisabled(arg)
+        self.__ui.leName.setDisabled(arg)
+        self.__ui.leEmail.setDisabled(arg)
+        self.__ui.lePassword.setDisabled(arg)
+        self.__ui.lePassConfirm.setDisabled(arg)
+        self.__ui.btnVoltar.setDisabled(arg)
+        self.__ui.btnSalvar.setDisabled(arg)

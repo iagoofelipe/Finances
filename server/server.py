@@ -3,21 +3,22 @@ import asyncio
 import json
 from dataclasses import fields
 
-from .database import FinancesDatabase, AbstractTable
+from . import database
 
 BUFFER_SIZE = 1024
 IP = '127.0.0.1'
 PORT = 8888
-SEP = '!0'
+SEP = '<CMD_END>'
 
 CMD_AUTH = 'AUTH'
 CMD_LOGOUT = 'LOGOUT'
+CMD_CREATE_USER = 'CREATE_USER'
 
-def dataclassToDict(obj:AbstractTable) -> dict:
+def dataclassToDict(obj:database.AbstractTable) -> dict:
     return { field.name : getattr(obj, field.name) for field in fields(obj) }
 
 class FinancesClientHandler:
-    def __init__(self, db:FinancesDatabase, id:int, reader:asyncio.StreamReader, writer:asyncio.StreamWriter):
+    def __init__(self, db:database.FinancesDatabase, id:int, reader:asyncio.StreamReader, writer:asyncio.StreamWriter):
         self.__db = db
         self.__id = id
         self.__reader = reader
@@ -37,6 +38,13 @@ class FinancesClientHandler:
 
         await self.sendCommand(CMD_AUTH, { 'success': success, 'user': dict_user })
 
+    async def createUser(self, **params):
+        log.info(f'{self.__pref} create user required with {params=}')
+        success = bool(self.__db.createUser(**params))
+        log.info(f'{self.__pref} create user result {success=}')
+        
+        await self.sendCommand(CMD_CREATE_USER, { 'success': success })
+
     async def logout(self):
         self.__user = None
         log.debug(f'{self.__pref} user logout')
@@ -49,7 +57,6 @@ class FinancesClientHandler:
         try:
             while True:
                 data = await self.__reader.read(BUFFER_SIZE)
-                log.debug(f'{self.__pref} len data received: {len(data)}')
 
                 if not data:
                     break
@@ -107,6 +114,9 @@ class FinancesClientHandler:
         elif cmd == CMD_LOGOUT:
             await self.logout()
 
+        elif cmd == CMD_CREATE_USER:
+            await self.createUser(**params)
+
         else:
             log.info(f'{self.__pref} undefined command {cmd}')
 
@@ -118,7 +128,7 @@ class FinancesServer:
         log.basicConfig(level=log.DEBUG)
 
         self.__clients = {}
-        self.__db = FinancesDatabase()
+        self.__db = database.FinancesDatabase()
 
     def exec(self):
         self.__db.initialize()

@@ -2,12 +2,13 @@ from sqlite3 import connect
 from uuid import uuid4
 from cryptography.fernet import Fernet
 import os
+import logging as log
 from dataclasses import dataclass, fields
 import datetime as dt
-from typing import TypeVar
+from typing import TypeVar, Iterable
 
 FILE_DB = 'database.db'
-FILE_DB_CREATE = 'httpserver/create.sql'
+FILE_DB_CREATE = 'server/src/create.sql'
 
 _T = TypeVar('_T')
 
@@ -20,61 +21,61 @@ class AbstractTable:
 class User(AbstractTable):
     id: str
     name: str
+    email: str
     username: str
     password: str
     __table__ = 'user'
     __encryptedFields__ = ['password']
 
-@dataclass
-class Category(AbstractTable):
-    id: str
-    name: str
-    type: int
-    description: str = ''
-    userId: str = None
-    __table__ = 'category'
+# @dataclass
+# class Category(AbstractTable):
+#     id: str
+#     name: str
+#     type: int
+#     description: str = ''
+#     userId: str = None
+#     __table__ = 'category'
 
-@dataclass
-class Card(AbstractTable):
-    id: str
-    name: str
-    userId: str = None
-    __table__ = 'card'
+# @dataclass
+# class Card(AbstractTable):
+#     id: str
+#     name: str
+#     userId: str = None
+#     __table__ = 'card'
 
-@dataclass
-class Third(AbstractTable):
-    id: str
-    name: str
-    userId: str = None
-    __table__ = 'third'
+# @dataclass
+# class Third(AbstractTable):
+#     id: str
+#     name: str
+#     userId: str = None
+#     __table__ = 'third'
 
-@dataclass
-class Registry(AbstractTable):
-    id: str
-    type: int
-    title: str
-    value: float
-    datetime: dt.datetime
-    description: str = ''
-    userId: str = None
-    cardId: str | None = None
-    categoryId: str | None = None
-    thirdId: str | None = None
-    __table__ = 'registry'
+# @dataclass
+# class Registry(AbstractTable):
+#     id: str
+#     type: int
+#     title: str
+#     value: float
+#     datetime: dt.datetime
+#     description: str = ''
+#     userId: str = None
+#     cardId: str | None = None
+#     categoryId: str | None = None
+#     thirdId: str | None = None
+#     __table__ = 'registry'
 
 class FinancesDatabase:
     __classFields = {}
 
     def __init__(self):
         self.__exists = os.path.exists(FILE_DB)
-        # self.__user = None
 
     def initialize(self):
         self.__conn = conn = connect(FILE_DB)
         self.__cursor = cursor = self.__conn.cursor()
 
         if not self.__exists:
-            with open('server/create.sql', encoding='utf-8') as f:
+            with open(FILE_DB_CREATE, encoding='utf-8') as f:
                 script = f.read()
                 cursor.executescript(script)
 
@@ -114,11 +115,13 @@ class FinancesDatabase:
         
         return user
 
-    def createUser(self, name:str, username:str, password:str) -> User | None:
-        if self.getCount(User, username=username):
+    def createUser(self, **params) -> User | None:
+        if self.getCount(User, username=params['username']) or self.getCount(User, email=params['email']):
+            log.debug('[Database] users found with the same username or email')
             return
 
-        return self.create(User, name=name, username=username, password=password)
+        log.debug('[Database] no users found with the same username or email')
+        return self.create(User, **params)
     
     def getCount(self, classType:AbstractTable, **params) -> int:
         """ return the number of matches from the table by params """
@@ -138,20 +141,15 @@ class FinancesDatabase:
     def create(self, classType:_T, **params) -> _T | None:
         """ insert a new value from a dataclass object. The dataclass must exist in the database, with the same fields """
 
-        # if self.tableClassHasField(classType, 'userId'):
-        #     if not self.__user:
-        #         return
-            
-        #     params['userId'] = self.__user.id
-
         # generating id
         if self.tableClassHasField(classType, 'id'):
             params['id'] = id = str(uuid4())
 
         # encrypting fields
+        log.debug(f'[Database] new {classType} with {params=}')
         if classType.__encryptedFields__:
             for field in filter(lambda x: x in params, classType.__encryptedFields__):
-                params[field] = self.__crypto.encrypt(params[field]).decode()
+                params[field] = self.__crypto.encrypt(params[field].encode()).decode()
             
         places = self.__getPlace(params)
         keys = ','.join(params)
@@ -164,11 +162,13 @@ class FinancesDatabase:
         return self.get(classType, True, id=id)
 
     def get(self, classType:_T, returnsOne=False, **params) -> _T | tuple[_T] | None:
-        places, args = self.__getPlaceWithArgs(params)
         sql = f'SELECT * FROM `{classType.__table__}`'
         
         if params:
+            places, args = self.__getPlaceWithArgs(params)
             sql += ' WHERE ' + places
+        else:
+            args = []
 
         self.__cursor.execute(sql, args)
 
@@ -198,10 +198,13 @@ class FinancesDatabase:
 
         return obj
 
-    def __getPlace(self, data, dataclass=False):
+    def __getPlace(self, data:Iterable|AbstractTable, dataclass=False):
+        """ ?,?, ... ,? """
         return ','.join(['?' for _ in (self.tableClassFields(type(data)) if dataclass else data)])
 
-    def __getPlaceWithArgs(self, data, dataclass=False):
+    def __getPlaceWithArgs(self, data:dict|AbstractTable, dataclass=False):
+        """ returns ('?,?, ... ,?', [arg1, arg2, ..., argN]) """
+
         if dataclass:
             dataFields = self.tableClassFields(type(data))
             places = ['?' for _ in dataFields]
@@ -234,12 +237,8 @@ if __name__ == '__main__':
             print('user not connected')
             exit()
 
-        db.create(Card, name='Nubank')
-        db.create(Card, name='Santander')
+        # db.create(Card, name='Nubank')
+        # db.create(Card, name='Santander')
 
     print(f'Welcome, {db.getUser().name}!')
     print('Users', *db.get(User), sep='\n\t')
-    print('Cards', *db.get(Card), sep='\n\t')
-    print('Categories', *db.get(Category), sep='\n\t')
-    print('Thirds', *db.get(Third), sep='\n\t')
-    print('Registries', *db.get(Registry), sep='\n\t')

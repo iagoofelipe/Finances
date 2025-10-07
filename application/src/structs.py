@@ -7,7 +7,8 @@ class LoginData:
     remember: bool
 
 @dataclass
-class NewAccountData:
+class User:
+    id: str
     username: str
     name: str
     email: str

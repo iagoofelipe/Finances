@@ -1,7 +1,7 @@
 from PySide6.QtCore import Signal
 from PySide6.QtWidgets import QWidget
 
-from ..ui.auto.ui_LoginPage import Ui_LoginPage
+from ..src.ui.auto.ui_LoginPage import Ui_LoginPage
 from ..src.tools import generateStyleSheet
 from .loginFormView import LoginFormView
 from .createAccountView import CreateAccountView
@@ -22,8 +22,11 @@ class LoginView(QWidget):
         self.__ui.setupUi(self)
         self.setStyleSheet(generateStyleSheet())
     
-    def getLoginFormView(self) -> LoginFormView | None: return self.__uiForm if self.__currentUi == self.UI_FORM else None
-    def getCreateAccountView(self) -> CreateAccountView | None: return self.__uiCreate if self.__currentUi == self.UI_CREATE_ACCOUNT else None
+    def getLoginFormView(self) -> LoginFormView | None: return self.__uiForm if self.isCurrentView(self.UI_FORM) else None
+    def getCreateAccountView(self) -> CreateAccountView | None: return self.__uiCreate if self.isCurrentView(self.UI_CREATE_ACCOUNT) else None
+
+    def isCurrentView(self, ui:int):
+        return self.__currentUi == ui
 
     def setUi(self, ui:int):
         parent = self.__ui.widMain
@@ -45,3 +48,10 @@ class LoginView(QWidget):
         self.__ui.mainLayout.replaceWidget(widOld, widNew)
         widOld.deleteLater()
         self.uiChanged.emit(ui)
+
+    # def setWaitMode(self, arg:bool):
+    #     if self.__currentUi == self.UI_FORM:
+    #         self.__uiForm.setWaitMode(arg)
+        
+    #     elif self.__currentUi == self.UI_CREATE_ACCOUNT:
+    #         self.__uiCreate.setWaitMode(arg)

@@ -1,4 +1,5 @@
 from typing import Iterable
+from dataclasses import fields
 
 STYLE_PROPERTIES = {
     'BG_HIGHLIGHT': '#59A1FF',
@@ -105,3 +106,6 @@ def generateStyleSheet(inputs:Iterable[str]=None, highlightBtns:Iterable[str]=No
         style += __style['btns-link'] % props
 
     return style
+
+def dataclassToDict(obj:object):
+    return { field.name : getattr(obj, field.name) for field in fields(obj) }

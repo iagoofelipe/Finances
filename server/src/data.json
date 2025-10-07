@@ -1,0 +1,91 @@
+{
+    "user": [
+        {
+            "id": "0",
+            "name": "Iago Carvalho",
+            "email": "iagoo.felipe123@gmail.com",
+            "username": "iagoo.felipe",
+            "password": "1234"
+        },
+        {
+            "id": "1",
+            "name": "Marcelo Carvalho",
+            "email": "marcelo@email.com",
+            "username": "marceloelo",
+            "password": "1234"
+        }
+    ],
+    "profile": [
+        {
+            "id": "0",
+            "name": "Principal",
+            "user_id": "0"
+        },
+        {
+            "id": "1",
+            "name": "Principal",
+            "user_id": "1"
+        },
+        {
+            "id": "2",
+            "name": "Loja A",
+            "user_id": "0"
+        }
+    ],
+    "profile_role": [
+        {
+            "id": "0",
+            "edit": true,
+            "view": true,
+            "pending": true,
+            "profile_id": "0",
+            "user_id": "1"
+        }
+    ],
+    "profile_transfer": [
+        {
+            "profile_id": "2",
+            "origin_user_id": "0",
+            "destiny_user_id": "1"
+        }
+    ],
+    "account": [
+        {
+            "id": "0",
+            "name": "Mercado Pago",
+            "profile_id": "0"
+        }
+    ],
+    "card": [
+        {
+            "id": "0",
+            "name": "Nubank",
+            "dueDay": 3,
+            "limit": 3500.00,
+            "profile_id": "0"
+        }
+    ],
+    "card_invoice": [
+        {
+            "id": "0",
+            "month": 10,
+            "year": 2025,
+            "card_id": "0"
+        }
+    ],
+    "registry" : [
+        {
+            "id": "0",
+            "title": "Lanche",
+            "value": 7.5,
+            "pending": false,
+            "in": false,
+            "category": "Alimentação",
+            "date": "2025-10-01",
+            "description": "",
+            "operationName": "Crédito",
+            "card_invoice_id": "0",
+            "account_id": null
+        }
+    ]
+}

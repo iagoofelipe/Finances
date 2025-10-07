@@ -1,7 +1,7 @@
 from PySide6.QtWidgets import QWidget, QMessageBox
 from PySide6.QtCore import Signal
 
-from ..ui.auto.ui_LoginForm import Ui_LoginForm
+from ..src.ui.auto.ui_LoginForm import Ui_LoginForm
 from ..src.structs import LoginData
 from ..src.tools import generateStyleSheet
 
@@ -42,3 +42,11 @@ class LoginFormView(QWidget):
             self.__ui.lePassword.text(),
             self.__ui.cbLembrar.isChecked()
         )
+
+    def setWaitMode(self, arg:bool):
+        self.__ui.leUsername.setDisabled(arg)
+        self.__ui.lePassword.setDisabled(arg)
+        self.__ui.cbLembrar.setDisabled(arg)
+        self.__ui.btnAcessar.setDisabled(arg)
+        self.__ui.btnCriar.setDisabled(arg)
+        self.__ui.btnEsqueci.setDisabled(arg)
