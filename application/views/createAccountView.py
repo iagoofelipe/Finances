@@ -30,7 +30,7 @@ class CreateAccountView(QWidget):
         data = self.getValues()
 
         for field in fields(data):
-            if not getattr(data, field.name):
+            if not getattr(data, field.name) and field.name != 'id':
                 QMessageBox(QMessageBox.Warning, 'Validação de Parâmetros', 'todos os campos devem ser preenchidos!', parent=self).exec()
                 return
         
