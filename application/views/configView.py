@@ -4,7 +4,7 @@ from PySide6.QtCore import Signal
 from ..src.ui.auto.ui_ConfigForm import Ui_ConfigForm
 from ..src.tools import generateStyleSheet
 from ..src.consts import MSG_DELETE_PROFILE
-from .components.dialog import newProfilePopup, MessageDialog, NewProfileDialog
+from .components.dialog import MessageDialog, NewProfileDialog
 
 class ConfigView(QWidget):
     TITLE = 'configurações'
