@@ -12,7 +12,6 @@ class LoginController(QObject):
 
         model.authenticationFinished.connect(self.on_model_authenticationFinished)
         model.createUserFinished.connect(self.on_model_createUserFinished)
-        
 
     def setView(self, view:LoginView):
         self.__view = view

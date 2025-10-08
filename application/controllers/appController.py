@@ -54,6 +54,7 @@ class AppController(QObject):
             self.__model.saveCredentials()
 
         self.__view.setUi(AppView.UI_MAIN)
+        self.__view.getMainPageView().setUserName(self.__model.getUser().name)
 
     def on_MainPageView_logoutRequired(self):
         self.__view.getMainPageView().setWaitMode(True)

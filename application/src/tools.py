@@ -1,17 +1,7 @@
 from typing import Iterable
 from dataclasses import fields
 
-STYLE_PROPERTIES = {
-    'BG_HIGHLIGHT': '#59A1FF',
-    'BG_HIGHLIGHT_HOVER': "#2E70C7",
-    'BG_PRIMARY': '#FFFFFF',
-    'BG_SECONDARY': '#F6F6F6',
-    'BORDER': '1px solid #EDEDED',
-    'BORDER_RADIUS': 15,
-    'COLOR_HIGHLIGHT': '#006FFF',
-    'COLOR_TITLE': '#000000',
-    'COLOR_SUBTITLE': '#636363',
-}
+from .consts import STYLE_PROPERTIES
 
 __style = {
     'default': """
@@ -37,7 +27,7 @@ __style = {
             background-color: %(BG_HIGHLIGHT)s;
             border: none;
             border-radius: %(BORDER_RADIUS)s;
-            padding: 10;
+            padding: 10 30;
             color: white;
         }
 
@@ -51,7 +41,7 @@ __style = {
             color: %(COLOR_SUBTITLE)s;
             border: %(BORDER)s;
             border-radius: %(BORDER_RADIUS)s;
-            padding: 10;
+            padding: 10 30;
         }
 
         %(ids_hover)s {
@@ -69,10 +59,15 @@ __style = {
         %(ids_hover)s {
             background-color: %(BG_SECONDARY)s;
         }
+    """,
+    'title': """
+        %(ids)s {
+            color: %(COLOR_TITLE)s;
+        }
     """
 }
 
-def generateStyleSheet(inputs:Iterable[str]=None, highlightBtns:Iterable[str]=None, secondaryButtons:Iterable[str]=None, linkBtns:Iterable[str]=None):
+def generateStyleSheet(inputs:Iterable[str]=None, highlightBtns:Iterable[str]=None, secondaryButtons:Iterable[str]=None, linkBtns:Iterable[str]=None, title:Iterable[str]=None):
     props = STYLE_PROPERTIES.copy()
     style = __style['default']
 
@@ -104,6 +99,12 @@ def generateStyleSheet(inputs:Iterable[str]=None, highlightBtns:Iterable[str]=No
             'ids_hover': ', '.join([x + '::hover' for x in linkBtns]),
         })
         style += __style['btns-link'] % props
+
+    if title:
+        props.update({
+            'ids': ', '.join(title)
+        })
+        style += __style['title'] % props
 
     return style
 

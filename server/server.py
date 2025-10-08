@@ -13,6 +13,7 @@ SEP = '<CMD_END>'
 CMD_AUTH = 'AUTH'
 CMD_LOGOUT = 'LOGOUT'
 CMD_CREATE_USER = 'CREATE_USER'
+CMD_CREATE_PROFILE = 'CREATE_PROFILE'
 
 def dataclassToDict(obj:database.AbstractTable) -> dict:
     return { field.name : getattr(obj, field.name) for field in fields(obj) }

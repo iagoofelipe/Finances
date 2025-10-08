@@ -1,7 +1,7 @@
 from PySide6.QtWidgets import QApplication, QWidget
 
 from ..ui.auto.ui_LoginForm import Ui_LoginForm
-from ..src.tools import generateStyleSheet
+from ..tools import generateStyleSheet
 
 def loginForm():
     app = QApplication()

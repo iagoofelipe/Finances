@@ -1,7 +1,7 @@
 from PySide6.QtWidgets import QApplication, QWidget
 
 from ..ui.auto.ui_CreateAccountForm import Ui_CreateAccountForm
-from ..src.tools import generateStyleSheet
+from ..tools import generateStyleSheet
 
 def crerateAccountForm():
     app = QApplication()

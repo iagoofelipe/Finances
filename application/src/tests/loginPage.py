@@ -3,7 +3,7 @@ from PySide6.QtWidgets import QApplication, QMainWindow, QWidget
 from ..ui.auto.ui_LoginPage import Ui_LoginPage
 from ..ui.auto.ui_LoginForm import Ui_LoginForm
 from ..ui.auto.ui_CreateAccountForm import Ui_CreateAccountForm
-from ..src.tools import generateStyleSheet
+from ..tools import generateStyleSheet
 
 ui = None
 

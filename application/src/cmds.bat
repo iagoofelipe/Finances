@@ -3,3 +3,4 @@ pyside6-uic application/src/ui/CreateAccountForm.ui -o application/src/ui/auto/u
 pyside6-uic application/src/ui/LoginForm.ui -o application/src/ui/auto/ui_LoginForm.py
 pyside6-uic application/src/ui/LoginPage.ui -o application/src/ui/auto/ui_LoginPage.py
 pyside6-uic application/src/ui/MainPage.ui -o application/src/ui/auto/ui_MainPage.py
+pyside6-uic application/src/ui/ConfigForm.ui -o application/src/ui/auto/ui_ConfigForm.py
