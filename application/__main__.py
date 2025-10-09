@@ -26,6 +26,10 @@ if __name__ == '__main__':
             from .src.tests.configForm import configForm
             configForm()
 
+        elif mode == 'test.tableForm':
+            from .src.tests.tableForm import tableForm
+            tableForm()
+
     else:
         app = FinancesApp()
         sys.exit(app.exec())

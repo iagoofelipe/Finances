@@ -15,7 +15,12 @@ STYLE_PROPERTIES = {
 CMD_AUTH = 'AUTH'
 CMD_LOGOUT = 'LOGOUT'
 CMD_CREATE_USER = 'CREATE_USER'
+CMD_CREATE_PROFILE = 'CREATE_PROFILE'
+CMD_NO_PROFILE_FOUND = 'NO_PROFILE_FOUND'
+CMD_GET_PROFILES = 'GET_PROFILES'
 
 MSG_DELETE_PROFILE = 'O perfil Principal será agendado para exclusão em 30 dias, você pode desfazer esta ação durante esse período. Após o tempo, todos os dados serão perdidos, deseja continuar?'
 
 FILE_CONFIG = __os.path.join(__os.environ.get('TMP', '.'), 'Finances.ini')
+
+TABLE_MAX_LEN = 3

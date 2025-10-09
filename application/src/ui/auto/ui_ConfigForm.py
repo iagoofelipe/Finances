@@ -16,9 +16,9 @@ from PySide6.QtGui import (QBrush, QColor, QConicalGradient, QCursor,
     QImage, QKeySequence, QLinearGradient, QPainter,
     QPalette, QPixmap, QRadialGradient, QTransform)
 from PySide6.QtWidgets import (QApplication, QComboBox, QFrame, QGridLayout,
-    QHBoxLayout, QHeaderView, QLabel, QLineEdit,
-    QPushButton, QScrollArea, QSizePolicy, QSpacerItem,
-    QTableWidget, QTableWidgetItem, QVBoxLayout, QWidget)
+    QHBoxLayout, QLabel, QLineEdit, QPushButton,
+    QScrollArea, QSizePolicy, QSpacerItem, QVBoxLayout,
+    QWidget)
 from . import resource_rc
 
 class Ui_ConfigForm(object):
@@ -156,117 +156,6 @@ class Ui_ConfigForm(object):
 
         self.gridLayout.addWidget(self.frame_2, 0, 1, 1, 1)
 
-        self.frame_4 = QFrame(self.scrollAreaWidgetContents)
-        self.frame_4.setObjectName(u"frame_4")
-        self.frame_4.setFrameShape(QFrame.StyledPanel)
-        self.frame_4.setFrameShadow(QFrame.Raised)
-        self.verticalLayout_2 = QVBoxLayout(self.frame_4)
-        self.verticalLayout_2.setObjectName(u"verticalLayout_2")
-        self.widget_8 = QWidget(self.frame_4)
-        self.widget_8.setObjectName(u"widget_8")
-        sizePolicy1.setHeightForWidth(self.widget_8.sizePolicy().hasHeightForWidth())
-        self.widget_8.setSizePolicy(sizePolicy1)
-        self.horizontalLayout_6 = QHBoxLayout(self.widget_8)
-        self.horizontalLayout_6.setObjectName(u"horizontalLayout_6")
-        self.horizontalLayout_6.setContentsMargins(0, 0, 0, 0)
-        self.label_9 = QLabel(self.widget_8)
-        self.label_9.setObjectName(u"label_9")
-        self.label_9.setFont(font)
-        self.label_9.setStyleSheet(u"color: #5E5E5E;")
-        self.label_9.setWordWrap(False)
-
-        self.horizontalLayout_6.addWidget(self.label_9)
-
-        self.horizontalSpacer_5 = QSpacerItem(49, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
-
-        self.horizontalLayout_6.addItem(self.horizontalSpacer_5)
-
-        self.btnAceitarShare = QPushButton(self.widget_8)
-        self.btnAceitarShare.setObjectName(u"btnAceitarShare")
-        icon = QIcon()
-        icon.addFile(u":/root/icons/Vector.svg", QSize(), QIcon.Mode.Normal, QIcon.State.Off)
-        self.btnAceitarShare.setIcon(icon)
-        self.btnAceitarShare.setIconSize(QSize(20, 20))
-        self.btnAceitarShare.setFlat(True)
-
-        self.horizontalLayout_6.addWidget(self.btnAceitarShare)
-
-        self.btnCancelarShare = QPushButton(self.widget_8)
-        self.btnCancelarShare.setObjectName(u"btnCancelarShare")
-        icon1 = QIcon()
-        icon1.addFile(u":/root/icons/x.svg", QSize(), QIcon.Mode.Normal, QIcon.State.Off)
-        self.btnCancelarShare.setIcon(icon1)
-        self.btnCancelarShare.setIconSize(QSize(20, 20))
-        self.btnCancelarShare.setFlat(True)
-
-        self.horizontalLayout_6.addWidget(self.btnCancelarShare)
-
-
-        self.verticalLayout_2.addWidget(self.widget_8)
-
-        self.tableShare = QTableWidget(self.frame_4)
-        self.tableShare.setObjectName(u"tableShare")
-
-        self.verticalLayout_2.addWidget(self.tableShare)
-
-
-        self.gridLayout.addWidget(self.frame_4, 1, 1, 1, 1)
-
-        self.frame_3 = QFrame(self.scrollAreaWidgetContents)
-        self.frame_3.setObjectName(u"frame_3")
-        self.frame_3.setFrameShape(QFrame.StyledPanel)
-        self.frame_3.setFrameShadow(QFrame.Raised)
-        self.verticalLayout_9 = QVBoxLayout(self.frame_3)
-        self.verticalLayout_9.setObjectName(u"verticalLayout_9")
-        self.widget_7 = QWidget(self.frame_3)
-        self.widget_7.setObjectName(u"widget_7")
-        sizePolicy1.setHeightForWidth(self.widget_7.sizePolicy().hasHeightForWidth())
-        self.widget_7.setSizePolicy(sizePolicy1)
-        self.horizontalLayout_5 = QHBoxLayout(self.widget_7)
-        self.horizontalLayout_5.setObjectName(u"horizontalLayout_5")
-        self.horizontalLayout_5.setContentsMargins(0, 0, 0, 0)
-        self.label_3 = QLabel(self.widget_7)
-        self.label_3.setObjectName(u"label_3")
-        self.label_3.setFont(font)
-        self.label_3.setStyleSheet(u"color: #5E5E5E;")
-
-        self.horizontalLayout_5.addWidget(self.label_3)
-
-        self.horizontalSpacer_4 = QSpacerItem(225, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
-
-        self.horizontalLayout_5.addItem(self.horizontalSpacer_4)
-
-        self.btnDelPerfil = QPushButton(self.widget_7)
-        self.btnDelPerfil.setObjectName(u"btnDelPerfil")
-        icon2 = QIcon()
-        icon2.addFile(u":/root/icons/minus.svg", QSize(), QIcon.Mode.Normal, QIcon.State.Off)
-        self.btnDelPerfil.setIcon(icon2)
-        self.btnDelPerfil.setIconSize(QSize(20, 20))
-        self.btnDelPerfil.setFlat(True)
-
-        self.horizontalLayout_5.addWidget(self.btnDelPerfil)
-
-        self.btnAddPerfil = QPushButton(self.widget_7)
-        self.btnAddPerfil.setObjectName(u"btnAddPerfil")
-        icon3 = QIcon()
-        icon3.addFile(u":/root/icons/plus.svg", QSize(), QIcon.Mode.Normal, QIcon.State.Off)
-        self.btnAddPerfil.setIcon(icon3)
-        self.btnAddPerfil.setIconSize(QSize(20, 20))
-        self.btnAddPerfil.setFlat(True)
-
-        self.horizontalLayout_5.addWidget(self.btnAddPerfil)
-
-
-        self.verticalLayout_9.addWidget(self.widget_7)
-
-        self.tablePerfis = QTableWidget(self.frame_3)
-        self.tablePerfis.setObjectName(u"tablePerfis")
-
-        self.verticalLayout_9.addWidget(self.tablePerfis)
-
-
-        self.gridLayout.addWidget(self.frame_3, 1, 0, 1, 1)
-
         self.frame = QFrame(self.scrollAreaWidgetContents)
         self.frame.setObjectName(u"frame")
         sizePolicy.setHeightForWidth(self.frame.sizePolicy().hasHeightForWidth())
@@ -403,116 +292,34 @@ class Ui_ConfigForm(object):
 
         self.widget_16 = QWidget(self.frame_5)
         self.widget_16.setObjectName(u"widget_16")
-        self.horizontalLayout_8 = QHBoxLayout(self.widget_16)
-        self.horizontalLayout_8.setObjectName(u"horizontalLayout_8")
-        self.horizontalLayout_8.setContentsMargins(0, 0, 0, 0)
-        self.frame_6 = QFrame(self.widget_16)
-        self.frame_6.setObjectName(u"frame_6")
-        self.frame_6.setFrameShape(QFrame.StyledPanel)
-        self.frame_6.setFrameShadow(QFrame.Raised)
-        self.verticalLayout_10 = QVBoxLayout(self.frame_6)
-        self.verticalLayout_10.setObjectName(u"verticalLayout_10")
-        self.widget_9 = QWidget(self.frame_6)
-        self.widget_9.setObjectName(u"widget_9")
-        sizePolicy1.setHeightForWidth(self.widget_9.sizePolicy().hasHeightForWidth())
-        self.widget_9.setSizePolicy(sizePolicy1)
-        self.horizontalLayout_4 = QHBoxLayout(self.widget_9)
-        self.horizontalLayout_4.setObjectName(u"horizontalLayout_4")
-        self.horizontalLayout_4.setContentsMargins(0, 0, 0, 0)
-        self.label_11 = QLabel(self.widget_9)
-        self.label_11.setObjectName(u"label_11")
-        self.label_11.setFont(font)
-        self.label_11.setStyleSheet(u"color: #5E5E5E;")
+        self.acessoPerfilLayout = QHBoxLayout(self.widget_16)
+        self.acessoPerfilLayout.setObjectName(u"acessoPerfilLayout")
+        self.acessoPerfilLayout.setContentsMargins(0, 0, 0, 0)
+        self.widEdicao = QWidget(self.widget_16)
+        self.widEdicao.setObjectName(u"widEdicao")
 
-        self.horizontalLayout_4.addWidget(self.label_11)
+        self.acessoPerfilLayout.addWidget(self.widEdicao)
 
-        self.horizontalSpacer_3 = QSpacerItem(208, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
+        self.widVisu = QWidget(self.widget_16)
+        self.widVisu.setObjectName(u"widVisu")
 
-        self.horizontalLayout_4.addItem(self.horizontalSpacer_3)
-
-        self.btnDelEdicao = QPushButton(self.widget_9)
-        self.btnDelEdicao.setObjectName(u"btnDelEdicao")
-        self.btnDelEdicao.setIcon(icon2)
-        self.btnDelEdicao.setIconSize(QSize(20, 20))
-        self.btnDelEdicao.setFlat(True)
-
-        self.horizontalLayout_4.addWidget(self.btnDelEdicao)
-
-        self.pushButton_12 = QPushButton(self.widget_9)
-        self.pushButton_12.setObjectName(u"pushButton_12")
-        self.pushButton_12.setIcon(icon3)
-        self.pushButton_12.setIconSize(QSize(20, 20))
-        self.pushButton_12.setFlat(True)
-
-        self.horizontalLayout_4.addWidget(self.pushButton_12)
-
-
-        self.verticalLayout_10.addWidget(self.widget_9)
-
-        self.tableEdicao = QTableWidget(self.frame_6)
-        self.tableEdicao.setObjectName(u"tableEdicao")
-
-        self.verticalLayout_10.addWidget(self.tableEdicao)
-
-
-        self.horizontalLayout_8.addWidget(self.frame_6)
-
-        self.frame_7 = QFrame(self.widget_16)
-        self.frame_7.setObjectName(u"frame_7")
-        self.frame_7.setFrameShape(QFrame.StyledPanel)
-        self.frame_7.setFrameShadow(QFrame.Raised)
-        self.verticalLayout_11 = QVBoxLayout(self.frame_7)
-        self.verticalLayout_11.setObjectName(u"verticalLayout_11")
-        self.widget_10 = QWidget(self.frame_7)
-        self.widget_10.setObjectName(u"widget_10")
-        sizePolicy1.setHeightForWidth(self.widget_10.sizePolicy().hasHeightForWidth())
-        self.widget_10.setSizePolicy(sizePolicy1)
-        self.horizontalLayout_3 = QHBoxLayout(self.widget_10)
-        self.horizontalLayout_3.setObjectName(u"horizontalLayout_3")
-        self.horizontalLayout_3.setContentsMargins(0, 0, 0, 0)
-        self.label_12 = QLabel(self.widget_10)
-        self.label_12.setObjectName(u"label_12")
-        self.label_12.setFont(font)
-        self.label_12.setStyleSheet(u"color: #5E5E5E;")
-
-        self.horizontalLayout_3.addWidget(self.label_12)
-
-        self.horizontalSpacer_6 = QSpacerItem(167, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
-
-        self.horizontalLayout_3.addItem(self.horizontalSpacer_6)
-
-        self.btnDelVisu = QPushButton(self.widget_10)
-        self.btnDelVisu.setObjectName(u"btnDelVisu")
-        self.btnDelVisu.setIcon(icon2)
-        self.btnDelVisu.setIconSize(QSize(20, 20))
-        self.btnDelVisu.setFlat(True)
-
-        self.horizontalLayout_3.addWidget(self.btnDelVisu)
-
-        self.btnAddVisu = QPushButton(self.widget_10)
-        self.btnAddVisu.setObjectName(u"btnAddVisu")
-        self.btnAddVisu.setIcon(icon3)
-        self.btnAddVisu.setIconSize(QSize(20, 20))
-        self.btnAddVisu.setFlat(True)
-
-        self.horizontalLayout_3.addWidget(self.btnAddVisu)
-
-
-        self.verticalLayout_11.addWidget(self.widget_10)
-
-        self.tableVisu = QTableWidget(self.frame_7)
-        self.tableVisu.setObjectName(u"tableVisu")
-
-        self.verticalLayout_11.addWidget(self.tableVisu)
-
-
-        self.horizontalLayout_8.addWidget(self.frame_7)
+        self.acessoPerfilLayout.addWidget(self.widVisu)
 
 
         self.verticalLayout_12.addWidget(self.widget_16)
 
 
         self.gridLayout.addWidget(self.frame_5, 2, 0, 1, 2)
+
+        self.widPerfis = QWidget(self.scrollAreaWidgetContents)
+        self.widPerfis.setObjectName(u"widPerfis")
+
+        self.gridLayout.addWidget(self.widPerfis, 1, 0, 1, 1)
+
+        self.widShare = QWidget(self.scrollAreaWidgetContents)
+        self.widShare.setObjectName(u"widShare")
+
+        self.gridLayout.addWidget(self.widShare, 1, 1, 1, 1)
 
         self.scrollArea.setWidget(self.scrollAreaWidgetContents)
 
@@ -528,16 +335,8 @@ class Ui_ConfigForm(object):
         QWidget.setTabOrder(self.leSenhaConfirm, self.btnCancelarSenha)
         QWidget.setTabOrder(self.btnCancelarSenha, self.btnSalvarSenha)
         QWidget.setTabOrder(self.btnSalvarSenha, self.btnAtualizarSenha)
-        QWidget.setTabOrder(self.btnAtualizarSenha, self.btnDelPerfil)
-        QWidget.setTabOrder(self.btnDelPerfil, self.btnAddPerfil)
-        QWidget.setTabOrder(self.btnAddPerfil, self.btnAceitarShare)
-        QWidget.setTabOrder(self.btnAceitarShare, self.btnCancelarShare)
-        QWidget.setTabOrder(self.btnCancelarShare, self.cbPerfil)
-        QWidget.setTabOrder(self.cbPerfil, self.btnDelEdicao)
-        QWidget.setTabOrder(self.btnDelEdicao, self.pushButton_12)
-        QWidget.setTabOrder(self.pushButton_12, self.btnDelVisu)
-        QWidget.setTabOrder(self.btnDelVisu, self.btnAddVisu)
-        QWidget.setTabOrder(self.btnAddVisu, self.scrollArea)
+        QWidget.setTabOrder(self.btnAtualizarSenha, self.cbPerfil)
+        QWidget.setTabOrder(self.cbPerfil, self.scrollArea)
 
         self.retranslateUi(ConfigForm)
 
@@ -553,8 +352,6 @@ class Ui_ConfigForm(object):
         self.btnCancelarSenha.setText(QCoreApplication.translate("ConfigForm", u"cancelar", None))
         self.btnSalvarSenha.setText(QCoreApplication.translate("ConfigForm", u"salvar", None))
         self.btnAtualizarSenha.setText(QCoreApplication.translate("ConfigForm", u"atualizar", None))
-        self.label_9.setText(QCoreApplication.translate("ConfigForm", u"Compartilhamentos Pendentes", None))
-        self.label_3.setText(QCoreApplication.translate("ConfigForm", u"Perfis", None))
         self.label.setText(QCoreApplication.translate("ConfigForm", u"Dados de usu\u00e1rio", None))
         self.label_2.setText(QCoreApplication.translate("ConfigForm", u"Nome", None))
         self.label_4.setText(QCoreApplication.translate("ConfigForm", u"Email", None))
@@ -562,7 +359,5 @@ class Ui_ConfigForm(object):
         self.btnSalvarUser.setText(QCoreApplication.translate("ConfigForm", u"salvar", None))
         self.btnEditarUser.setText(QCoreApplication.translate("ConfigForm", u"editar", None))
         self.label_10.setText(QCoreApplication.translate("ConfigForm", u"Acesso ao Perfil", None))
-        self.label_11.setText(QCoreApplication.translate("ConfigForm", u"Edi\u00e7\u00e3o", None))
-        self.label_12.setText(QCoreApplication.translate("ConfigForm", u"Visualiza\u00e7\u00e3o", None))
     # retranslateUi
 

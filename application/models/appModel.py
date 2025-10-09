@@ -12,7 +12,10 @@ class AppModel(QObject):
     initializationFinished = Signal(bool)
     authenticationFinished = Signal(bool)
     createUserFinished = Signal(bool)
+    createProfileFinished = Signal(bool)
     logoutFinished = Signal()
+    noProfileFound = Signal()
+    profilesUpdated = Signal(list) # list[Profile]
     __instance = None
 
     def __init__(self):
@@ -20,6 +23,7 @@ class AppModel(QObject):
         self.__user = None
         self.__server = server.ServerClient(self)
         self.__loginData = None
+        self.__profiles = None
         self.__config = Configuration()
 
         self.__server.connectionError.connect(self.on_server_connectionError)
@@ -73,8 +77,18 @@ class AppModel(QObject):
         log.debug(f'[AppModel] create user {data}')
         self.__server.sendCommand(CMD_CREATE_USER, dataclassToDict(data))
 
+    def createProfile(self, name:str):
+        self.__server.sendCommand(CMD_CREATE_PROFILE, { 'name': name })
+
     def getUser(self) -> structs.User | None:
         return self.__user
+    
+    def requireProfiles(self):
+        # TODO: add cache verification
+        self.__server.sendCommand(CMD_GET_PROFILES)
+
+    def getProfiles(self):
+        return self.__profiles
 
     def on_server_connectionError(self):
         log.info('[AppModel] connection error with the server')
@@ -94,11 +108,21 @@ class AppModel(QObject):
             self.__user = structs.User(**params['user']) if success else None
             self.authenticationFinished.emit(success)
 
+        elif cmd == CMD_LOGOUT:
+            self.logoutFinished.emit()
+
         elif cmd == CMD_CREATE_USER:
             self.createUserFinished.emit(params['success'])
 
-        elif cmd == CMD_LOGOUT:
-            self.logoutFinished.emit()
+        elif cmd == CMD_CREATE_PROFILE:
+            self.createProfileFinished.emit(params['success'])
+
+        elif cmd == CMD_NO_PROFILE_FOUND:
+            self.noProfileFound.emit()
+
+        elif cmd == CMD_GET_PROFILES:
+            self.__profiles = [ structs.Profile(**d) for d in params ]
+            self.profilesUpdated.emit(self.__profiles)
 
     def clearSavedCredentials(self):
         self.__config.removeOptions(('credentials', 'username'), ('credentials', 'password'))

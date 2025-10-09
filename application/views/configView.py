@@ -1,10 +1,9 @@
-from PySide6.QtWidgets import QWidget, QHeaderView
+from PySide6.QtWidgets import QWidget
 from PySide6.QtCore import Signal
 
 from ..src.ui.auto.ui_ConfigForm import Ui_ConfigForm
 from ..src.tools import generateStyleSheet
-from ..src.consts import MSG_DELETE_PROFILE
-from .components.dialog import MessageDialog, NewProfileDialog
+from .components.table import TableWidget
 
 class ConfigView(QWidget):
     TITLE = 'configurações'
@@ -20,28 +19,24 @@ class ConfigView(QWidget):
             secondaryButtons=['QPushButton#btnCancelarUser', 'QPushButton#btnCancelarSenha']
         ))
 
-        # tables
+        # nameWidOld, layout, columns, title, flags
         tables = (
-            (self.__ui.tablePerfis, ['Proprietário', 'Perfil', 'Tipo de Acesso']),
-            (self.__ui.tableShare, ['Proprietário', 'Perfil', 'Compartilhamento']),
-            (self.__ui.tableEdicao, ['Usuário', 'Status']),
-            (self.__ui.tableVisu, ['Usuário', 'Status']),
+            ('widPerfis', self.__ui.gridLayout, ['Proprietário', 'Perfil', 'Tipo de Acesso'], 'Perfis', TableWidget.ShowNavAsNeeded | TableWidget.BtnDelete | TableWidget.BtnAdd),
+            ('widShare', self.__ui.gridLayout, ['Proprietário', 'Perfil', 'Compartilhamento'], 'Compartilhamentos Pendentes', TableWidget.ShowNavAsNeeded | TableWidget.BtnAccept | TableWidget.BtnReject),
+            ('widEdicao', self.__ui.acessoPerfilLayout, ['Usuário', 'Status'], 'Edição', TableWidget.ShowNavAsNeeded | TableWidget.BtnDelete | TableWidget.BtnAdd),
+            ('widVisu', self.__ui.acessoPerfilLayout, ['Usuário', 'Status'], 'Visualização', TableWidget.ShowNavAsNeeded | TableWidget.BtnDelete | TableWidget.BtnAdd),
         )
 
-        for table, cols in tables:
-            table.setColumnCount(len(cols))
-            table.horizontalHeader().setSectionResizeMode(QHeaderView.ResizeMode.Stretch)
-            table.setHorizontalHeaderLabels(cols)
+        for nameWidOld, layout, columns, title, flags in tables:
+            widOld = getattr(self.__ui, nameWidOld)
+            table = TableWidget(columns, title, flags, parent=self)
+            setattr(self.__ui, nameWidOld, table)
+            layout.replaceWidget(widOld, table)
+            widOld.deleteLater()
 
-        self.__ui.btnAddPerfil.clicked.connect(self.btnAddPerfil_clicked)
-        self.__ui.btnDelPerfil.clicked.connect(self.on_btnDelPerfil_clicked)
+    def getTablePerfis(self) -> TableWidget: return self.__ui.widPerfis
+    def getTableShare(self) -> TableWidget: return self.__ui.widShare
+    def getTableEdicao(self) -> TableWidget: return self.__ui.widEdicao
+    def getTableVisualizacao(self) -> TableWidget: return self.__ui.widVisu
 
-    def btnAddPerfil_clicked(self):
-        # newProfilePopup(self)
-        dialog = NewProfileDialog(self)
-        if dialog.exec():
-            print('Novo perfil:', dialog.getValues())
-
-    def on_btnDelPerfil_clicked(self):
-        dialog = MessageDialog('Exclusão de Perfil', MSG_DELETE_PROFILE, 500, self)
-        print('deletar' if dialog.exec() else 'n deletar')
+    

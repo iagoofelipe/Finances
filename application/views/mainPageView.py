@@ -4,10 +4,12 @@ from typing import Sequence
 
 from ..src.ui.auto.ui_MainPage import Ui_MainPage
 from .configView import ConfigView
-# from ..models.appModel import AppModel
+from ..models.appModel import AppModel
+from ..src.structs import Profile
 
 class MainPageView(QWidget):
     logoutRequired = Signal()
+    uiChanged = Signal(int)
 
     UI_QUANT = 0
     UI_REG = 1
@@ -18,6 +20,7 @@ class MainPageView(QWidget):
         super().__init__(parent)
         self.__ui = Ui_MainPage()
         self.__currentUi = None
+        self.__model = AppModel.instance()
 
         self.__ui.setupUi(self)
         self.setUserName('Usuário')
@@ -41,6 +44,8 @@ class MainPageView(QWidget):
         self.__ui.btnCartoes.clicked.connect(lambda: self.setUi(self.UI_CARD))
         self.__ui.btnConfig.clicked.connect(lambda: self.setUi(self.UI_CONFIG))
         self.__ui.btnSair.clicked.connect(self.logoutRequired)
+
+        self.__model.profilesUpdated.connect(self.on_model_profilesUpdated)
 
     def getConfigView(self):
         return self.__configView if self.isCurrentView(self.UI_CONFIG) else None
@@ -96,6 +101,8 @@ class MainPageView(QWidget):
         self.__ui.mainLayout.replaceWidget(widOld, widNew)
         widOld.deleteLater()
 
+        self.uiChanged.emit(ui)
+
     def on_btnNav_clicked(self):
         for btn in [self.__ui.btnSair, self.__ui.btnNav] + self.__navBtns.buttons():
             currentText = btn.text()
@@ -103,3 +110,7 @@ class MainPageView(QWidget):
 
             btn.setText(newText)
             self.__navBtnsText[btn] = currentText
+
+    def on_model_profilesUpdated(self, profiles:list[Profile]):
+        self.__ui.cbProfile.clear()
+        self.__ui.cbProfile.addItems(sorted(map(lambda p: p.name, profiles)))

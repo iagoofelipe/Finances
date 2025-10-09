@@ -2,8 +2,10 @@ from PySide6.QtWidgets import QApplication, QMessageBox
 from PySide6.QtCore import QObject, Signal
 
 from .loginController import LoginController
+from .mainController import MainController
 from ..views.appView import AppView
 from ..models.appModel import AppModel
+from ..views.components.dialog import NewProfileDialog
 
 class AppController(QObject):
     def __init__(self, model:AppModel, view:AppView):
@@ -11,11 +13,13 @@ class AppController(QObject):
         self.__model = model
         self.__view = view
         self.__loginController = LoginController(self)
+        self.__mainController = MainController(self)
 
         view.uiChanged.connect(self.on_view_uiChanged)
         model.initializationFinished.connect(self.on_model_initializationFinished)
         model.authenticationFinished.connect(self.on_model_authenticationFinished)
         model.logoutFinished.connect(self.on_model_logoutFinished)
+        model.noProfileFound.connect(self.on_model_noProfileFound)
     
     def initialize(self):
         self.__view.initialize()
@@ -30,8 +34,7 @@ class AppController(QObject):
                 self.__loginController.setView(self.__view.getLoginView())
 
             case AppView.UI_MAIN:
-                view = self.__view.getMainPageView()
-                view.logoutRequired.connect(self.on_MainPageView_logoutRequired)
+                self.__mainController.setView(self.__view.getMainPageView())
 
     def on_model_initializationFinished(self, success:bool):
         if not success:
@@ -54,13 +57,16 @@ class AppController(QObject):
             self.__model.saveCredentials()
 
         self.__view.setUi(AppView.UI_MAIN)
-        self.__view.getMainPageView().setUserName(self.__model.getUser().name)
-
-    def on_MainPageView_logoutRequired(self):
-        self.__view.getMainPageView().setWaitMode(True)
-        self.__model.logout()
 
     def on_model_logoutFinished(self):
         self.__view.setUi(AppView.UI_LOGIN)
         view = self.__view.getLoginView()
         view.setUi(view.UI_FORM)
+
+    def on_model_noProfileFound(self):
+        dialog = NewProfileDialog(self.__view.getMainPageView())
+        
+        while True:
+            if dialog.exec():
+                self.__model.createProfile(dialog.getValues())
+                break

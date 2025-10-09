@@ -4,3 +4,4 @@ pyside6-uic application/src/ui/LoginForm.ui -o application/src/ui/auto/ui_LoginF
 pyside6-uic application/src/ui/LoginPage.ui -o application/src/ui/auto/ui_LoginPage.py
 pyside6-uic application/src/ui/MainPage.ui -o application/src/ui/auto/ui_MainPage.py
 pyside6-uic application/src/ui/ConfigForm.ui -o application/src/ui/auto/ui_ConfigForm.py
+pyside6-uic application/src/ui/TableForm.ui -o application/src/ui/auto/ui_TableForm.py

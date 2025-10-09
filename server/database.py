@@ -27,6 +27,23 @@ class User(AbstractTable):
     __table__ = 'user'
     __encryptedFields__ = ['password']
 
+@dataclass
+class Profile(AbstractTable):
+    id: str
+    name: str
+    user_id: str
+    __table__ = 'profile'
+
+@dataclass
+class ProfileRole(AbstractTable):
+    id: str
+    edit: bool
+    view: bool
+    pending: bool
+    profile_id: str
+    user_id: str
+    __table__ = 'profile_role'
+
 # @dataclass
 # class Category(AbstractTable):
 #     id: str
@@ -89,6 +106,9 @@ class FinancesDatabase:
             key = cursor.fetchone()[0]
 
         self.__crypto = Fernet(key)
+
+    @property
+    def cursor(self): return self.__cursor
     
     @staticmethod
     def tableClassFields(classType:AbstractTable) -> list[str]:
@@ -129,7 +149,7 @@ class FinancesDatabase:
         sql = f'SELECT COUNT(*) FROM `{classType.__table__}`'
 
         if params:
-            places, args = self.__getPlaceWithArgs(params)
+            places, args = self.__getPlaceWithArgs(params, sep=' AND ')
             sql += ' WHERE ' + places
             self.__cursor.execute(sql, args)
 
@@ -202,8 +222,8 @@ class FinancesDatabase:
         """ ?,?, ... ,? """
         return ','.join(['?' for _ in (self.tableClassFields(type(data)) if dataclass else data)])
 
-    def __getPlaceWithArgs(self, data:dict|AbstractTable, dataclass=False):
-        """ returns ('?,?, ... ,?', [arg1, arg2, ..., argN]) """
+    def __getPlaceWithArgs(self, data:dict|AbstractTable, dataclass=False, sep=','):
+        """ returns ('?<sep>?<sep> ... <sep>?', [arg1, arg2, ..., argN]) """
 
         if dataclass:
             dataFields = self.tableClassFields(type(data))
@@ -218,7 +238,7 @@ class FinancesDatabase:
                 places.append(f'`{k}`=?')
                 args.append(v)
 
-        return ','.join(places), args
+        return sep.join(places), args
     
 
 if __name__ == '__main__':    
