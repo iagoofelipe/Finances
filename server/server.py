@@ -94,12 +94,12 @@ class FinancesClientHandler:
         
         sql = """
         SELECT
-            profile.id, profile.name, user.name, profile_role.edit, profile_role.view, profile.user_id
+            profile.id, profile.name, profile_role.edit, profile_role.view,
+            (SELECT user.name FROM profile INNER JOIN user ON profile.user_id = user.id WHERE profile.id = profile_role.profile_id) as ownerName,
+            profile.user_id
         FROM profile_role
-        INNER JOIN
-            profile ON profile_role.profile_id = profile.id
-        INNER JOIN
-            user ON profile_role.user_id = user.id
+        INNER JOIN profile ON profile_role.profile_id = profile.id
+        INNER JOIN user ON profile_role.user_id = user.id
         WHERE
             profile_role.user_id = ?
             AND (profile_role.edit = 1 OR profile_role.view = 1)
@@ -111,9 +111,9 @@ class FinancesClientHandler:
             data.append({
                 'id': row[0],
                 'name': row[1],
-                'ownerName': row[2],
-                'editPermission': bool(row[3]),
-                'viewPermission': bool(row[4]),
+                'editPermission': bool(row[2]),
+                'viewPermission': bool(row[3]),
+                'ownerName': row[4],
                 'isOwner': self.__user.id == row[5],
             })
         

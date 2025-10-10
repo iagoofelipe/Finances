@@ -4,7 +4,6 @@ from typing import Sequence
 
 from ..src.ui.auto.ui_MainPage import Ui_MainPage
 from .configView import ConfigView
-from ..models.appModel import AppModel
 from ..src.structs import Profile
 
 class MainPageView(QWidget):
@@ -20,7 +19,6 @@ class MainPageView(QWidget):
         super().__init__(parent)
         self.__ui = Ui_MainPage()
         self.__currentUi = None
-        self.__model = AppModel.instance()
 
         self.__ui.setupUi(self)
         self.setUserName('Usuário')
@@ -45,8 +43,6 @@ class MainPageView(QWidget):
         self.__ui.btnConfig.clicked.connect(lambda: self.setUi(self.UI_CONFIG))
         self.__ui.btnSair.clicked.connect(self.logoutRequired)
 
-        self.__model.profilesUpdated.connect(self.on_model_profilesUpdated)
-
     def getConfigView(self):
         return self.__configView if self.isCurrentView(self.UI_CONFIG) else None
 
@@ -62,9 +58,22 @@ class MainPageView(QWidget):
     def setWaitMode(self, arg:bool):
         self.setDisabled(arg)
 
-    def setProfiles(self, profiles:Sequence[str]):
-        self.__ui.cbProfile.clear()
-        self.__ui.cbProfile.addItems(sorted(profiles))
+    def setProfiles(self, profiles:Sequence[Profile]):
+        cb = self.__ui.cbProfile
+        text = cb.currentText()
+        values = sorted(map(lambda p: p.name, profiles))
+        
+        cb.clear()
+        cb.addItems(values)
+
+        if text in values:
+            cb.setCurrentText(text)
+        
+        cb.clear()
+        cb.addItems(values)
+
+        if text in values:
+            cb.setCurrentText(text)
 
     def setUi(self, ui:int):
         if self.__currentUi == ui:
@@ -110,7 +119,3 @@ class MainPageView(QWidget):
 
             btn.setText(newText)
             self.__navBtnsText[btn] = currentText
-
-    def on_model_profilesUpdated(self, profiles:list[Profile]):
-        self.__ui.cbProfile.clear()
-        self.__ui.cbProfile.addItems(sorted(map(lambda p: p.name, profiles)))

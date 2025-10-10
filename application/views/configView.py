@@ -1,5 +1,6 @@
 from PySide6.QtWidgets import QWidget
 from PySide6.QtCore import Signal
+from typing import Sequence
 
 from ..src.ui.auto.ui_ConfigForm import Ui_ConfigForm
 from ..src.tools import generateStyleSheet
@@ -39,4 +40,22 @@ class ConfigView(QWidget):
     def getTableEdicao(self) -> TableWidget: return self.__ui.widEdicao
     def getTableVisualizacao(self) -> TableWidget: return self.__ui.widVisu
 
-    
+    def setProfiles(self, profiles:Sequence[str]):
+        cb = self.__ui.cbPerfil
+        text = cb.currentText()
+        values = sorted(map(lambda p: p.name, profiles))
+        
+        cb.clear()
+        cb.addItems(values)
+
+        if text in values:
+            cb.setCurrentText(text)
+        
+        cb.clear()
+        cb.addItems(values)
+
+        if text in values:
+            cb.setCurrentText(text)
+
+        # tablePerfis = self.getTablePerfis()
+        # tablePerfis.setData([()])

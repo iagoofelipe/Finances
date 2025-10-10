@@ -17,6 +17,9 @@ class ConfigController(QObject):
         table = view.getTablePerfis()
         table.addRequired.connect(self.on_TablePerfis_addRequired)
         table.deleteRequired.connect(self.on_TablePerfis_deleteRequired)
+        self.__model.profilesUpdated.connect(view.setProfiles)
+
+        view.setProfiles(self.__model.getProfiles())
 
     def on_TablePerfis_addRequired(self):
         dialog = NewProfileDialog(self.__view)

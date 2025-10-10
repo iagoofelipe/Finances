@@ -14,12 +14,14 @@ class MainController(QObject):
 
     def setView(self, view:MainPageView):
         self.__view = view
+        model = self.__model
 
         view.uiChanged.connect(self.on_view_uiChanged)
         view.logoutRequired.connect(self.on_view_logoutRequired)
+        model.profilesUpdated.connect(view.setProfiles)
 
-        view.setUserName(self.__model.getUser().name)
-        self.__model.requireProfiles()
+        view.setUserName(model.getUser().name)
+        model.requireProfiles()
 
     def on_view_logoutRequired(self):
         self.__view.setWaitMode(True)
