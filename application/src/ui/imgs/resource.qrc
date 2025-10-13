@@ -1,5 +1,7 @@
 <RCC>
   <qresource prefix="root">
+    <file>icons/eye.svg</file>
+    <file>icons/eye-off.svg</file>
     <file>icons/next.svg</file>
     <file>icons/prev.svg</file>
     <file>icons/sliders.svg</file>

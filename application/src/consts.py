@@ -18,9 +18,12 @@ CMD_CREATE_USER = 'CREATE_USER'
 CMD_CREATE_PROFILE = 'CREATE_PROFILE'
 CMD_NO_PROFILE_FOUND = 'NO_PROFILE_FOUND'
 CMD_GET_PROFILES = 'GET_PROFILES'
+CMD_GET_PROFILE_THIRD_ACCESSES = 'GET_PROFILE_THIRD_ACCESSES'
+CMD_GET_ID_FROM_DEFAULT_PROFILE = 'GET_ID_FROM_DEFAULT_PROFILE'
+CMD_UPDATE_DEF_PROFILE = 'UPDATE_DEF_PROFILE'
 
-MSG_DELETE_PROFILE = 'O perfil Principal será agendado para exclusão em 30 dias, você pode desfazer esta ação durante esse período. Após o tempo, todos os dados serão perdidos, deseja continuar?'
+MSG_DELETE_PROFILE = 'O perfil \'%s\' será agendado para exclusão em 30 dias, você pode desfazer esta ação durante esse período. Após o tempo, todos os dados serão perdidos, deseja continuar?'
 
 FILE_CONFIG = __os.path.join(__os.environ.get('TMP', '.'), 'Finances.ini')
 
-TABLE_MAX_LEN = 3
+TABLE_MAX_LEN = 5

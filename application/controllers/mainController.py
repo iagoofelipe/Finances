@@ -1,6 +1,7 @@
 from PySide6.QtCore import QObject, Signal
 
 from ..models.appModel import AppModel
+from ..src.structs import Profile
 from ..views.mainPageView import MainPageView
 from .configController import ConfigController
 
@@ -18,10 +19,15 @@ class MainController(QObject):
 
         view.uiChanged.connect(self.on_view_uiChanged)
         view.logoutRequired.connect(self.on_view_logoutRequired)
-        model.profilesUpdated.connect(view.setProfiles)
+        model.profilesUpdated.connect(self.on_model_profilesUpdated)
+
+        profiles = model.getProfiles()
+        if profiles: self.on_model_profilesUpdated(None)
 
         view.setUserName(model.getUser().name)
-        model.requireProfiles()
+
+    def on_model_profilesUpdated(self, profiles:dict[str, Profile]):
+        self.__view.setProfiles(self.__model.getProfileNames().values())
 
     def on_view_logoutRequired(self):
         self.__view.setWaitMode(True)

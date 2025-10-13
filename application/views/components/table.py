@@ -17,6 +17,8 @@ class TableWidget(QWidget):
     BtnParams = 64
     BtnDetails = 128
     ShowNavAsNeeded = 256
+    DeleteJustOne = 512
+    SelectJustOne = 1024
 
     addRequired = Signal()
     editRequired = Signal()
@@ -37,8 +39,12 @@ class TableWidget(QWidget):
         self.setTitle(title)
         
         table = self.__ui.tableWid
-        table.setColumnCount(len(columns))
-        table.setHorizontalHeaderLabels(columns)
+        table.setColumnCount(len(columns) + 1)
+        table.setHorizontalHeaderLabels(['Key'] + list(columns))
+        table.hideColumn(0)
+
+        if flags & self.SelectJustOne:
+            table.setSelectionMode(table.SelectionMode.SingleSelection)
 
         self.__ui.btnAdd.clicked.connect(self.addRequired)
         self.__ui.btnEdit.clicked.connect(self.editRequired)
@@ -49,6 +55,7 @@ class TableWidget(QWidget):
         self.__ui.btnDetails.clicked.connect(self.detailsRequired)
         self.__ui.btnPrev.clicked.connect(self.on_btnPrev_clicked)
         self.__ui.btnNext.clicked.connect(self.on_btnNext_clicked)
+        table.itemSelectionChanged.connect(self.on_itemSelectionChanged)
         
         self.__updateNav()
 
@@ -64,10 +71,16 @@ class TableWidget(QWidget):
         self.__ui.btnParams.setVisible(flags & self.BtnParams)
         self.__ui.btnDetails.setVisible(flags & self.BtnDetails)
         self.__showNavAsNeeded = flags & self.ShowNavAsNeeded
+        self.__flags = flags
 
-    def setData(self, data:Iterable[Any]):
+        self.on_itemSelectionChanged()
+
+    def setData(self, data:dict[Any, Iterable]):
         self.__nav.setData(data)
         self.updateValues()
+
+    def getSelectedKeys(self) -> list[str]:
+        return [self.__ui.tableWid.item(row, 0).text() for row in { item.row() for item in self.__ui.tableWid.selectedItems() }]
 
     def updateValues(self):
         table = self.__ui.tableWid
@@ -77,7 +90,9 @@ class TableWidget(QWidget):
 
         if data is None: return
 
-        table.setRowCount(len(data))
+        count = len(data)
+        table.setRowCount(count)
+
         for rowIndex, rowData in enumerate(data):
             for colIndex, d in enumerate(rowData):
                 table.setItem(rowIndex, colIndex, QTableWidgetItem(str(d)))
@@ -108,3 +123,33 @@ class TableWidget(QWidget):
         self.__ui.widNav.show()
         start, end, total = self.__nav.start, self.__nav.end, self.__nav.total
         self.__ui.lbNav.setText(f'{start} a {end} de {total} {'items' if total > 0 else 'item'}')
+
+    def on_itemSelectionChanged(self):
+        numRows = len({ item.row() for item in self.__ui.tableWid.selectedItems() })
+
+        if numRows == 0:
+            if self.__flags & self.BtnReject: self.__ui.btnReject.hide()
+            if self.__flags & self.BtnAccept: self.__ui.btnAccept.hide()
+            if self.__flags & self.BtnDelete: self.__ui.btnDelete.hide()
+            if self.__flags & self.BtnDetails: self.__ui.btnDetails.hide()
+            # if self.__flags & self.BtnAdd: Always visible
+            # if self.__flags & self.BtnParams: Always visible
+            if self.__flags & self.BtnEdit: self.__ui.btnEdit.hide()
+
+        elif numRows == 1:
+            if self.__flags & self.BtnReject: self.__ui.btnReject.show()
+            if self.__flags & self.BtnAccept: self.__ui.btnAccept.show()
+            if self.__flags & self.BtnDelete: self.__ui.btnDelete.show()
+            if self.__flags & self.BtnDetails: self.__ui.btnDetails.show()
+            # if self.__flags & self.BtnAdd: Always visible
+            # if self.__flags & self.BtnParams: Always visible
+            if self.__flags & self.BtnEdit: self.__ui.btnEdit.show()
+
+        else: # > 1
+            if self.__flags & self.BtnReject: self.__ui.btnReject.hide()
+            if self.__flags & self.BtnAccept: self.__ui.btnAccept.hide()
+            if self.__flags & self.BtnDelete: self.__ui.btnDelete.setVisible(not self.__flags & self.DeleteJustOne)
+            if self.__flags & self.BtnDetails: self.__ui.btnDetails.hide()
+            # if self.__flags & self.BtnAdd: Always visible
+            # if self.__flags & self.BtnParams: Always visible
+            if self.__flags & self.BtnEdit: self.__ui.btnEdit.hide()

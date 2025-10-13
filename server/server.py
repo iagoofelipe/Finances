@@ -16,6 +16,9 @@ CMD_CREATE_USER = 'CREATE_USER'
 CMD_CREATE_PROFILE = 'CREATE_PROFILE'
 CMD_NO_PROFILE_FOUND = 'NO_PROFILE_FOUND'
 CMD_GET_PROFILES = 'GET_PROFILES'
+CMD_GET_PROFILE_THIRD_ACCESSES = 'GET_PROFILE_THIRD_ACCESSES'
+CMD_GET_ID_FROM_DEFAULT_PROFILE = 'GET_ID_FROM_DEFAULT_PROFILE'
+CMD_UPDATE_DEF_PROFILE = 'UPDATE_DEF_PROFILE'
 
 def dataclassToDict(obj:database.AbstractTable) -> dict:
     return { field.name : getattr(obj, field.name) for field in fields(obj) }
@@ -87,14 +90,14 @@ class FinancesClientHandler:
         await self.sendCommand(CMD_CREATE_PROFILE, data)
         await self.getProfiles() # if there is data, sends to user, sends NO_PROFILE_FOUND otherwise
 
-    async def getProfiles(self, send=True):
+    async def getProfiles(self, send=True, justOne=False) -> list[dict] | None:
         """ if there is data, sends to user, sends NO_PROFILE_FOUND otherwise """
 
         if not await self.checkProfile(): return
         
-        sql = """
+        sql = f"""
         SELECT
-            profile.id, profile.name, profile_role.edit, profile_role.view,
+            profile.id, profile.name, profile_role.edit, profile_role.view, profile_role.pending,
             (SELECT user.name FROM profile INNER JOIN user ON profile.user_id = user.id WHERE profile.id = profile_role.profile_id) as ownerName,
             profile.user_id
         FROM profile_role
@@ -103,24 +106,100 @@ class FinancesClientHandler:
         WHERE
             profile_role.user_id = ?
             AND (profile_role.edit = 1 OR profile_role.view = 1)
+        {'LIMIT 1' if justOne else ''}
         """
         self.__db.cursor.execute(sql, (self.__user.id, ))
         data = []
 
         for row in self.__db.cursor.fetchall():
-            data.append({
+            d = {
                 'id': row[0],
                 'name': row[1],
                 'editPermission': bool(row[2]),
                 'viewPermission': bool(row[3]),
-                'ownerName': row[4],
-                'isOwner': self.__user.id == row[5],
-            })
+                'pendingShare': bool(row[4]),
+                'ownerName': row[5],
+                'isOwner': self.__user.id == row[6],
+                'accessType': 'Indefinido'
+            }
+
+            if d['isOwner']: d['accessType'] = 'Proprietário'
+            elif d['editPermission']: d['accessType'] = 'Edição'
+            elif d['viewPermission']: d['accessType'] = 'Visualização'
+
+            data.append(d)
         
         if send:
             await self.sendCommand(CMD_GET_PROFILES, data)
 
         return data
+    
+    async def setDefaultProfile(self, profileId:str, send=True):
+        sql = """
+        UPDATE profile_role SET is_default = 1 WHERE profile_id = ? AND user_id = ?;
+        """
+
+        self.__db.cursor.execute(sql, (profileId, self.__user.id))
+        self.__db.commit()
+
+        if send:
+            await self.sendCommand(CMD_UPDATE_DEF_PROFILE, { 'profileId': profileId })
+    
+    async def getIdFromDefaultProfile(self, send=True) -> str | None:
+        if not await self.checkProfile(): return
+
+        sql = """
+        SELECT profile_id FROM profile_role WHERE is_default=1 AND user_id=? AND (view=1 OR edit=1) LIMIT 1;
+        """
+
+        self.__db.cursor.execute(sql, (self.__user.id, ))
+
+        r = self.__db.cursor.fetchone()
+        if not r:
+            # updates the default profile to a valid one
+            profile = await self.getProfiles(False, True)[0]
+            profileId = profile['id']
+            await self.setDefaultProfile(profileId, False)
+        else:
+            profileId = r[0]
+
+        if send:
+            await self.sendCommand(CMD_GET_ID_FROM_DEFAULT_PROFILE, { 'profileId': profileId })
+
+        return profileId
+    
+    async def getProfileThridAccesses(self):
+
+        # users with access to the profiles of the current user
+        sql = """
+        SELECT
+            profile_id, profile.name as profileName,
+            profile_role.edit, profile_role.view, profile_role.pending,
+            user.name as userName,
+            user.id as userId
+        FROM profile_role
+        INNER JOIN user ON profile_role.user_id = user.id
+        INNER JOIN profile ON profile_role.profile_id = profile.id
+        WHERE
+            profile_id IN (SELECT id FROM profile WHERE user_id = ?)
+            AND profile_role.user_id != ?;
+        """
+        self.__db.cursor.execute(sql, (self.__user.id, self.__user.id))
+        data = []
+
+        for row in self.__db.cursor.fetchall():
+            data.append({
+                'profileId': row[0],
+                'profileName': row[1],
+                'editPermission': bool(row[2]),
+                'viewPermission': bool(row[3]),
+                'pendingShare': bool(row[4]),
+                'status': 'Pendente' if row[4] else 'Liberado',
+                'userName': row[5],
+                'userId': row[6],
+            })
+
+        await self.sendCommand(CMD_GET_PROFILE_THIRD_ACCESSES, data)
 
     async def logout(self):
         self.__user = None
@@ -199,6 +278,15 @@ class FinancesClientHandler:
 
         elif cmd == CMD_GET_PROFILES:
             await self.getProfiles()
+
+        elif cmd == CMD_GET_PROFILE_THIRD_ACCESSES:
+            await self.getProfileThridAccesses()
+
+        elif cmd == CMD_GET_ID_FROM_DEFAULT_PROFILE:
+            await self.getIdFromDefaultProfile()
+
+        elif cmd == CMD_UPDATE_DEF_PROFILE:
+            await self.setDefaultProfile(params['profileId'])
 
         else:
             log.info(f'{self.__pref} undefined command {cmd}')

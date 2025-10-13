@@ -22,3 +22,16 @@ class Profile:
     ownerName: str
     editPermission: str
     viewPermission: str
+    pendingShare: bool
+    accessType: str
+
+@dataclass
+class ProfileThirdAccess:
+    profileId: str
+    profileName: str
+    editPermission: str
+    viewPermission: str
+    pendingShare: bool
+    status: str
+    userName: str
+    userId: str

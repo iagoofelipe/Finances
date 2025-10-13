@@ -55,7 +55,7 @@ class AppController(QObject):
         
         if self.__model.credentials.remember:
             self.__model.saveCredentials()
-
+        
         self.__view.setUi(AppView.UI_MAIN)
 
     def on_model_logoutFinished(self):
@@ -65,8 +65,10 @@ class AppController(QObject):
 
     def on_model_noProfileFound(self):
         dialog = NewProfileDialog(self.__view.getMainPageView())
+        if dialog.exec():
+            self.__model.createProfile(dialog.getValues())
         
-        while True:
-            if dialog.exec():
-                self.__model.createProfile(dialog.getValues())
-                break
+        # while True:
+        #     if dialog.exec():
+        #         self.__model.createProfile(dialog.getValues())
+        #         break

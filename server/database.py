@@ -109,6 +109,10 @@ class FinancesDatabase:
 
     @property
     def cursor(self): return self.__cursor
+
+    def commit(self): self.__conn.commit()
+
+    @property
     
     @staticmethod
     def tableClassFields(classType:AbstractTable) -> list[str]:

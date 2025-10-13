@@ -42,6 +42,7 @@ class MainPageView(QWidget):
         self.__ui.btnCartoes.clicked.connect(lambda: self.setUi(self.UI_CARD))
         self.__ui.btnConfig.clicked.connect(lambda: self.setUi(self.UI_CONFIG))
         self.__ui.btnSair.clicked.connect(self.logoutRequired)
+        self.__ui.cbProfile.currentTextChanged.connect(self.on_cbProfile_currentTextChanged)
 
     def getConfigView(self):
         return self.__configView if self.isCurrentView(self.UI_CONFIG) else None
@@ -61,7 +62,7 @@ class MainPageView(QWidget):
     def setProfiles(self, profiles:Sequence[Profile]):
         cb = self.__ui.cbProfile
         text = cb.currentText()
-        values = sorted(map(lambda p: p.name, profiles))
+        values = sorted(profiles)
         
         cb.clear()
         cb.addItems(values)
@@ -119,3 +120,6 @@ class MainPageView(QWidget):
 
             btn.setText(newText)
             self.__navBtnsText[btn] = currentText
+
+    def on_cbProfile_currentTextChanged(self, text:str):
+        self.__ui.cbProfile.setToolTip(text)

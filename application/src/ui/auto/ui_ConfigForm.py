@@ -25,7 +25,7 @@ class Ui_ConfigForm(object):
     def setupUi(self, ConfigForm):
         if not ConfigForm.objectName():
             ConfigForm.setObjectName(u"ConfigForm")
-        ConfigForm.resize(743, 700)
+        ConfigForm.resize(743, 699)
         self.verticalLayout_13 = QVBoxLayout(ConfigForm)
         self.verticalLayout_13.setObjectName(u"verticalLayout_13")
         self.verticalLayout_13.setContentsMargins(0, 0, 0, 0)
@@ -34,7 +34,7 @@ class Ui_ConfigForm(object):
         self.scrollArea.setWidgetResizable(True)
         self.scrollAreaWidgetContents = QWidget()
         self.scrollAreaWidgetContents.setObjectName(u"scrollAreaWidgetContents")
-        self.scrollAreaWidgetContents.setGeometry(QRect(0, 0, 741, 698))
+        self.scrollAreaWidgetContents.setGeometry(QRect(0, 0, 741, 697))
         self.gridLayout = QGridLayout(self.scrollAreaWidgetContents)
         self.gridLayout.setObjectName(u"gridLayout")
         self.gridLayout.setContentsMargins(0, 0, 0, 0)
@@ -77,10 +77,39 @@ class Ui_ConfigForm(object):
 
         self.verticalLayout_4.addWidget(self.label_6)
 
-        self.leSenhaAtual = QLineEdit(self.widSenhaAtual)
+        self.widget_2 = QWidget(self.widSenhaAtual)
+        self.widget_2.setObjectName(u"widget_2")
+        self.horizontalLayout_3 = QHBoxLayout(self.widget_2)
+        self.horizontalLayout_3.setObjectName(u"horizontalLayout_3")
+        self.horizontalLayout_3.setContentsMargins(0, 0, 0, 0)
+        self.leSenhaAtual = QLineEdit(self.widget_2)
         self.leSenhaAtual.setObjectName(u"leSenhaAtual")
+        self.leSenhaAtual.setEchoMode(QLineEdit.Password)
+        self.leSenhaAtual.setDragEnabled(False)
+        self.leSenhaAtual.setClearButtonEnabled(False)
 
-        self.verticalLayout_4.addWidget(self.leSenhaAtual)
+        self.horizontalLayout_3.addWidget(self.leSenhaAtual)
+
+        self.btnSenhaAtualHide = QPushButton(self.widget_2)
+        self.btnSenhaAtualHide.setObjectName(u"btnSenhaAtualHide")
+        icon = QIcon()
+        icon.addFile(u":/root/icons/eye-off.svg", QSize(), QIcon.Mode.Normal, QIcon.State.Off)
+        self.btnSenhaAtualHide.setIcon(icon)
+        self.btnSenhaAtualHide.setFlat(True)
+
+        self.horizontalLayout_3.addWidget(self.btnSenhaAtualHide)
+
+        self.btnSenhaAtualShow = QPushButton(self.widget_2)
+        self.btnSenhaAtualShow.setObjectName(u"btnSenhaAtualShow")
+        icon1 = QIcon()
+        icon1.addFile(u":/root/icons/eye.svg", QSize(), QIcon.Mode.Normal, QIcon.State.Off)
+        self.btnSenhaAtualShow.setIcon(icon1)
+        self.btnSenhaAtualShow.setFlat(True)
+
+        self.horizontalLayout_3.addWidget(self.btnSenhaAtualShow)
+
+
+        self.verticalLayout_4.addWidget(self.widget_2)
 
 
         self.verticalLayout_8.addWidget(self.widSenhaAtual)
@@ -88,19 +117,42 @@ class Ui_ConfigForm(object):
         self.widSenhaNova = QWidget(self.frame_2)
         self.widSenhaNova.setObjectName(u"widSenhaNova")
         self.widSenhaNova.setFont(font)
-        self.verticalLayout_5 = QVBoxLayout(self.widSenhaNova)
-        self.verticalLayout_5.setSpacing(0)
-        self.verticalLayout_5.setObjectName(u"verticalLayout_5")
-        self.verticalLayout_5.setContentsMargins(10, 10, 10, 10)
+        self.verticalLayout_2 = QVBoxLayout(self.widSenhaNova)
+        self.verticalLayout_2.setObjectName(u"verticalLayout_2")
         self.label_7 = QLabel(self.widSenhaNova)
         self.label_7.setObjectName(u"label_7")
 
-        self.verticalLayout_5.addWidget(self.label_7)
+        self.verticalLayout_2.addWidget(self.label_7)
 
-        self.leSenhaNova = QLineEdit(self.widSenhaNova)
+        self.widget_3 = QWidget(self.widSenhaNova)
+        self.widget_3.setObjectName(u"widget_3")
+        self.horizontalLayout_4 = QHBoxLayout(self.widget_3)
+        self.horizontalLayout_4.setObjectName(u"horizontalLayout_4")
+        self.horizontalLayout_4.setContentsMargins(0, 0, 0, 0)
+        self.leSenhaNova = QLineEdit(self.widget_3)
         self.leSenhaNova.setObjectName(u"leSenhaNova")
+        self.leSenhaNova.setEchoMode(QLineEdit.Password)
+        self.leSenhaNova.setDragEnabled(False)
+        self.leSenhaNova.setClearButtonEnabled(False)
 
-        self.verticalLayout_5.addWidget(self.leSenhaNova)
+        self.horizontalLayout_4.addWidget(self.leSenhaNova)
+
+        self.btnSenhaNovaHide = QPushButton(self.widget_3)
+        self.btnSenhaNovaHide.setObjectName(u"btnSenhaNovaHide")
+        self.btnSenhaNovaHide.setIcon(icon)
+        self.btnSenhaNovaHide.setFlat(True)
+
+        self.horizontalLayout_4.addWidget(self.btnSenhaNovaHide)
+
+        self.btnSenhaNovaShow = QPushButton(self.widget_3)
+        self.btnSenhaNovaShow.setObjectName(u"btnSenhaNovaShow")
+        self.btnSenhaNovaShow.setIcon(icon1)
+        self.btnSenhaNovaShow.setFlat(True)
+
+        self.horizontalLayout_4.addWidget(self.btnSenhaNovaShow)
+
+
+        self.verticalLayout_2.addWidget(self.widget_3)
 
 
         self.verticalLayout_8.addWidget(self.widSenhaNova)
@@ -108,19 +160,42 @@ class Ui_ConfigForm(object):
         self.widSenhaConfirm = QWidget(self.frame_2)
         self.widSenhaConfirm.setObjectName(u"widSenhaConfirm")
         self.widSenhaConfirm.setFont(font)
-        self.verticalLayout_6 = QVBoxLayout(self.widSenhaConfirm)
-        self.verticalLayout_6.setSpacing(0)
-        self.verticalLayout_6.setObjectName(u"verticalLayout_6")
-        self.verticalLayout_6.setContentsMargins(10, 10, 10, 10)
+        self.verticalLayout_5 = QVBoxLayout(self.widSenhaConfirm)
+        self.verticalLayout_5.setObjectName(u"verticalLayout_5")
         self.label_8 = QLabel(self.widSenhaConfirm)
         self.label_8.setObjectName(u"label_8")
 
-        self.verticalLayout_6.addWidget(self.label_8)
+        self.verticalLayout_5.addWidget(self.label_8)
 
-        self.leSenhaConfirm = QLineEdit(self.widSenhaConfirm)
+        self.widget_4 = QWidget(self.widSenhaConfirm)
+        self.widget_4.setObjectName(u"widget_4")
+        self.horizontalLayout_5 = QHBoxLayout(self.widget_4)
+        self.horizontalLayout_5.setObjectName(u"horizontalLayout_5")
+        self.horizontalLayout_5.setContentsMargins(0, 0, 0, 0)
+        self.leSenhaConfirm = QLineEdit(self.widget_4)
         self.leSenhaConfirm.setObjectName(u"leSenhaConfirm")
+        self.leSenhaConfirm.setEchoMode(QLineEdit.Password)
+        self.leSenhaConfirm.setDragEnabled(False)
+        self.leSenhaConfirm.setClearButtonEnabled(False)
 
-        self.verticalLayout_6.addWidget(self.leSenhaConfirm)
+        self.horizontalLayout_5.addWidget(self.leSenhaConfirm)
+
+        self.btnSenhaConfirmHide = QPushButton(self.widget_4)
+        self.btnSenhaConfirmHide.setObjectName(u"btnSenhaConfirmHide")
+        self.btnSenhaConfirmHide.setIcon(icon)
+        self.btnSenhaConfirmHide.setFlat(True)
+
+        self.horizontalLayout_5.addWidget(self.btnSenhaConfirmHide)
+
+        self.btnSenhaConfirmShow = QPushButton(self.widget_4)
+        self.btnSenhaConfirmShow.setObjectName(u"btnSenhaConfirmShow")
+        self.btnSenhaConfirmShow.setIcon(icon1)
+        self.btnSenhaConfirmShow.setFlat(True)
+
+        self.horizontalLayout_5.addWidget(self.btnSenhaConfirmShow)
+
+
+        self.verticalLayout_5.addWidget(self.widget_4)
 
 
         self.verticalLayout_8.addWidget(self.widSenhaConfirm)
@@ -271,7 +346,7 @@ class Ui_ConfigForm(object):
 
         self.horizontalLayout_7.addWidget(self.label_10)
 
-        self.horizontalSpacer_7 = QSpacerItem(529, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
+        self.horizontalSpacer_7 = QSpacerItem(0, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
 
         self.horizontalLayout_7.addItem(self.horizontalSpacer_7)
 
@@ -297,14 +372,18 @@ class Ui_ConfigForm(object):
         self.acessoPerfilLayout.setContentsMargins(0, 0, 0, 0)
         self.widEdicao = QWidget(self.widget_16)
         self.widEdicao.setObjectName(u"widEdicao")
+        self.widEdicao.setMinimumSize(QSize(0, 0))
 
         self.acessoPerfilLayout.addWidget(self.widEdicao)
 
         self.widVisu = QWidget(self.widget_16)
         self.widVisu.setObjectName(u"widVisu")
+        self.widVisu.setMinimumSize(QSize(0, 0))
 
         self.acessoPerfilLayout.addWidget(self.widVisu)
 
+        self.acessoPerfilLayout.setStretch(0, 1)
+        self.acessoPerfilLayout.setStretch(1, 1)
 
         self.verticalLayout_12.addWidget(self.widget_16)
 
@@ -313,14 +392,18 @@ class Ui_ConfigForm(object):
 
         self.widPerfis = QWidget(self.scrollAreaWidgetContents)
         self.widPerfis.setObjectName(u"widPerfis")
+        self.widPerfis.setMinimumSize(QSize(0, 0))
 
         self.gridLayout.addWidget(self.widPerfis, 1, 0, 1, 1)
 
         self.widShare = QWidget(self.scrollAreaWidgetContents)
         self.widShare.setObjectName(u"widShare")
+        self.widShare.setMinimumSize(QSize(0, 0))
 
         self.gridLayout.addWidget(self.widShare, 1, 1, 1, 1)
 
+        self.gridLayout.setColumnStretch(0, 1)
+        self.gridLayout.setColumnStretch(1, 1)
         self.scrollArea.setWidget(self.scrollAreaWidgetContents)
 
         self.verticalLayout_13.addWidget(self.scrollArea)
@@ -329,10 +412,7 @@ class Ui_ConfigForm(object):
         QWidget.setTabOrder(self.leEmail, self.btnCancelarUser)
         QWidget.setTabOrder(self.btnCancelarUser, self.btnSalvarUser)
         QWidget.setTabOrder(self.btnSalvarUser, self.btnEditarUser)
-        QWidget.setTabOrder(self.btnEditarUser, self.leSenhaAtual)
-        QWidget.setTabOrder(self.leSenhaAtual, self.leSenhaNova)
-        QWidget.setTabOrder(self.leSenhaNova, self.leSenhaConfirm)
-        QWidget.setTabOrder(self.leSenhaConfirm, self.btnCancelarSenha)
+        QWidget.setTabOrder(self.btnEditarUser, self.btnCancelarSenha)
         QWidget.setTabOrder(self.btnCancelarSenha, self.btnSalvarSenha)
         QWidget.setTabOrder(self.btnSalvarSenha, self.btnAtualizarSenha)
         QWidget.setTabOrder(self.btnAtualizarSenha, self.cbPerfil)
@@ -347,8 +427,14 @@ class Ui_ConfigForm(object):
         ConfigForm.setWindowTitle(QCoreApplication.translate("ConfigForm", u"Form", None))
         self.label_5.setText(QCoreApplication.translate("ConfigForm", u"Senha de usu\u00e1rio", None))
         self.label_6.setText(QCoreApplication.translate("ConfigForm", u"Senha Atual", None))
+        self.btnSenhaAtualHide.setText("")
+        self.btnSenhaAtualShow.setText("")
         self.label_7.setText(QCoreApplication.translate("ConfigForm", u"Nova Senha", None))
+        self.btnSenhaNovaHide.setText("")
+        self.btnSenhaNovaShow.setText("")
         self.label_8.setText(QCoreApplication.translate("ConfigForm", u"Confirmar Senha", None))
+        self.btnSenhaConfirmHide.setText("")
+        self.btnSenhaConfirmShow.setText("")
         self.btnCancelarSenha.setText(QCoreApplication.translate("ConfigForm", u"cancelar", None))
         self.btnSalvarSenha.setText(QCoreApplication.translate("ConfigForm", u"salvar", None))
         self.btnAtualizarSenha.setText(QCoreApplication.translate("ConfigForm", u"atualizar", None))
@@ -358,6 +444,6 @@ class Ui_ConfigForm(object):
         self.btnCancelarUser.setText(QCoreApplication.translate("ConfigForm", u"cancelar", None))
         self.btnSalvarUser.setText(QCoreApplication.translate("ConfigForm", u"salvar", None))
         self.btnEditarUser.setText(QCoreApplication.translate("ConfigForm", u"editar", None))
-        self.label_10.setText(QCoreApplication.translate("ConfigForm", u"Acesso ao Perfil", None))
+        self.label_10.setText(QCoreApplication.translate("ConfigForm", u"Acessos de Terceiros", None))
     # retranslateUi
 

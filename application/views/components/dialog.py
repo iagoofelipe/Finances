@@ -7,14 +7,15 @@ from PySide6.QtGui import QFont
 from ...src.tools import generateStyleSheet
 
 class Dialog:
-    Cancel = 0x01
-    Save = 0x02
-    Continue = 0x04
-    LeftSpace = 0x08
+    BtnCancel = 2
+    BtnSave = 4
+    BtnContinue = 8
+    LeftSpace = 16
+    HideTitle = 32
     
     def __init__(self, title:str, btns:int=None, flags:int=0, width:int=None, parent:QWidget=None):
         self.__dialog = QDialog(parent)
-        self.__dialog.setMinimumWidth(width if width else 400)
+        self.__dialog.setMinimumWidth(width if width else 450)
         self.__dialog.setWindowTitle(title)
         self.__dialog.setSizePolicy(QSizePolicy.Policy.Fixed, QSizePolicy.Policy.Fixed)
 
@@ -23,12 +24,14 @@ class Dialog:
         
         self.__layout = QVBoxLayout(self.__dialog)
 
-        lbTitle = QLabel(title, self.__dialog)
-        lbTitle.setObjectName('lbTitle')
-        lbTitle.setFont(QFont('Segoe UI', 15))
-        lbTitle.setSizePolicy(QSizePolicy.Policy.Preferred, QSizePolicy.Policy.Fixed)
+        if not (flags & self.HideTitle):
+            lbTitle = QLabel(title, self.__dialog)
+            lbTitle.setObjectName('lbTitle')
+            lbTitle.setFont(QFont('Segoe UI', 15))
+            lbTitle.setSizePolicy(QSizePolicy.Policy.Preferred, QSizePolicy.Policy.Fixed)
 
-        self.__layout.addWidget(lbTitle)
+            self.__layout.addWidget(lbTitle)
+
         self.__layout.addWidget(self.__widContent)
 
         if btns is not None:
@@ -65,7 +68,7 @@ class Dialog:
         return self.__dialog.exec() == QDialog.DialogCode.Accepted
 
     def __generateBtns(self, btns:int, flags:int):
-        if btns & self.Save and btns & self.Continue:
+        if btns & self.BtnSave and btns & self.BtnContinue:
             raise ValueError('Save and Continue cannot be passed together')
         
         widBtns = QWidget(self.__dialog)
@@ -78,21 +81,21 @@ class Dialog:
         if flags & self.LeftSpace:
             btnsLayout.addStretch()
 
-        if btns & self.Cancel:
+        if btns & self.BtnCancel:
             btnCancel = QPushButton('cancelar', widBtns)
             btnCancel.setObjectName('btnCancel')
             btnCancel.setFont(self.__font)
             btnCancel.clicked.connect(self.__dialog.reject)
             btnsLayout.addWidget(btnCancel)
         
-        if btns & self.Save:
+        if btns & self.BtnSave:
             btnSave = QPushButton('salvar', widBtns)
             btnSave.setObjectName('btnSave')
             btnSave.setFont(self.__font)
             btnSave.clicked.connect(self.validate)
             btnsLayout.addWidget(btnSave)
 
-        if btns & self.Continue:
+        if btns & self.BtnContinue:
             btnContinue = QPushButton('continuar', widBtns)
             btnContinue.setObjectName('btnContinue')
             btnContinue.setFont(self.__font)
@@ -103,7 +106,7 @@ class Dialog:
 
 class MessageDialog(Dialog):
     def __init__(self, title:str, content:str, width:int=None, parent:QWidget=None):
-        super().__init__(title, self.Continue | self.Cancel, self.LeftSpace, width, parent=parent)
+        super().__init__(title, self.BtnContinue | self.BtnCancel | self.HideTitle | self.LeftSpace, width, parent=parent)
         lb = QLabel(content, self.getParent())
         lb.setFont(self.getFont())
         lb.setWordWrap(True)
@@ -111,7 +114,7 @@ class MessageDialog(Dialog):
 
 class NewProfileDialog(Dialog):
     def __init__(self, parent:QWidget=None):
-        super().__init__('Novo Perfil', self.Save | self.Cancel, width=400, parent=parent)
+        super().__init__('Novo Perfil', self.BtnSave | self.BtnCancel, width=400, parent=parent)
         widName = QWidget(self.getParent())
         widName.setObjectName('widName')
 
