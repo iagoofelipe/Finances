@@ -10,6 +10,7 @@ class ConfigModel(QObject):
     def __init__(self, parent:QObject=None):
         super().__init__(parent)
         self.__model = model = AppModel.instance()
+        self.__profileId = ''
         self.__profTable = {}
         self.__profShares = {}
         self.__profEdit = {}
@@ -20,11 +21,12 @@ class ConfigModel(QObject):
 
     def getProfilesForTable(self) -> dict[str, tuple[str, str, str]]: return self.__profTable
     def getPendingProfileShares(self) -> dict[str, tuple[str, str, str]]: return self.__profShares
-    def getEditionProfiles(self) -> dict[str, tuple[str, str]]: return self.__profEdit
-    def getVisualizationProfiles(self) -> dict[str, tuple[str, str]]: return self.__profView
+    def getEditionProfiles(self) -> dict[str, tuple[str, str]]: return self.__profEdit.get(self.__profileId, {})
+    def getVisualizationProfiles(self) -> dict[str, tuple[str, str]]: return self.__profView.get(self.__profileId, {})
 
-    # def setCurrentProfile(self, profile:Profile):
-        # self.__model = 
+    def setCurrentProfileId(self, profileId:str):
+        self.__profileId = profileId
+        self.thirdAccessesUpdated.emit()
 
     def on_model_profilesUpdated(self, profiles:dict[str, Profile]):
         self.__profTable.clear()
@@ -59,16 +61,25 @@ class ConfigModel(QObject):
         self.__profView.clear()
 
         for third in thirds:
+
             if third.editPermission:
-                self.__profEdit[third.profileId] = (
+                if third.profileId not in self.__profEdit:
+                    self.__profEdit[third.profileId] = {}
+
+                self.__profEdit[third.profileId][third.id] = (
                     third.userName,
                     third.status
                 )
 
             if third.viewPermission:
-                self.__profView[third.profileId] = (
+                if third.profileId not in self.__profView:
+                    self.__profView[third.profileId] = {}
+
+                self.__profView[third.profileId][third.id] = (
                     third.userName,
                     third.status
                 )
+
+        print('ConfigModel thridAcessesUpdated', self.__profEdit, self.__profView)
 
         self.thirdAccessesUpdated.emit()
