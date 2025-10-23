@@ -4,26 +4,14 @@ import json
 from dataclasses import fields
 
 from . import database
-
-BUFFER_SIZE = 1024
-IP = '127.0.0.1'
-PORT = 8888
-SEP = '<CMD_END>'
-
-CMD_AUTH = 'AUTH'
-CMD_LOGOUT = 'LOGOUT'
-CMD_CREATE_USER = 'CREATE_USER'
-CMD_CREATE_PROFILE = 'CREATE_PROFILE'
-CMD_NO_PROFILE_FOUND = 'NO_PROFILE_FOUND'
-CMD_GET_PROFILES = 'GET_PROFILES'
-CMD_GET_PROFILE_THIRD_ACCESSES = 'GET_PROFILE_THIRD_ACCESSES'
-CMD_GET_ID_FROM_DEFAULT_PROFILE = 'GET_ID_FROM_DEFAULT_PROFILE'
-CMD_UPDATE_DEF_PROFILE = 'UPDATE_DEF_PROFILE'
+from .consts import *
 
 def dataclassToDict(obj:database.AbstractTable) -> dict:
     return { field.name : getattr(obj, field.name) for field in fields(obj) }
 
 class FinancesClientHandler:
+    clients:dict[str, list['FinancesClientHandler']] = {} # the key is User.id
+
     def __init__(self, db:database.FinancesDatabase, id:int, reader:asyncio.StreamReader, writer:asyncio.StreamWriter):
         self.__db = db
         self.__id = id
@@ -36,20 +24,26 @@ class FinancesClientHandler:
     #region Public Methods
     async def auth(self, username:str, password:str):
         self.__user = self.__db.auth(username, password)
-        success = bool(self.__user)
-        name = self.__user.name if success else None
-        dict_user = dataclassToDict(self.__user) if success else None
+        name, dict_user = None, None
 
-        log.info(f'{self.__pref} user authenticated {success} {name=}')
+        # case success
+        if self.__user:
+            name = self.__user.name
+            dict_user = dataclassToDict(self.__user)
+            if self.__user.id not in self.clients:
+                self.clients[self.__user.id] = []
 
-        await self.sendCommand(CMD_AUTH, { 'success': success, 'user': dict_user })
+            self.clients[self.__user.id].append(self)
+        
+        log.info(f'{self.__pref} user authenticated {name=}')
+
+        await self.sendCommand(CMD_AUTH, { 'success': bool(self.__user), 'user': dict_user })
 
         # if success:
         #     await self.checkProfile()
 
     async def checkProfile(self):
         sql, args = f'SELECT COUNT(*) FROM {database.ProfileRole.__table__} WHERE user_id=? AND pending=0 AND (edit=1 OR view=1)', (self.__user.id, )
-        print(sql, args)
         self.__db.cursor.execute(sql, args)
         count = self.__db.cursor.fetchone()[0]
         found = bool(count)
@@ -99,7 +93,8 @@ class FinancesClientHandler:
         SELECT
             profile.id, profile.name, profile_role.edit, profile_role.view, profile_role.pending,
             (SELECT user.name FROM profile INNER JOIN user ON profile.user_id = user.id WHERE profile.id = profile_role.profile_id) as ownerName,
-            profile.user_id
+            profile.user_id,
+            profile_role.id
         FROM profile_role
         INNER JOIN profile ON profile_role.profile_id = profile.id
         INNER JOIN user ON profile_role.user_id = user.id
@@ -120,7 +115,8 @@ class FinancesClientHandler:
                 'pendingShare': bool(row[4]),
                 'ownerName': row[5],
                 'isOwner': self.__user.id == row[6],
-                'accessType': 'Indefinido'
+                'accessType': 'Indefinido',
+                'roleId': row[7],
             }
 
             if d['isOwner']: d['accessType'] = 'Proprietário'
@@ -176,7 +172,8 @@ class FinancesClientHandler:
             profile_id, profile.name as profileName,
             profile_role.edit, profile_role.view, profile_role.pending,
             user.name as userName,
-            user.id as userId
+            user.id as userId,
+            profile_role.id
         FROM profile_role
         INNER JOIN user ON profile_role.user_id = user.id
         INNER JOIN profile ON profile_role.profile_id = profile.id
@@ -197,14 +194,46 @@ class FinancesClientHandler:
                 'status': 'Pendente' if row[4] else 'Liberado',
                 'userName': row[5],
                 'userId': row[6],
+                'id': row[7]
             })
 
         await self.sendCommand(CMD_GET_PROFILE_THIRD_ACCESSES, data)
 
     async def logout(self):
+        userId = self.__user.id
         self.__user = None
+        
+        if userId in self.clients and self in self.clients[userId]:
+            self.clients[userId].remove(self)
+        
         log.debug(f'{self.__pref} user logout')
         await self.sendCommand(CMD_LOGOUT)
+
+    async def shareProfile(self, roleId:str, accept:bool):
+        # getting the ownerId to be notified later
+        sql = """
+        SELECT
+            profile.user_id as ownerId
+        FROM profile_role
+        INNER JOIN profile ON profile_role.profile_id = profile.id
+        WHERE
+            profile_role.id = ?
+        """
+        self.__db.cursor.execute(sql, (roleId, ))
+        ownerId = self.__db.cursor.fetchone()[0]
+        
+        # updating accept
+        sql = """ UPDATE profile_role SET pending = 0 WHERE id = ? """ if accept else """ DELETE FROM profile_role WHERE id = ? """
+
+        self.__db.cursor.execute(sql, (roleId, ))
+        self.__db.commit()
+
+        await self.sendCommand(CMD_SHARE_PROFILE)
+
+        # notifying the owner if connected
+        if ownerId in self.clients:
+            for handler in self.clients[ownerId]: # to all instances
+                await handler.sendCommand(CMD_GET_PROFILE_THIRD_ACCESSES)
 
     async def run(self):
         log.info(f'{self.__pref} new connection received')
@@ -287,6 +316,9 @@ class FinancesClientHandler:
 
         elif cmd == CMD_UPDATE_DEF_PROFILE:
             await self.setDefaultProfile(params['profileId'])
+        
+        elif cmd == CMD_SHARE_PROFILE:
+            await self.shareProfile(**params)
 
         else:
             log.info(f'{self.__pref} undefined command {cmd}')
@@ -321,7 +353,7 @@ class FinancesServer:
         )
 
         addr = server.sockets[0].getsockname()
-        print(f"Servidor rodando em {addr}")
+        log.info(f"Servidor rodando em {addr}")
 
         async with server:
             await server.serve_forever()
