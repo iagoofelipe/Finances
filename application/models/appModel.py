@@ -10,29 +10,37 @@ from ..src.consts import *
 from .config import Configuration
 
 class AppModel(QObject):
-    initializationFinished = Signal(bool)
-    authenticationFinished = Signal(bool)
-    createUserFinished = Signal(bool)
-    createProfileFinished = Signal(bool)
-    logoutFinished = Signal()
-    noProfileFound = Signal()
-    profilesUpdated = Signal(dict) # dict[id, Profile]
-    thirdAccessesUpdated = Signal(list) # list[ProfileThirdAccess]
-    defaultProfileUpdated = Signal(structs.Profile)
     __instance = None
+    initializationFinished = Signal(bool)
+    
+    #region Server Events
+    
+    # Authentication
+    authenticationFinished = Signal(bool)
+    logoutFinished = Signal()
+
+    # User
+    createUserFinished = Signal(bool)
+    
+    # Profile
+    createProfileFinished = Signal(bool)
+    profilesUpdated = Signal(dict) # dict[id, Profile]
+    defaultProfileUpdated = Signal(structs.Profile)
+    noProfileFound = Signal()
+    shareProfileFinished = Signal()
+    
+    # Third Parties
+    thirdAccessesUpdated = Signal(list) # list[ProfileThirdAccess]
+    
+    #endregion
 
     def __init__(self):
         super().__init__()
-        self.__user = None
-        self.__server = server.ServerClient(self)
-        self.__loginData = None
-        self.__profiles = None
-        self.__ownProfiles = None
-        self.__currentProfile = None
         self.__profileNames = {}
-        self.__thirdAcesses = None
-        self.__defaultProfile = None
+        self.__thirdAcessesByProfileId = {}
+        self.__server = server.ServerClient(self)
         self.__config = Configuration()
+        self.__clearSessionData()
 
         self.__server.connectionError.connect(self.on_server_connectionError)
         self.__server.connectionClosed.connect(self.on_server_connectionClosed)
@@ -76,9 +84,9 @@ class AppModel(QObject):
             'password': data.password
         })
 
+
     def logout(self):
-        self.__loginData = None
-        self.__user = None
+        self.__clearSessionData()
         self.clearSavedCredentials()
         self.__server.sendCommand(CMD_LOGOUT)
     
@@ -88,6 +96,9 @@ class AppModel(QObject):
 
     def createProfile(self, name:str):
         self.__server.sendCommand(CMD_CREATE_PROFILE, { 'name': name })
+
+    def shareProfile(self, roleId:str, accept:bool):
+        self.__server.sendCommand(CMD_SHARE_PROFILE, { 'roleId': roleId, 'accept': accept })
     
     def clearSavedCredentials(self):
         self.__config.removeOptions(('credentials', 'username'), ('credentials', 'password'))
@@ -112,6 +123,7 @@ class AppModel(QObject):
     def getProfileById(self, pId:str): return self.__profiles.get(pId) if self.__profiles else None
     def getCurrentProfile(self): return self.__currentProfile
     def getProfileThirdAcesses(self): return self.__thirdAcesses
+    def getProfileThirdByProfileId(self, profileId:str): return self.__thirdAcessesByProfileId.get(profileId)
 
     def getProfileNames(self) -> dict[str, str]:
         """
@@ -150,20 +162,42 @@ class AppModel(QObject):
     def on_server_commandReceived(self, cmd:str, params:list|dict|None):
         log.debug(f'[AppModel] command received from server {cmd=} {params=}')
 
+        # Authentication
         if cmd == CMD_AUTH: self.__responseAuth(params)
         elif cmd == CMD_LOGOUT: self.logoutFinished.emit()
+        
+        # User
         elif cmd == CMD_CREATE_USER: self.createUserFinished.emit(params['success'])
+        
+        # Profile
         elif cmd == CMD_CREATE_PROFILE: self.createProfileFinished.emit(params['success'])
-        elif cmd == CMD_NO_PROFILE_FOUND: self.noProfileFound.emit()
         elif cmd == CMD_GET_PROFILES: self.__responseGetProfiles(params)
-        elif cmd == CMD_GET_PROFILE_THIRD_ACCESSES: self.__responseGetProfileThirdAccesses(params)
         elif cmd == CMD_GET_ID_FROM_DEFAULT_PROFILE: self.__responseGetIdFromDefaultProfile(params)
         elif cmd == CMD_UPDATE_DEF_PROFILE: ...
+        elif cmd == CMD_NO_PROFILE_FOUND: self.noProfileFound.emit()
+        elif cmd == CMD_SHARE_PROFILE: self.__responseShareProfile(params)
+        
+        # Third Parties
+        elif cmd == CMD_GET_PROFILE_THIRD_ACCESSES: self.__responseGetProfileThirdAccesses(params)
+        
         else: log.error(f'undefined command {cmd=} {params=}')
 
     #endregion
     #----------------------------------------------------------------------
+    def __clearSessionData(self):
+        self.__user = None
+        self.__loginData = None
+        self.__profiles = None
+        self.__ownProfiles = None
+        self.__currentProfile = None
+        self.__thirdAcesses = None
+        self.__defaultProfile = None
+        self.__profileNames.clear()
+        self.__thirdAcessesByProfileId.clear()
+    
     #region Server Response
+
+    # Authentication
     def __responseAuth(self, params):
         success = params['success']
 
@@ -177,20 +211,33 @@ class AppModel(QObject):
 
         self.authenticationFinished.emit(success)
 
+    # User
+
+    # Profile
     def __responseGetProfiles(self, params):
         self.__profiles = { d['id'] : structs.Profile(**d) for d in params }
         self.__profileNames = { p.id : (p.name if p.isOwner else f'{p.name} ({p.ownerName})') for p in filter(lambda p: not p.pendingShare, self.__profiles.values()) }
         self.__ownProfiles = { p.id : p for p in filter(lambda p: p.isOwner, self.__profiles.values()) }
 
         self.profilesUpdated.emit(self.__profiles)
-        
-    def __responseGetProfileThirdAccesses(self, params):
-        self.__thirdAcesses = [ structs.ProfileThirdAccess(**d) for d in params ]
-        self.thirdAccessesUpdated.emit(self.__thirdAcesses)
-
+    
     def __responseGetIdFromDefaultProfile(self, params):
         self.__defaultProfile = self.__profiles[params['profileId']]
         self.defaultProfileUpdated.emit(self.__defaultProfile)
+
+    def __responseShareProfile(self, params):
+        self.shareProfileFinished.emit()
+        self.requireProfiles()
+    
+    # Third Parties
+    def __responseGetProfileThirdAccesses(self, params):
+        self.__thirdAcesses = [ structs.ProfileThirdAccess(**d) for d in params ]
+
+        # splitting by profileId
+        self.__thirdAcessesByProfileId = { t.profileId : list(filter(lambda x: x.profileId == t.profileId, self.__thirdAcesses)) for t in self.__thirdAcesses }
+
+        self.thirdAccessesUpdated.emit(self.__thirdAcesses)
+
 
     #endregion
     #----------------------------------------------------------------------
