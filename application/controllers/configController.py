@@ -1,5 +1,6 @@
 from PySide6.QtCore import QObject, Signal
 
+from ..src.structs import Profile
 from ..models.appModel import AppModel
 from ..models.configModel import ConfigModel
 from ..views.configView import ConfigView
@@ -17,6 +18,8 @@ class ConfigController(QObject):
         self.__view = view
         
         view.destroyed.connect(self.on_view_destroyed)
+        view.thirdAccessProfileChanged.connect(self.on_view_thirdAccessProfileChanged)
+
         self.__model.profilesUpdated.connect(self.on_model_profilesUpdated)
         self.__model.thirdAccessesUpdated.connect(self.on_model_thirdAccessesUpdated)
 
@@ -24,6 +27,11 @@ class ConfigController(QObject):
         table = view.getTablePerfis()
         table.addRequired.connect(self.on_TablePerfis_addRequired)
         table.deleteRequired.connect(self.on_TablePerfis_deleteRequired)
+
+        # Table Share
+        table = view.getTableShare()
+        table.acceptRequired.connect(self.on_TableShare_acceptRequired)
+        table.rejectRequired.connect(self.on_TableShare_rejectRequired)
 
         view.setUser(self.__appmodel.getUser())
         profiles = self.__appmodel.getProfiles()
@@ -36,6 +44,9 @@ class ConfigController(QObject):
     def on_view_destroyed(self):
         self.__view = None
 
+    def on_view_thirdAccessProfileChanged(self, profile:Profile|None):
+        self.__model.setCurrentProfileId(profile.id if profile else '')
+
     def on_model_profilesUpdated(self):
         if not self.__view: return
 
@@ -45,7 +56,7 @@ class ConfigController(QObject):
         tableShare = self.__view.getTableShare()
         tableShare.setData(self.__model.getPendingProfileShares())
 
-        self.__view.setProfiles([ p.name for p in self.__appmodel.getOwnProfiles().values() ])
+        self.__view.setProfiles(self.__appmodel.getOwnProfiles().values())
     
     def on_model_thirdAccessesUpdated(self):
         if not self.__view: return
@@ -68,3 +79,13 @@ class ConfigController(QObject):
 
         dialog = MessageDialog('Exclusão de Perfil', MSG_DELETE_PROFILE % profileName, 500, self.__view)
         print('deletar' if dialog.exec() else 'n deletar')
+
+    def on_TableShare_acceptRequired(self):
+        self.__shareProfile(True)
+
+    def on_TableShare_rejectRequired(self):
+        self.__shareProfile(False)
+
+    def __shareProfile(self, accept:bool):
+        roleId = self.__view.getTableShare().getSelectedKeys()[0]
+        self.__appmodel.shareProfile(roleId, accept)
