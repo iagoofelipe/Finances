@@ -17,6 +17,7 @@ class User:
 @dataclass
 class Profile:
     id: str
+    roleId: str
     name: str
     isOwner: bool
     ownerName: str
@@ -27,11 +28,12 @@ class Profile:
 
 @dataclass
 class ProfileThirdAccess:
+    id: str
+    userId: str
+    userName: str
     profileId: str
     profileName: str
     editPermission: str
     viewPermission: str
     pendingShare: bool
     status: str
-    userName: str
-    userId: str
