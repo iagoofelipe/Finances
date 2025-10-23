@@ -42,6 +42,7 @@ class ProfileRole(AbstractTable):
     pending: bool
     profile_id: str
     user_id: str
+    is_default: bool
     __table__ = 'profile_role'
 
 # @dataclass
@@ -112,8 +113,6 @@ class FinancesDatabase:
 
     def commit(self): self.__conn.commit()
 
-    @property
-    
     @staticmethod
     def tableClassFields(classType:AbstractTable) -> list[str]:
         cls = __class__.__classFields
@@ -200,7 +199,7 @@ class FinancesDatabase:
             r = self.__cursor.fetchone()
             return self.__decryptFields(classType(*r)) if r else None
         
-        return tuple([ self.__decryptFields(classType(*tuple(r))) for r in self.__cursor.fetchall() ])
+        return tuple([ self.__decryptFields(classType(*r)) for r in self.__cursor.fetchall() ])
 
     def update(self, classType:AbstractTable, pk, pkField='id', data=None, **params) -> bool:
         if not params and data is None:
