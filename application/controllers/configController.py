@@ -87,5 +87,7 @@ class ConfigController(QObject):
         self.__shareProfile(False)
 
     def __shareProfile(self, accept:bool):
-        roleId = self.__view.getTableShare().getSelectedKeys()[0]
+        profileId = self.__view.getTableShare().getSelectedKeys()[0]
+        roleId = self.__appmodel.getProfileById(profileId).roleId
+        
         self.__appmodel.shareProfile(roleId, accept)

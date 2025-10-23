@@ -233,7 +233,7 @@ class FinancesClientHandler:
         # notifying the owner if connected
         if ownerId in self.clients:
             for handler in self.clients[ownerId]: # to all instances
-                await handler.sendCommand(CMD_GET_PROFILE_THIRD_ACCESSES)
+                await handler.getProfileThridAccesses()
 
     async def run(self):
         log.info(f'{self.__pref} new connection received')

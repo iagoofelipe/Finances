@@ -80,6 +80,4 @@ class ConfigModel(QObject):
                     third.status
                 )
 
-        print('ConfigModel thridAcessesUpdated', self.__profEdit, self.__profView)
-
         self.thirdAccessesUpdated.emit()
