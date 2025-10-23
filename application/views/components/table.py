@@ -79,6 +79,8 @@ class TableWidget(QWidget):
         self.__nav.setData(data)
         self.updateValues()
 
+    def getData(self): return self.__nav.getData()
+
     def getSelectedKeys(self) -> list[str]:
         return [self.__ui.tableWid.item(row, 0).text() for row in { item.row() for item in self.__ui.tableWid.selectedItems() }]
 
