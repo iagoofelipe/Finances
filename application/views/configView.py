@@ -3,7 +3,7 @@ from PySide6.QtCore import Signal
 from typing import Sequence
 
 from ..src.ui.auto.ui_ConfigForm import Ui_ConfigForm
-from ..src.structs import User
+from ..src.structs import User, Profile
 from ..src.tools import generateStyleSheet
 from .components.table import TableWidget
 
@@ -11,11 +11,13 @@ class ConfigView(QWidget):
     TITLE = 'configurações'
 
     updatePasswordRequired = Signal(str, str)
+    thirdAccessProfileChanged = Signal(object) # Profile | None
 
     def __init__(self, parent:QWidget=None):
         super().__init__(parent)
         self.__ui = Ui_ConfigForm()
         self.__user = None
+        self.__profilesByName = {}
 
         self.__ui.setupUi(self)
         self.setStyleSheet(generateStyleSheet(
@@ -69,10 +71,14 @@ class ConfigView(QWidget):
         self.__ui.leNome.setText(user.name)
         self.__ui.leEmail.setText(user.email)
 
-    def setProfiles(self, profiles:Sequence[str]):
+    def getCurrentProfile(self) -> Profile | None:
+        return self.__profilesByName.get(self.__ui.cbPerfil.currentText())
+
+    def setProfiles(self, profiles:Sequence[Profile]):
         cb = self.__ui.cbPerfil
         text = cb.currentText()
-        values = sorted(profiles)
+        self.__profilesByName = { p.name : p for p in profiles }
+        values = sorted(self.__profilesByName)
         
         cb.clear()
         cb.addItems(values)
@@ -160,4 +166,5 @@ class ConfigView(QWidget):
         self.__ui.leSenhaConfirm.setFocus()
 
     def on_cbPerfil_currentTextChanged(self, text:str):
+        self.thirdAccessProfileChanged.emit(self.getCurrentProfile())
         self.__ui.cbPerfil.setToolTip(text)
