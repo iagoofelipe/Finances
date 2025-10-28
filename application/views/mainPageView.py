@@ -1,14 +1,13 @@
 from PySide6.QtCore import Signal
 from PySide6.QtWidgets import QWidget, QButtonGroup
-from typing import Sequence
 
 from ..src.ui.auto.ui_MainPage import Ui_MainPage
 from .configView import ConfigView
-from ..src.structs import Profile
 
 class MainPageView(QWidget):
     logoutRequired = Signal()
     uiChanged = Signal(int)
+    currentProfileChanged = Signal(object) # profileId: str | None
 
     UI_QUANT = 0
     UI_REG = 1
@@ -19,6 +18,7 @@ class MainPageView(QWidget):
         super().__init__(parent)
         self.__ui = Ui_MainPage()
         self.__currentUi = None
+        self.__profileIdByIndex = []
 
         self.__ui.setupUi(self)
         self.setUserName('Usuário')
@@ -47,6 +47,10 @@ class MainPageView(QWidget):
     def getConfigView(self):
         return self.__configView if self.isCurrentView(self.UI_CONFIG) else None
 
+    def getCurrentProfileId(self) -> str | None:
+        index = self.__ui.cbProfile.currentIndex()
+        return self.__profileIdByIndex[index] if index != -1 else None
+
     def isCurrentView(self, ui:int):
         return self.__currentUi == ui
 
@@ -59,10 +63,11 @@ class MainPageView(QWidget):
     def setWaitMode(self, arg:bool):
         self.setDisabled(arg)
 
-    def setProfiles(self, profiles:Sequence[Profile]):
+    def setProfiles(self, profiles:dict[str, str]):
         cb = self.__ui.cbProfile
         text = cb.currentText()
-        values = sorted(profiles)
+        values = sorted(profiles.values())
+        self.__profileIdByIndex = list(profiles)
         
         cb.clear()
         cb.addItems(values)
@@ -123,3 +128,4 @@ class MainPageView(QWidget):
 
     def on_cbProfile_currentTextChanged(self, text:str):
         self.__ui.cbProfile.setToolTip(text)
+        self.currentProfileChanged.emit(self.getCurrentProfileId())

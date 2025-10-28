@@ -71,7 +71,7 @@ class ConfigModel(QObject):
                     third.status
                 )
 
-            if third.viewPermission:
+            elif third.viewPermission:
                 if third.profileId not in self.__profView:
                     self.__profView[third.profileId] = {}
 

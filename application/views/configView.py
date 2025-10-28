@@ -3,20 +3,23 @@ from PySide6.QtCore import Signal
 from typing import Sequence
 
 from ..src.ui.auto.ui_ConfigForm import Ui_ConfigForm
-from ..src.structs import User, Profile
+from ..src.structs import User, Profile, ShareProfile
 from ..src.tools import generateStyleSheet
 from .components.table import TableWidget
+from .components.shareProfileDialog import ShareProfileDialog
 
 class ConfigView(QWidget):
     TITLE = 'configurações'
 
     updatePasswordRequired = Signal(str, str)
     thirdAccessProfileChanged = Signal(object) # Profile | None
+    shareProfileRequired = Signal(ShareProfile)
 
     def __init__(self, parent:QWidget=None):
         super().__init__(parent)
         self.__ui = Ui_ConfigForm()
         self.__user = None
+        self.__profiles = None
         self.__profilesByName = {}
 
         self.__ui.setupUi(self)
@@ -60,6 +63,8 @@ class ConfigView(QWidget):
         self.__ui.btnSenhaConfirmHide.clicked.connect(self.on_btnSenhaConfirmHide_clicked)
         self.__ui.btnSenhaConfirmShow.clicked.connect(self.on_btnSenhaConfirmShow_clicked)
         self.__ui.cbPerfil.currentTextChanged.connect(self.on_cbPerfil_currentTextChanged)
+        self.__ui.widEdicao.addRequired.connect(self.requireShareProfileData)
+        self.__ui.widVisu.addRequired.connect(self.requireShareProfileData)
 
     def getTablePerfis(self) -> TableWidget: return self.__ui.widPerfis
     def getTableShare(self) -> TableWidget: return self.__ui.widShare
@@ -77,9 +82,10 @@ class ConfigView(QWidget):
     def setProfiles(self, profiles:Sequence[Profile]):
         cb = self.__ui.cbPerfil
         text = cb.currentText()
+        self.__profiles = profiles
         self.__profilesByName = { p.name : p for p in profiles }
         values = sorted(self.__profilesByName)
-        
+
         cb.clear()
         cb.addItems(values)
 
@@ -91,6 +97,11 @@ class ConfigView(QWidget):
 
         if text in values:
             cb.setCurrentText(text)
+
+    def requireShareProfileData(self):
+        dialog = ShareProfileDialog(self.__ui.widget_16, self.__profiles, self.getCurrentProfile())
+        if dialog.exec():
+            self.shareProfileRequired.emit(dialog.getData())
 
     def on_btnEditarUser_clicked(self):
         self.__ui.btnCancelarUser.show()

@@ -10,7 +10,6 @@ SEP = '<CMD_END>'
 
 class ServerClient(QObject):
     connectionError = Signal()
-    connectionClosed = Signal()
     commandReceived = Signal(str, object)
 
     def __init__(self, parent:QObject=None):
@@ -73,6 +72,3 @@ class ServerClient(QObject):
                     continue
                 
                 self.commandReceived.emit(cmd, json_data.get('data'))
-
-
-        self.connectionClosed.emit()

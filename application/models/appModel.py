@@ -12,6 +12,7 @@ from .config import Configuration
 class AppModel(QObject):
     __instance = None
     initializationFinished = Signal(bool)
+    currentProfileChanged = Signal(object) # Profile | None
     
     #region Server Events
     
@@ -27,7 +28,8 @@ class AppModel(QObject):
     profilesUpdated = Signal(dict) # dict[id, Profile]
     defaultProfileUpdated = Signal(structs.Profile)
     noProfileFound = Signal()
-    shareProfileFinished = Signal()
+    pendingShareFinished = Signal()
+    shareProfileFinished = Signal(bool)
     
     # Third Parties
     thirdAccessesUpdated = Signal(list) # list[ProfileThirdAccess]
@@ -43,7 +45,6 @@ class AppModel(QObject):
         self.__clearSessionData()
 
         self.__server.connectionError.connect(self.on_server_connectionError)
-        self.__server.connectionClosed.connect(self.on_server_connectionClosed)
         self.__server.commandReceived.connect(self.on_server_commandReceived)
 
     @staticmethod
@@ -97,8 +98,14 @@ class AppModel(QObject):
     def createProfile(self, name:str):
         self.__server.sendCommand(CMD_CREATE_PROFILE, { 'name': name })
 
-    def shareProfile(self, roleId:str, accept:bool):
-        self.__server.sendCommand(CMD_SHARE_PROFILE, { 'roleId': roleId, 'accept': accept })
+    def shareProfile(self, shareData:structs.ShareProfile):
+        log.debug(f'[AppModel] share profile {shareData}')
+        d = dataclassToDict(shareData)
+        d['profileId'] = d.pop('profile').id
+        self.__server.sendCommand(CMD_SHARE_PROFILE, d)
+
+    def pendingShare(self, roleId:str, accept:bool):
+        self.__server.sendCommand(CMD_PENDING_SHARE, { 'roleId': roleId, 'accept': accept })
     
     def clearSavedCredentials(self):
         self.__config.removeOptions(('credentials', 'username'), ('credentials', 'password'))
@@ -114,6 +121,13 @@ class AppModel(QObject):
         self.__config.parser['credentials']['password'] = self.__loginData.password
         self.__config.updateFile()
 
+    #----------------------------------------------------------------------
+    #region SET
+    def setCurrentProfile(self, profile:structs.Profile|None):
+        self.__currentProfile = profile
+        self.currentProfileChanged.emit(profile)
+
+    #endregion
     #----------------------------------------------------------------------
     #region GET
     def getDefaultProfile(self) -> structs.Profile | None: return self.__defaultProfile
@@ -156,9 +170,6 @@ class AppModel(QObject):
     def on_server_connectionError(self):
         log.info('[AppModel] connection error with the server')
 
-    def on_server_connectionClosed(self):
-        log.info('[AppModel] connection closed with the server')
-
     def on_server_commandReceived(self, cmd:str, params:list|dict|None):
         log.debug(f'[AppModel] command received from server {cmd=} {params=}')
 
@@ -175,8 +186,9 @@ class AppModel(QObject):
         elif cmd == CMD_GET_ID_FROM_DEFAULT_PROFILE: self.__responseGetIdFromDefaultProfile(params)
         elif cmd == CMD_UPDATE_DEF_PROFILE: ...
         elif cmd == CMD_NO_PROFILE_FOUND: self.noProfileFound.emit()
-        elif cmd == CMD_SHARE_PROFILE: self.__responseShareProfile(params)
-        
+        elif cmd == CMD_PENDING_SHARE: self.__responsePendingShare(params)
+        elif cmd == CMD_SHARE_PROFILE: self.shareProfileFinished.emit(params['success'])
+
         # Third Parties
         elif cmd == CMD_GET_PROFILE_THIRD_ACCESSES: self.__responseGetProfileThirdAccesses(params)
         
@@ -225,8 +237,8 @@ class AppModel(QObject):
         self.__defaultProfile = self.__profiles[params['profileId']]
         self.defaultProfileUpdated.emit(self.__defaultProfile)
 
-    def __responseShareProfile(self, params):
-        self.shareProfileFinished.emit()
+    def __responsePendingShare(self, params):
+        self.pendingShareFinished.emit()
         self.requireProfiles()
     
     # Third Parties

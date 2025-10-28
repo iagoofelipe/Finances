@@ -13,10 +13,15 @@ STYLE_PROPERTIES = {
 }
 
 MSG_DELETE_PROFILE = 'O perfil \'%s\' será agendado para exclusão em 30 dias, você pode desfazer esta ação durante esse período. Após o tempo, todos os dados serão perdidos, deseja continuar?'
+MSG_SHARE_PROFILE = 'Ao transferir a propriedade, você perderá o acesso ao perfil e, caso necessário, você deverá solicitar acesso de edição ou visualização ao novo proprietário.'
 
 FILE_CONFIG = __os.path.join(__os.environ.get('TMP', '.'), 'Finances.ini')
 
 TABLE_MAX_LEN = 5
+
+SHARE_TYPE_EDIT = 0
+SHARE_TYPE_VIEW = 1
+SHARE_TYPE_PROPERTY = 2
 
 #region CMDs
 
@@ -33,6 +38,7 @@ CMD_GET_PROFILES = 'GET_PROFILES'
 CMD_GET_ID_FROM_DEFAULT_PROFILE = 'GET_ID_FROM_DEFAULT_PROFILE'
 CMD_UPDATE_DEF_PROFILE = 'UPDATE_DEF_PROFILE'
 CMD_NO_PROFILE_FOUND = 'NO_PROFILE_FOUND'
+CMD_PENDING_SHARE = 'PENDING_SHARE'
 CMD_SHARE_PROFILE = 'SHARE_PROFILE'
 
 # Third Parties

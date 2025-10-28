@@ -4,7 +4,7 @@ from PySide6.QtWidgets import (
 )
 from PySide6.QtGui import QFont
 
-from ...src.tools import generateStyleSheet
+from ...src.tools import generateStyleSheet, generateInputForm
 
 class Dialog:
     BtnCancel = 2
@@ -115,25 +115,28 @@ class MessageDialog(Dialog):
 class NewProfileDialog(Dialog):
     def __init__(self, parent:QWidget=None):
         super().__init__('Novo Perfil', self.BtnSave | self.BtnCancel, width=400, parent=parent)
-        widName = QWidget(self.getParent())
-        widName.setObjectName('widName')
+        # widName = QWidget(self.getParent())
+        # widName.setObjectName('widName')
 
-        nameLayout = QVBoxLayout(widName)
-        nameLayout.setContentsMargins(10, 10, 10, 10)
-        nameLayout.setSpacing(0)
+        # nameLayout = QVBoxLayout(widName)
+        # nameLayout.setContentsMargins(10, 10, 10, 10)
+        # nameLayout.setSpacing(0)
 
-        lbName = QLabel('Nome', widName)
-        nameLayout.addWidget(lbName)
+        # lbName = QLabel('Nome', widName)
+        # nameLayout.addWidget(lbName)
         
-        self.__leName = leName = QLineEdit(widName)
-        leName.setFont(self.getFont())
-        nameLayout.addWidget(leName)
+        # self.__leName = leName = QLineEdit(widName)
+        # leName.setFont(self.getFont())
+        # nameLayout.addWidget(leName)
 
+        # self.setWidget(widName)
+
+        # widName.setStyleSheet(generateStyleSheet(
+        #     inputs=['QWidget#widName']
+        # ))
+
+        widName, leName, layoutName = generateInputForm('Nome', self.getParent(), self.getFont())
         self.setWidget(widName)
-
-        widName.setStyleSheet(generateStyleSheet(
-            inputs=['QWidget#widName']
-        ))
 
     def isValid(self):
         return bool(self.__leName.text())
@@ -143,3 +146,4 @@ class NewProfileDialog(Dialog):
     
     def getValues(self) -> str:
         return self.__leName.text()
+    

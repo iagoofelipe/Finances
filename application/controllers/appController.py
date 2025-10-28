@@ -20,6 +20,7 @@ class AppController(QObject):
         model.authenticationFinished.connect(self.on_model_authenticationFinished)
         model.logoutFinished.connect(self.on_model_logoutFinished)
         model.noProfileFound.connect(self.on_model_noProfileFound)
+        model.shareProfileFinished.connect(self.on_model_shareProfileFinished)
     
     def initialize(self):
         self.__view.initialize()
@@ -72,3 +73,9 @@ class AppController(QObject):
         #     if dialog.exec():
         #         self.__model.createProfile(dialog.getValues())
         #         break
+
+    def on_model_shareProfileFinished(self, success:bool):
+        if success: return
+            
+        QMessageBox(QMessageBox.Warning, 'Compartilhamento de Perfil', 'não foi possível realizar o compartilhamento do perfil, tente novamente.').exec()
+    

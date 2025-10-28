@@ -37,3 +37,9 @@ class ProfileThirdAccess:
     viewPermission: str
     pendingShare: bool
     status: str
+
+@dataclass
+class ShareProfile:
+    username: str
+    profile: Profile
+    shareType: int

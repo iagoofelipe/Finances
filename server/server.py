@@ -209,7 +209,7 @@ class FinancesClientHandler:
         log.debug(f'{self.__pref} user logout')
         await self.sendCommand(CMD_LOGOUT)
 
-    async def shareProfile(self, roleId:str, accept:bool):
+    async def pendingShare(self, roleId:str, accept:bool):
         # getting the ownerId to be notified later
         sql = """
         SELECT
@@ -228,12 +228,42 @@ class FinancesClientHandler:
         self.__db.cursor.execute(sql, (roleId, ))
         self.__db.commit()
 
-        await self.sendCommand(CMD_SHARE_PROFILE)
+        await self.sendCommand(CMD_PENDING_SHARE)
 
         # notifying the owner if connected
         if ownerId in self.clients:
             for handler in self.clients[ownerId]: # to all instances
                 await handler.getProfileThridAccesses()
+
+    async def shareProfile(self, username:str, profileId:str, shareType:int):
+        #TODO: Add transfer property
+        if shareType == SHARE_TYPE_PROPERTY:
+            await self.sendCommand(CMD_SHARE_PROFILE, { 'success': False })
+            return
+        
+        edit = shareType == SHARE_TYPE_EDIT
+        view = shareType == SHARE_TYPE_VIEW or shareType == SHARE_TYPE_EDIT
+        
+        # getting the user id by username
+        self.__db.cursor.execute(' SELECT id FROM user WHERE username = ? ', (username, ))
+        r = self.__db.cursor.fetchone()
+        if not r:
+            await self.sendCommand(CMD_SHARE_PROFILE, { 'success': False })
+            return
+        
+        userId = r[0]
+
+        # check if the role already exists
+        self.__db.cursor.execute('SELECT COUNT(*) FROM profile_role WHERE profile_id=? user_id=? AND view=? AND edit=?')
+        
+        profileRole = self.__db.create(database.ProfileRole, edit=edit, view=view, pending=True, profile_id=profileId, user_id=userId)
+        
+        await self.sendCommand(CMD_SHARE_PROFILE, { 'success': bool(profileRole) })
+
+        # notifying the owner if connected
+        if userId in self.clients:
+            for handler in self.clients[userId]: # to all instances
+                await handler.getProfiles()
 
     async def run(self):
         log.info(f'{self.__pref} new connection received')
@@ -317,6 +347,9 @@ class FinancesClientHandler:
         elif cmd == CMD_UPDATE_DEF_PROFILE:
             await self.setDefaultProfile(params['profileId'])
         
+        elif cmd == CMD_PENDING_SHARE:
+            await self.pendingShare(**params)
+
         elif cmd == CMD_SHARE_PROFILE:
             await self.shareProfile(**params)
 

@@ -30,6 +30,10 @@ if __name__ == '__main__':
             from .src.tests.tableForm import tableForm
             tableForm()
 
+        elif mode == 'test.shareProfileDialog':
+            from .src.tests.shareProfileDialog import shareProfileDialog
+            shareProfileDialog()
+
     else:
         app = FinancesApp()
         sys.exit(app.exec())

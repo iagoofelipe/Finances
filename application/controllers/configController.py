@@ -1,6 +1,6 @@
 from PySide6.QtCore import QObject, Signal
 
-from ..src.structs import Profile
+from ..src.structs import Profile, ShareProfile
 from ..models.appModel import AppModel
 from ..models.configModel import ConfigModel
 from ..views.configView import ConfigView
@@ -14,11 +14,14 @@ class ConfigController(QObject):
         self.__model = ConfigModel(self)
         self.__view = None
 
+        self.__appmodel.shareProfileFinished.connect(self.on_AppModel_shareProfileFinished)
+
     def setView(self, view:ConfigView):
         self.__view = view
         
         view.destroyed.connect(self.on_view_destroyed)
         view.thirdAccessProfileChanged.connect(self.on_view_thirdAccessProfileChanged)
+        view.shareProfileRequired.connect(self.__appmodel.shareProfile)
 
         self.__model.profilesUpdated.connect(self.on_model_profilesUpdated)
         self.__model.thirdAccessesUpdated.connect(self.on_model_thirdAccessesUpdated)
@@ -67,6 +70,11 @@ class ConfigController(QObject):
         tableView = self.__view.getTableVisualizacao()
         tableView.setData(self.__model.getVisualizationProfiles())
 
+    def on_AppModel_shareProfileFinished(self, success:bool):
+        if not success or not self.__view: return
+
+        self.__appmodel.requireProfileThirdAcesses()
+
     def on_TablePerfis_addRequired(self):
         dialog = NewProfileDialog(self.__view)
         if dialog.exec():
@@ -81,13 +89,13 @@ class ConfigController(QObject):
         print('deletar' if dialog.exec() else 'n deletar')
 
     def on_TableShare_acceptRequired(self):
-        self.__shareProfile(True)
+        self.__pendingShare(True)
 
     def on_TableShare_rejectRequired(self):
-        self.__shareProfile(False)
+        self.__pendingShare(False)
 
-    def __shareProfile(self, accept:bool):
+    def __pendingShare(self, accept:bool):
         profileId = self.__view.getTableShare().getSelectedKeys()[0]
         roleId = self.__appmodel.getProfileById(profileId).roleId
         
-        self.__appmodel.shareProfile(roleId, accept)
+        self.__appmodel.pendingShare(roleId, accept)

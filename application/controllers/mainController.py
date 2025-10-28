@@ -27,7 +27,7 @@ class MainController(QObject):
         view.setUserName(model.getUser().name)
 
     def on_model_profilesUpdated(self, profiles:dict[str, Profile]):
-        self.__view.setProfiles(self.__model.getProfileNames().values())
+        self.__view.setProfiles(self.__model.getProfileNames())
 
     def on_view_logoutRequired(self):
         self.__view.setWaitMode(True)
