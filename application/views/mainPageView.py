@@ -2,6 +2,7 @@ from PySide6.QtCore import Signal
 from PySide6.QtWidgets import QWidget, QButtonGroup
 
 from ..src.ui.auto.ui_MainPage import Ui_MainPage
+from .regView import RegView
 from .configView import ConfigView
 
 class MainPageView(QWidget):
@@ -46,6 +47,9 @@ class MainPageView(QWidget):
 
     def getConfigView(self):
         return self.__configView if self.isCurrentView(self.UI_CONFIG) else None
+    
+    def getRegView(self):
+        return self.__regView if self.isCurrentView(self.UI_REG) else None
 
     def getCurrentProfileId(self) -> str | None:
         index = self.__ui.cbProfile.currentIndex()
@@ -92,7 +96,7 @@ class MainPageView(QWidget):
 
             case self.UI_REG:
                 navBtn = self.__ui.btnRegs
-                widNew = QWidget(self)
+                widNew = self.__regView = RegView(self)
 
             case self.UI_CARD:
                 navBtn = self.__ui.btnCartoes

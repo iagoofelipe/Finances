@@ -4,14 +4,14 @@ from ..models.appModel import AppModel
 from ..src.structs import Profile
 from ..views.mainPageView import MainPageView
 from .configController import ConfigController
+from .regController import RegController
 
 class MainController(QObject):
     def __init__(self, parent:QObject=None):
         super().__init__(parent)
-        self.__configController = ConfigController(self)
         self.__model = AppModel.instance()
-
-    def getConfigController(self): return self.__configController
+        self.__configController = ConfigController(self)
+        self.__regController = RegController(self)
 
     def setView(self, view:MainPageView):
         self.__view = view
@@ -37,3 +37,6 @@ class MainController(QObject):
         match ui:
             case MainPageView.UI_CONFIG:
                 self.__configController.setView(self.__view.getConfigView())
+
+            case MainPageView.UI_REG:
+                self.__regController.setView(self.__view.getRegView())

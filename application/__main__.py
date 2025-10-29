@@ -34,6 +34,10 @@ if __name__ == '__main__':
             from .src.tests.shareProfileDialog import shareProfileDialog
             shareProfileDialog()
 
+        elif mode == 'test.regView':
+            from .src.tests.regView import regView
+            regView()
+
     else:
         app = FinancesApp()
         sys.exit(app.exec())

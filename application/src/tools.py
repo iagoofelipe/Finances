@@ -1,7 +1,8 @@
 from typing import Iterable
 from dataclasses import fields
-from PySide6.QtWidgets import QLabel, QLineEdit, QWidget, QVBoxLayout, QComboBox
+from PySide6.QtWidgets import QLabel, QLineEdit, QWidget, QVBoxLayout, QComboBox, QSpinBox
 from uuid import uuid4
+from .consts import FONT
 
 from .consts import STYLE_PROPERTIES
 
@@ -39,8 +40,7 @@ __style = {
             color: %(COLOR_SUBTITLE)s;
         }
 
-        %(ids_comboBox)s::drop-down {
-            /* Estilo da área do botão drop-down */
+        %(ids_comboBox_dropdown)s {
             subcontrol-origin: padding;
             subcontrol-position: top right;
             width: 25px; 
@@ -48,22 +48,20 @@ __style = {
             border-radius: 5px;
         }
 
-        %(ids_comboBox)s::drop-down:hover {
+        %(ids_comboBox_dropdown_hover)s {
             background-color: lightgray;
         }
 
-        %(ids_comboBox)s::down-arrow {
-            /* Estilo da seta (imagem ou cor) */
-            image: url(application/src/ui/imgs/icons/down.svg); /* Se quiser usar uma imagem de seta */
-            /* Ou apenas mudar a cor da seta nativa (pode variar o efeito) */
-            background-color: transparent; /* Apenas para garantir */
+        %(ids_comboBox_downarrow)s {
+            image: url(application/src/ui/imgs/icons/down.svg);
+            background-color: transparent;
             width: 25px;
             height: 25px;
         }
-
-        %(ids_comboBox)s QAbstractItemView {
+        
+        /*%(ids_comboBox_item)s {
             border: 1px solid lightgray;
-        }
+        }*/
     """,
     'btns-highlight': """
         %(ids)s {
@@ -107,10 +105,25 @@ __style = {
         %(ids)s {
             color: %(COLOR_TITLE)s;
         }
+    """,
+    'abstractSpin': """
+        %(ids)s {
+            background-color: %(BG_PRIMARY)s;
+            border: %(BORDER)s;
+            border-radius: %(BORDER_RADIUS)s;
+        }
+
+        %(ids_spin)s {
+            border: none;
+        }
+
+        %(ids_label)s {
+            color: %(COLOR_SUBTITLE)s;
+        }
     """
 }
 
-def generateStyleSheet(inputs:Iterable[str]=None, highlightBtns:Iterable[str]=None, secondaryButtons:Iterable[str]=None, linkBtns:Iterable[str]=None, title:Iterable[str]=None, combobox:Iterable[str]=None):
+def generateStyleSheet(inputs:Iterable[str]=None, highlightBtns:Iterable[str]=None, secondaryButtons:Iterable[str]=None, linkBtns:Iterable[str]=None, title:Iterable[str]=None, combobox:Iterable[str]=None, abstractSpin:Iterable[str]=None):
     props = STYLE_PROPERTIES.copy()
     style = __style['default']
 
@@ -126,6 +139,10 @@ def generateStyleSheet(inputs:Iterable[str]=None, highlightBtns:Iterable[str]=No
         props.update({
             'ids': ', '.join(combobox),
             'ids_comboBox': ', '.join([x + ' QComboBox' for x in combobox]),
+            'ids_comboBox_dropdown': ', '.join([x + ' QComboBox::drop-down' for x in combobox]),
+            'ids_comboBox_dropdown_hover': ', '.join([x + ' QComboBox::drop-down:hover' for x in combobox]),
+            'ids_comboBox_downarrow': ', '.join([x + ' QComboBox::down-arrow' for x in combobox]),
+            'ids_comboBox_item': ', '.join([x + ' QAbstractItemView' for x in combobox]),
             'ids_label': ', '.join([x + ' QLabel' for x in combobox]),
         })
         style += __style['combo'] % props
@@ -157,12 +174,20 @@ def generateStyleSheet(inputs:Iterable[str]=None, highlightBtns:Iterable[str]=No
         })
         style += __style['title'] % props
 
+    if abstractSpin:
+        props.update({
+            'ids': ', '.join(abstractSpin),
+            'ids_spin': ', '.join([x + ' QAbstractSpinBox' for x in abstractSpin]),
+            'ids_label': ', '.join([x + ' QLabel' for x in abstractSpin]),
+        })
+        style += __style['abstractSpin'] % props
+
     return style
 
 def dataclassToDict(obj:object):
     return { field.name : getattr(obj, field.name) for field in fields(obj) }
 
-def generateInputForm(labelTitle:str, parent:QWidget=None, font=None):
+def generateInputForm(labelTitle:str, parent:QWidget=None, font=FONT):
     widget = QWidget(parent)
     widId = str(uuid4()).replace('-', '')
     widget.setObjectName(widId)
@@ -184,7 +209,7 @@ def generateInputForm(labelTitle:str, parent:QWidget=None, font=None):
 
     return widget, lineEdit, layout
 
-def generateComboBox(labelTitle:str, parent:QWidget=None, font=None):
+def generateComboBox(labelTitle:str, parent:QWidget=None, font=FONT):
     widget = QWidget(parent)
     widId = str(uuid4()).replace('-', '')
     widget.setObjectName(widId)
@@ -197,11 +222,40 @@ def generateComboBox(labelTitle:str, parent:QWidget=None, font=None):
     layout.addWidget(label)
     
     comboBox = QComboBox(widget)
-    if font: comboBox.setFont(font)
     layout.addWidget(comboBox)
 
     widget.setStyleSheet(generateStyleSheet(
         combobox=[f'QWidget#{widId}']
     ))
 
+    if font:
+        label.setFont(font)
+        comboBox.setFont(font)
+
     return widget, comboBox, layout
+
+def generateSpinBox(labelTitle:str, parent:QWidget=None, font=FONT, **spinParams):
+    widget = QWidget(parent)
+    widId = str(uuid4()).replace('-', '')
+    widget.setObjectName(widId)
+
+    layout = QVBoxLayout(widget)
+    layout.setContentsMargins(10, 10, 10, 10)
+    layout.setSpacing(0)
+
+    label = QLabel(labelTitle, widget)
+    layout.addWidget(label)
+    
+    spin = QSpinBox(widget, **spinParams)
+    spin.setButtonSymbols(QSpinBox.ButtonSymbols.NoButtons)
+    layout.addWidget(spin)
+
+    widget.setStyleSheet(generateStyleSheet(
+        abstractSpin=[f'QWidget#{widId}']
+    ))
+
+    if font:
+        label.setFont(font)
+        spin.setFont(font)
+
+    return widget, spin, layout

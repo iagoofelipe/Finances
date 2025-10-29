@@ -10,7 +10,7 @@ class FinancesApp(QApplication):
         super().__init__()
         log.basicConfig(level=log.DEBUG)
         
-        self.__model = AppModel.instance()
+        self.__model = AppModel._AppModel__instance = AppModel()
         self.__view = AppView(self.__model)
         self.__controller = AppController(self.__model, self.__view)
 
