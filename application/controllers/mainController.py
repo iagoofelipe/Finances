@@ -25,6 +25,7 @@ class MainController(QObject):
         if profiles: self.on_model_profilesUpdated(None)
 
         view.setUserName(model.getUser().name)
+        view.setUi(view.UI_REG)
 
     def on_model_profilesUpdated(self, profiles:dict[str, Profile]):
         self.__view.setProfiles(self.__model.getProfileNames())

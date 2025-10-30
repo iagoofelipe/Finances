@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>RegView</class>
- <widget class="QWidget" name="RegView">
+ <class>RegForm</class>
+ <widget class="QWidget" name="RegForm">
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -60,7 +60,7 @@
        <number>10</number>
       </property>
       <item>
-       <widget class="QLabel" name="label">
+       <widget class="QLabel" name="lbTitleReg">
         <property name="sizePolicy">
          <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
           <horstretch>0</horstretch>
@@ -72,9 +72,6 @@
           <family>Segoe UI</family>
           <pointsize>12</pointsize>
          </font>
-        </property>
-        <property name="styleSheet">
-         <string notr="true">color: #5E5E5E;</string>
         </property>
         <property name="text">
          <string>Novo Registro</string>
@@ -108,8 +105,29 @@
             </font>
            </property>
            <layout class="QVBoxLayout" name="verticalLayout_3">
+            <property name="spacing">
+             <number>0</number>
+            </property>
+            <property name="leftMargin">
+             <number>10</number>
+            </property>
+            <property name="topMargin">
+             <number>10</number>
+            </property>
+            <property name="rightMargin">
+             <number>10</number>
+            </property>
+            <property name="bottomMargin">
+             <number>10</number>
+            </property>
             <item>
              <widget class="QLabel" name="label_2">
+              <property name="font">
+               <font>
+                <family>Segoe UI</family>
+                <pointsize>11</pointsize>
+               </font>
+              </property>
               <property name="text">
                <string>Título</string>
               </property>
@@ -117,6 +135,12 @@
             </item>
             <item>
              <widget class="QLineEdit" name="leTitulo">
+              <property name="font">
+               <font>
+                <family>Segoe UI</family>
+                <pointsize>11</pointsize>
+               </font>
+              </property>
               <property name="frame">
                <bool>true</bool>
               </property>
@@ -134,8 +158,29 @@
             </font>
            </property>
            <layout class="QVBoxLayout" name="verticalLayout_4">
+            <property name="spacing">
+             <number>0</number>
+            </property>
+            <property name="leftMargin">
+             <number>10</number>
+            </property>
+            <property name="topMargin">
+             <number>10</number>
+            </property>
+            <property name="rightMargin">
+             <number>10</number>
+            </property>
+            <property name="bottomMargin">
+             <number>10</number>
+            </property>
             <item>
              <widget class="QLabel" name="label_11">
+              <property name="font">
+               <font>
+                <family>Segoe UI</family>
+                <pointsize>11</pointsize>
+               </font>
+              </property>
               <property name="text">
                <string>Contabilizado</string>
               </property>
@@ -143,6 +188,12 @@
             </item>
             <item>
              <widget class="QComboBox" name="cbContab">
+              <property name="font">
+               <font>
+                <family>Segoe UI</family>
+                <pointsize>11</pointsize>
+               </font>
+              </property>
               <property name="cursor">
                <cursorShape>PointingHandCursor</cursorShape>
               </property>
@@ -173,8 +224,29 @@
             </font>
            </property>
            <layout class="QVBoxLayout" name="verticalLayout_5">
+            <property name="spacing">
+             <number>0</number>
+            </property>
+            <property name="leftMargin">
+             <number>10</number>
+            </property>
+            <property name="topMargin">
+             <number>10</number>
+            </property>
+            <property name="rightMargin">
+             <number>10</number>
+            </property>
+            <property name="bottomMargin">
+             <number>10</number>
+            </property>
             <item>
              <widget class="QLabel" name="label_12">
+              <property name="font">
+               <font>
+                <family>Segoe UI</family>
+                <pointsize>11</pointsize>
+               </font>
+              </property>
               <property name="text">
                <string>Descrição</string>
               </property>
@@ -182,6 +254,12 @@
             </item>
             <item>
              <widget class="QLineEdit" name="leDesc">
+              <property name="font">
+               <font>
+                <family>Segoe UI</family>
+                <pointsize>11</pointsize>
+               </font>
+              </property>
               <property name="frame">
                <bool>true</bool>
               </property>
@@ -199,8 +277,29 @@
             </font>
            </property>
            <layout class="QVBoxLayout" name="verticalLayout_6">
+            <property name="spacing">
+             <number>0</number>
+            </property>
+            <property name="leftMargin">
+             <number>10</number>
+            </property>
+            <property name="topMargin">
+             <number>10</number>
+            </property>
+            <property name="rightMargin">
+             <number>10</number>
+            </property>
+            <property name="bottomMargin">
+             <number>10</number>
+            </property>
             <item>
              <widget class="QLabel" name="label_13">
+              <property name="font">
+               <font>
+                <family>Segoe UI</family>
+                <pointsize>11</pointsize>
+               </font>
+              </property>
               <property name="text">
                <string>Valor</string>
               </property>
@@ -208,6 +307,12 @@
             </item>
             <item>
              <widget class="QDoubleSpinBox" name="dsVal">
+              <property name="font">
+               <font>
+                <family>Segoe UI</family>
+                <pointsize>11</pointsize>
+               </font>
+              </property>
               <property name="frame">
                <bool>true</bool>
               </property>
@@ -228,8 +333,29 @@
             </font>
            </property>
            <layout class="QVBoxLayout" name="verticalLayout_7">
+            <property name="spacing">
+             <number>0</number>
+            </property>
+            <property name="leftMargin">
+             <number>10</number>
+            </property>
+            <property name="topMargin">
+             <number>10</number>
+            </property>
+            <property name="rightMargin">
+             <number>10</number>
+            </property>
+            <property name="bottomMargin">
+             <number>10</number>
+            </property>
             <item>
              <widget class="QLabel" name="label_14">
+              <property name="font">
+               <font>
+                <family>Segoe UI</family>
+                <pointsize>11</pointsize>
+               </font>
+              </property>
               <property name="text">
                <string>Data</string>
               </property>
@@ -237,6 +363,12 @@
             </item>
             <item>
              <widget class="QDateEdit" name="dtData">
+              <property name="font">
+               <font>
+                <family>Segoe UI</family>
+                <pointsize>11</pointsize>
+               </font>
+              </property>
               <property name="frame">
                <bool>true</bool>
               </property>
@@ -252,15 +384,12 @@
           </widget>
          </item>
          <item row="2" column="0" colspan="3">
-          <widget class="QLabel" name="label_19">
+          <widget class="QLabel" name="lbTitleOp">
            <property name="font">
             <font>
              <family>Segoe UI</family>
              <pointsize>12</pointsize>
             </font>
-           </property>
-           <property name="styleSheet">
-            <string notr="true">color: #5E5E5E;</string>
            </property>
            <property name="text">
             <string>Detalhes da Operação</string>
@@ -279,8 +408,29 @@
             </font>
            </property>
            <layout class="QVBoxLayout" name="verticalLayout_9">
+            <property name="spacing">
+             <number>0</number>
+            </property>
+            <property name="leftMargin">
+             <number>10</number>
+            </property>
+            <property name="topMargin">
+             <number>10</number>
+            </property>
+            <property name="rightMargin">
+             <number>10</number>
+            </property>
+            <property name="bottomMargin">
+             <number>10</number>
+            </property>
             <item>
              <widget class="QLabel" name="label_16">
+              <property name="font">
+               <font>
+                <family>Segoe UI</family>
+                <pointsize>11</pointsize>
+               </font>
+              </property>
               <property name="text">
                <string>Tipo de Operação</string>
               </property>
@@ -288,6 +438,12 @@
             </item>
             <item>
              <widget class="QComboBox" name="cbOperacao">
+              <property name="font">
+               <font>
+                <family>Segoe UI</family>
+                <pointsize>11</pointsize>
+               </font>
+              </property>
               <property name="cursor">
                <cursorShape>PointingHandCursor</cursorShape>
               </property>
@@ -308,8 +464,29 @@
             </font>
            </property>
            <layout class="QVBoxLayout" name="verticalLayout_8">
+            <property name="spacing">
+             <number>0</number>
+            </property>
+            <property name="leftMargin">
+             <number>10</number>
+            </property>
+            <property name="topMargin">
+             <number>10</number>
+            </property>
+            <property name="rightMargin">
+             <number>10</number>
+            </property>
+            <property name="bottomMargin">
+             <number>10</number>
+            </property>
             <item>
              <widget class="QLabel" name="label_15">
+              <property name="font">
+               <font>
+                <family>Segoe UI</family>
+                <pointsize>11</pointsize>
+               </font>
+              </property>
               <property name="text">
                <string>Categoria</string>
               </property>
@@ -317,6 +494,12 @@
             </item>
             <item>
              <widget class="QComboBox" name="cbCat">
+              <property name="font">
+               <font>
+                <family>Segoe UI</family>
+                <pointsize>11</pointsize>
+               </font>
+              </property>
               <property name="cursor">
                <cursorShape>IBeamCursor</cursorShape>
               </property>

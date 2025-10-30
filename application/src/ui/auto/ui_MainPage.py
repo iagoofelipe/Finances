@@ -34,7 +34,7 @@ class Ui_MainPage(object):
         self.widget = QWidget(MainPage)
         self.widget.setObjectName(u"widget")
         self.horizontalLayout = QHBoxLayout(self.widget)
-        self.horizontalLayout.setSpacing(10)
+        self.horizontalLayout.setSpacing(5)
         self.horizontalLayout.setObjectName(u"horizontalLayout")
         self.horizontalLayout.setContentsMargins(0, 0, 0, 0)
         self.lbTextUser = QLabel(self.widget)
@@ -49,78 +49,54 @@ class Ui_MainPage(object):
 
         self.horizontalLayout.addItem(self.horizontalSpacer_2)
 
-        self.lbTitle = QLabel(self.widget)
-        self.lbTitle.setObjectName(u"lbTitle")
-        self.lbTitle.setStyleSheet(u"color: #5E5E5E;")
+        self.lbMainTitle = QLabel(self.widget)
+        self.lbMainTitle.setObjectName(u"lbMainTitle")
+        self.lbMainTitle.setFont(font)
 
-        self.horizontalLayout.addWidget(self.lbTitle)
+        self.horizontalLayout.addWidget(self.lbMainTitle)
 
         self.horizontalSpacer = QSpacerItem(0, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
 
         self.horizontalLayout.addItem(self.horizontalSpacer)
 
-        self.cbProfile = QComboBox(self.widget)
-        self.cbProfile.setObjectName(u"cbProfile")
-
-        self.horizontalLayout.addWidget(self.cbProfile)
-
         self.btnNotificacoes = QPushButton(self.widget)
         self.btnNotificacoes.setObjectName(u"btnNotificacoes")
-        self.btnNotificacoes.setStyleSheet(u"QPushButton {\n"
-"	background-color: white;\n"
-"	border: 1px solid #EDEDED;\n"
-"	border-radius: 18;\n"
-"    padding: 5;\n"
-"}\n"
-"\n"
-"QPushButton::hover {\n"
-"	background-color: transparent;\n"
-"}")
+        self.btnNotificacoes.setStyleSheet(u"background-color: transparent;")
         icon = QIcon()
-        icon.addFile(u":/root/icons/bell.svg", QSize(), QIcon.Mode.Normal, QIcon.State.Off)
+        icon.addFile(u":/root/icons/light_bell.svg", QSize(), QIcon.Mode.Normal, QIcon.State.Off)
         self.btnNotificacoes.setIcon(icon)
         self.btnNotificacoes.setIconSize(QSize(25, 25))
         self.btnNotificacoes.setFlat(True)
 
         self.horizontalLayout.addWidget(self.btnNotificacoes)
 
+        self.cbProfile = QComboBox(self.widget)
+        self.cbProfile.setObjectName(u"cbProfile")
+        font2 = QFont()
+        font2.setPointSize(12)
+        self.cbProfile.setFont(font2)
+
+        self.horizontalLayout.addWidget(self.cbProfile)
+
 
         self.mainLayout.addWidget(self.widget, 0, 0, 1, 2)
 
-        self.frame = QFrame(MainPage)
-        self.frame.setObjectName(u"frame")
+        self.frameNav = QFrame(MainPage)
+        self.frameNav.setObjectName(u"frameNav")
         sizePolicy = QSizePolicy(QSizePolicy.Policy.Fixed, QSizePolicy.Policy.Preferred)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
-        sizePolicy.setHeightForWidth(self.frame.sizePolicy().hasHeightForWidth())
-        self.frame.setSizePolicy(sizePolicy)
-        font2 = QFont()
-        font2.setPointSize(11)
-        self.frame.setFont(font2)
-        self.frame.setStyleSheet(u"QWidget {\n"
-"	color: #5E5E5E;\n"
-"}\n"
-"\n"
-"QPushButton {\n"
-"	border: none;\n"
-"	padding: 10;\n"
-"	border-radius: 10;\n"
-"	border-top-left-radius: 0;\n"
-"	border-bottom-left-radius: 0;\n"
-"}\n"
-"\n"
-"QPushButton::hover, QPushButton:checked {\n"
-"	border-left:4px solid #003F87;\n"
-"	background-color: #CEE5FF;\n"
-"}\n"
-"\n"
-"/* bot\u00f5es para n\u00e3o aplicar cores */\n"
-"QPushButton#btnSair::hover, QPushButton#btnNav::hover { background-color: transparent; border: none;}")
-        self.frame.setFrameShape(QFrame.StyledPanel)
-        self.frame.setFrameShadow(QFrame.Raised)
-        self.frameLayout = QVBoxLayout(self.frame)
+        sizePolicy.setHeightForWidth(self.frameNav.sizePolicy().hasHeightForWidth())
+        self.frameNav.setSizePolicy(sizePolicy)
+        font3 = QFont()
+        font3.setPointSize(11)
+        self.frameNav.setFont(font3)
+        self.frameNav.setStyleSheet(u"")
+        self.frameNav.setFrameShape(QFrame.StyledPanel)
+        self.frameNav.setFrameShadow(QFrame.Raised)
+        self.frameLayout = QVBoxLayout(self.frameNav)
         self.frameLayout.setObjectName(u"frameLayout")
-        self.widget_2 = QWidget(self.frame)
+        self.widget_2 = QWidget(self.frameNav)
         self.widget_2.setObjectName(u"widget_2")
         self.horizontalLayout_2 = QHBoxLayout(self.widget_2)
         self.horizontalLayout_2.setSpacing(0)
@@ -129,34 +105,34 @@ class Ui_MainPage(object):
 
         self.frameLayout.addWidget(self.widget_2)
 
-        self.btnNav = QPushButton(self.frame)
+        self.btnNav = QPushButton(self.frameNav)
         self.btnNav.setObjectName(u"btnNav")
-        font3 = QFont()
-        font3.setFamilies([u"Segoe UI"])
-        font3.setPointSize(11)
-        self.btnNav.setFont(font3)
+        font4 = QFont()
+        font4.setFamilies([u"Segoe UI"])
+        font4.setPointSize(11)
+        self.btnNav.setFont(font4)
         self.btnNav.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
         icon1 = QIcon()
-        icon1.addFile(u":/root/icons/bars-solid-full.svg", QSize(), QIcon.Mode.Normal, QIcon.State.Off)
+        icon1.addFile(u":/root/icons/light_bars-solid-full.svg", QSize(), QIcon.Mode.Normal, QIcon.State.Off)
         self.btnNav.setIcon(icon1)
         self.btnNav.setIconSize(QSize(25, 25))
         self.btnNav.setFlat(True)
 
         self.frameLayout.addWidget(self.btnNav)
 
-        self.line_2 = QFrame(self.frame)
+        self.line_2 = QFrame(self.frameNav)
         self.line_2.setObjectName(u"line_2")
         self.line_2.setFrameShape(QFrame.Shape.HLine)
         self.line_2.setFrameShadow(QFrame.Shadow.Sunken)
 
         self.frameLayout.addWidget(self.line_2)
 
-        self.btnQuantitativos = QPushButton(self.frame)
+        self.btnQuantitativos = QPushButton(self.frameNav)
         self.btnQuantitativos.setObjectName(u"btnQuantitativos")
-        self.btnQuantitativos.setFont(font3)
+        self.btnQuantitativos.setFont(font4)
         self.btnQuantitativos.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
         icon2 = QIcon()
-        icon2.addFile(u":/root/icons/pie-chart.svg", QSize(), QIcon.Mode.Normal, QIcon.State.Off)
+        icon2.addFile(u":/root/icons/light_pie-chart.svg", QSize(), QIcon.Mode.Normal, QIcon.State.Off)
         self.btnQuantitativos.setIcon(icon2)
         self.btnQuantitativos.setIconSize(QSize(25, 25))
         self.btnQuantitativos.setCheckable(True)
@@ -164,12 +140,12 @@ class Ui_MainPage(object):
 
         self.frameLayout.addWidget(self.btnQuantitativos)
 
-        self.btnRegs = QPushButton(self.frame)
+        self.btnRegs = QPushButton(self.frameNav)
         self.btnRegs.setObjectName(u"btnRegs")
-        self.btnRegs.setFont(font3)
+        self.btnRegs.setFont(font4)
         self.btnRegs.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
         icon3 = QIcon()
-        icon3.addFile(u":/root/icons/list.svg", QSize(), QIcon.Mode.Normal, QIcon.State.Off)
+        icon3.addFile(u":/root/icons/light_list.svg", QSize(), QIcon.Mode.Normal, QIcon.State.Off)
         self.btnRegs.setIcon(icon3)
         self.btnRegs.setIconSize(QSize(25, 25))
         self.btnRegs.setCheckable(True)
@@ -177,12 +153,12 @@ class Ui_MainPage(object):
 
         self.frameLayout.addWidget(self.btnRegs)
 
-        self.btnCartoes = QPushButton(self.frame)
+        self.btnCartoes = QPushButton(self.frameNav)
         self.btnCartoes.setObjectName(u"btnCartoes")
-        self.btnCartoes.setFont(font3)
+        self.btnCartoes.setFont(font4)
         self.btnCartoes.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
         icon4 = QIcon()
-        icon4.addFile(u":/root/icons/credit-card.svg", QSize(), QIcon.Mode.Normal, QIcon.State.Off)
+        icon4.addFile(u":/root/icons/light_credit-card.svg", QSize(), QIcon.Mode.Normal, QIcon.State.Off)
         self.btnCartoes.setIcon(icon4)
         self.btnCartoes.setIconSize(QSize(25, 25))
         self.btnCartoes.setCheckable(True)
@@ -190,13 +166,13 @@ class Ui_MainPage(object):
 
         self.frameLayout.addWidget(self.btnCartoes)
 
-        self.btnConfig = QPushButton(self.frame)
+        self.btnConfig = QPushButton(self.frameNav)
         self.btnConfig.setObjectName(u"btnConfig")
-        self.btnConfig.setFont(font3)
+        self.btnConfig.setFont(font4)
         self.btnConfig.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
         self.btnConfig.setStyleSheet(u"")
         icon5 = QIcon()
-        icon5.addFile(u":/root/icons/settings.svg", QSize(), QIcon.Mode.Normal, QIcon.State.Off)
+        icon5.addFile(u":/root/icons/light_settings.svg", QSize(), QIcon.Mode.Normal, QIcon.State.Off)
         self.btnConfig.setIcon(icon5)
         self.btnConfig.setIconSize(QSize(25, 25))
         self.btnConfig.setCheckable(True)
@@ -208,20 +184,20 @@ class Ui_MainPage(object):
 
         self.frameLayout.addItem(self.verticalSpacer)
 
-        self.line = QFrame(self.frame)
+        self.line = QFrame(self.frameNav)
         self.line.setObjectName(u"line")
         self.line.setFrameShape(QFrame.Shape.HLine)
         self.line.setFrameShadow(QFrame.Shadow.Sunken)
 
         self.frameLayout.addWidget(self.line)
 
-        self.btnSair = QPushButton(self.frame)
+        self.btnSair = QPushButton(self.frameNav)
         self.btnSair.setObjectName(u"btnSair")
-        self.btnSair.setFont(font3)
+        self.btnSair.setFont(font4)
         self.btnSair.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
         self.btnSair.setStyleSheet(u"")
         icon6 = QIcon()
-        icon6.addFile(u":/root/icons/log-out.svg", QSize(), QIcon.Mode.Normal, QIcon.State.Off)
+        icon6.addFile(u":/root/icons/light_log-out.svg", QSize(), QIcon.Mode.Normal, QIcon.State.Off)
         self.btnSair.setIcon(icon6)
         self.btnSair.setIconSize(QSize(25, 25))
         self.btnSair.setFlat(True)
@@ -229,7 +205,7 @@ class Ui_MainPage(object):
         self.frameLayout.addWidget(self.btnSair)
 
 
-        self.mainLayout.addWidget(self.frame, 1, 0, 1, 1)
+        self.mainLayout.addWidget(self.frameNav, 1, 0, 1, 1)
 
         self.widContent = QWidget(MainPage)
         self.widContent.setObjectName(u"widContent")
@@ -245,7 +221,7 @@ class Ui_MainPage(object):
     def retranslateUi(self, MainPage):
         MainPage.setWindowTitle(QCoreApplication.translate("MainPage", u"Form", None))
         self.lbTextUser.setText(QCoreApplication.translate("MainPage", u"-TEXT-", None))
-        self.lbTitle.setText(QCoreApplication.translate("MainPage", u"-TITLE-", None))
+        self.lbMainTitle.setText(QCoreApplication.translate("MainPage", u"-TITLE-", None))
         self.btnNotificacoes.setText("")
 #if QT_CONFIG(tooltip)
         self.btnNav.setToolTip(QCoreApplication.translate("MainPage", u"Menu", None))

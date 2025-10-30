@@ -4,6 +4,9 @@ IP = '127.0.0.1'
 PORT = 8888
 SEP = '<CMD_END>'
 
+FILE_DB = 'database.db'
+FILE_DB_CREATE = 'server/src/create.sql'
+
 #region CMDs
 
 # Authentication

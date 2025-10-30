@@ -17,7 +17,7 @@ def shareProfileDialog():
 
     dialog.setProfiles(profiles)
     dialog.setData(ShareProfile(
-        'marcelo', currentProfile, SHARE_TYPE_EDIT
+        'marcelo@email.com', currentProfile, SHARE_TYPE_EDIT
     ))
 
     dialog.exec()

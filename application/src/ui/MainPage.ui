@@ -24,7 +24,7 @@
     <widget class="QWidget" name="widget" native="true">
      <layout class="QHBoxLayout" name="horizontalLayout">
       <property name="spacing">
-       <number>10</number>
+       <number>5</number>
       </property>
       <property name="leftMargin">
        <number>0</number>
@@ -64,9 +64,12 @@
        </spacer>
       </item>
       <item>
-       <widget class="QLabel" name="lbTitle">
-        <property name="styleSheet">
-         <string notr="true">color: #5E5E5E;</string>
+       <widget class="QLabel" name="lbMainTitle">
+        <property name="font">
+         <font>
+          <family>Segoe UI</family>
+          <pointsize>12</pointsize>
+         </font>
         </property>
         <property name="text">
          <string>-TITLE-</string>
@@ -87,28 +90,16 @@
        </spacer>
       </item>
       <item>
-       <widget class="QComboBox" name="cbProfile"/>
-      </item>
-      <item>
        <widget class="QPushButton" name="btnNotificacoes">
         <property name="styleSheet">
-         <string notr="true">QPushButton {
-	background-color: white;
-	border: 1px solid #EDEDED;
-	border-radius: 18;
-    padding: 5;
-}
-
-QPushButton::hover {
-	background-color: transparent;
-}</string>
+         <string notr="true">background-color: transparent;</string>
         </property>
         <property name="text">
          <string/>
         </property>
         <property name="icon">
          <iconset resource="imgs/resource.qrc">
-          <normaloff>:/root/icons/bell.svg</normaloff>:/root/icons/bell.svg</iconset>
+          <normaloff>:/root/icons/light_bell.svg</normaloff>:/root/icons/light_bell.svg</iconset>
         </property>
         <property name="iconSize">
          <size>
@@ -121,11 +112,20 @@ QPushButton::hover {
         </property>
        </widget>
       </item>
+      <item>
+       <widget class="QComboBox" name="cbProfile">
+        <property name="font">
+         <font>
+          <pointsize>12</pointsize>
+         </font>
+        </property>
+       </widget>
+      </item>
      </layout>
     </widget>
    </item>
    <item row="1" column="0">
-    <widget class="QFrame" name="frame">
+    <widget class="QFrame" name="frameNav">
      <property name="sizePolicy">
       <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
        <horstretch>0</horstretch>
@@ -138,25 +138,7 @@ QPushButton::hover {
       </font>
      </property>
      <property name="styleSheet">
-      <string notr="true">QWidget {
-	color: #5E5E5E;
-}
-
-QPushButton {
-	border: none;
-	padding: 10;
-	border-radius: 10;
-	border-top-left-radius: 0;
-	border-bottom-left-radius: 0;
-}
-
-QPushButton::hover, QPushButton:checked {
-	border-left:4px solid #003F87;
-	background-color: #CEE5FF;
-}
-
-/* botões para não aplicar cores */
-QPushButton#btnSair::hover, QPushButton#btnNav::hover { background-color: transparent; border: none;}</string>
+      <string notr="true"/>
      </property>
      <property name="frameShape">
       <enum>QFrame::StyledPanel</enum>
@@ -205,7 +187,7 @@ QPushButton#btnSair::hover, QPushButton#btnNav::hover { background-color: transp
         </property>
         <property name="icon">
          <iconset resource="imgs/resource.qrc">
-          <normaloff>:/root/icons/bars-solid-full.svg</normaloff>:/root/icons/bars-solid-full.svg</iconset>
+          <normaloff>:/root/icons/light_bars-solid-full.svg</normaloff>:/root/icons/light_bars-solid-full.svg</iconset>
         </property>
         <property name="iconSize">
          <size>
@@ -244,7 +226,7 @@ QPushButton#btnSair::hover, QPushButton#btnNav::hover { background-color: transp
         </property>
         <property name="icon">
          <iconset resource="imgs/resource.qrc">
-          <normaloff>:/root/icons/pie-chart.svg</normaloff>:/root/icons/pie-chart.svg</iconset>
+          <normaloff>:/root/icons/light_pie-chart.svg</normaloff>:/root/icons/light_pie-chart.svg</iconset>
         </property>
         <property name="iconSize">
          <size>
@@ -279,7 +261,7 @@ QPushButton#btnSair::hover, QPushButton#btnNav::hover { background-color: transp
         </property>
         <property name="icon">
          <iconset resource="imgs/resource.qrc">
-          <normaloff>:/root/icons/list.svg</normaloff>:/root/icons/list.svg</iconset>
+          <normaloff>:/root/icons/light_list.svg</normaloff>:/root/icons/light_list.svg</iconset>
         </property>
         <property name="iconSize">
          <size>
@@ -314,7 +296,7 @@ QPushButton#btnSair::hover, QPushButton#btnNav::hover { background-color: transp
         </property>
         <property name="icon">
          <iconset resource="imgs/resource.qrc">
-          <normaloff>:/root/icons/credit-card.svg</normaloff>:/root/icons/credit-card.svg</iconset>
+          <normaloff>:/root/icons/light_credit-card.svg</normaloff>:/root/icons/light_credit-card.svg</iconset>
         </property>
         <property name="iconSize">
          <size>
@@ -352,7 +334,7 @@ QPushButton#btnSair::hover, QPushButton#btnNav::hover { background-color: transp
         </property>
         <property name="icon">
          <iconset resource="imgs/resource.qrc">
-          <normaloff>:/root/icons/settings.svg</normaloff>:/root/icons/settings.svg</iconset>
+          <normaloff>:/root/icons/light_settings.svg</normaloff>:/root/icons/light_settings.svg</iconset>
         </property>
         <property name="iconSize">
          <size>
@@ -410,7 +392,7 @@ QPushButton#btnSair::hover, QPushButton#btnNav::hover { background-color: transp
         </property>
         <property name="icon">
          <iconset resource="imgs/resource.qrc">
-          <normaloff>:/root/icons/log-out.svg</normaloff>:/root/icons/log-out.svg</iconset>
+          <normaloff>:/root/icons/light_log-out.svg</normaloff>:/root/icons/light_log-out.svg</iconset>
         </property>
         <property name="iconSize">
          <size>

@@ -1,10 +1,11 @@
 from typing import Iterable
 from dataclasses import fields
-from PySide6.QtWidgets import QLabel, QLineEdit, QWidget, QVBoxLayout, QComboBox, QSpinBox
+from PySide6.QtWidgets import QLabel, QLineEdit, QWidget, QVBoxLayout, QComboBox, QSpinBox, QApplication
+from PySide6.QtGui import QPalette
 from uuid import uuid4
 from .consts import FONT
 
-from .consts import STYLE_PROPERTIES
+from .consts import STYLE_PROPERTIES_LIGHT, STYLE_PROPERTIES_DARK
 
 __style = {
     'default': """
@@ -19,6 +20,7 @@ __style = {
 
         %(ids_lineEdit)s {
             border: none;
+            background-color: transparent;
         }
 
         %(ids_label)s {
@@ -34,6 +36,7 @@ __style = {
 
         %(ids_comboBox)s {
             border: none;
+            background-color: transparent;
         }
 
         %(ids_label)s {
@@ -48,19 +51,15 @@ __style = {
             border-radius: 5px;
         }
 
-        %(ids_comboBox_dropdown_hover)s {
-            background-color: lightgray;
-        }
-
         %(ids_comboBox_downarrow)s {
-            image: url(application/src/ui/imgs/icons/down.svg);
+            image: url(%(ICON_DOWN)s);
             background-color: transparent;
             width: 25px;
             height: 25px;
         }
         
         /*%(ids_comboBox_item)s {
-            border: 1px solid lightgray;
+            border: %(BORDER)s;
         }*/
     """,
     'btns-highlight': """
@@ -68,7 +67,7 @@ __style = {
             background-color: %(BG_HIGHLIGHT)s;
             border: none;
             border-radius: %(BORDER_RADIUS)s;
-            padding: 10 30;
+            padding: 11 31;
             color: white;
         }
 
@@ -97,9 +96,6 @@ __style = {
             padding: 0;
         }
 
-        %(ids_hover)s {
-            background-color: %(BG_SECONDARY)s;
-        }
     """,
     'title': """
         %(ids)s {
@@ -115,6 +111,7 @@ __style = {
 
         %(ids_spin)s {
             border: none;
+            background-color: transparent;
         }
 
         %(ids_label)s {
@@ -123,8 +120,13 @@ __style = {
     """
 }
 
+def isDarkTheme() -> bool:
+    bg_color = QApplication.instance().palette().color(QPalette.ColorRole.Window)
+    return bg_color.toHsv().value() < 127
+
 def generateStyleSheet(inputs:Iterable[str]=None, highlightBtns:Iterable[str]=None, secondaryButtons:Iterable[str]=None, linkBtns:Iterable[str]=None, title:Iterable[str]=None, combobox:Iterable[str]=None, abstractSpin:Iterable[str]=None):
-    props = STYLE_PROPERTIES.copy()
+    isdark = isDarkTheme()
+    props = (STYLE_PROPERTIES_DARK if isdark else STYLE_PROPERTIES_LIGHT).copy()
     style = __style['default']
 
     if inputs:
@@ -200,12 +202,15 @@ def generateInputForm(labelTitle:str, parent:QWidget=None, font=FONT):
     layout.addWidget(label)
     
     lineEdit = QLineEdit(widget)
-    if font: lineEdit.setFont(font)
     layout.addWidget(lineEdit)
 
     widget.setStyleSheet(generateStyleSheet(
         inputs=[f'QWidget#{widId}']
     ))
+
+    if font:
+        label.setFont(font)
+        lineEdit.setFont(font)
 
     return widget, lineEdit, layout
 

@@ -41,7 +41,7 @@ class ProfileThirdAccess:
 
 @dataclass
 class ShareProfile:
-    username: str
+    email: str
     profile: Profile
     shareType: int
 

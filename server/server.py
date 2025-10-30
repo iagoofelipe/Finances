@@ -57,15 +57,21 @@ class FinancesClientHandler:
 
     async def createUser(self, **params):
         log.info(f'{self.__pref} create user required with {params=}')
-        success = bool(self.__db.createUser(**params))
+        user = self.__db.createUser(**params)
+        success = bool(user)
         log.info(f'{self.__pref} create user result {success=}')
+
+        # create the default profile
+        if success:
+            await self.createProfile(send=False, name='Principal', user_id=user.id)
+            
         
         await self.sendCommand(CMD_CREATE_USER, { 'success': success })
 
-    async def createProfile(self, **params):
+    async def createProfile(self, send=True, defaultProfile=False, **params):
         log.info(f'{self.__pref} create profile required with {params=}')
 
-        user_id = self.__user.id
+        user_id = self.__user.id if self.__user else params.pop('user_id')
         data = {
             'success': False,
             'error': None,
@@ -73,13 +79,19 @@ class FinancesClientHandler:
         
         # whether there is any profile with the same fields
         if self.__db.getCount(database.Profile, name=params['name'], user_id=user_id):
-            data['error'] = 'já existe um perfil com esse nome para este usuário!'
-            await self.sendCommand(CMD_CREATE_PROFILE, data)
+            if send:
+                data['error'] = 'já existe um perfil com esse nome para este usuário!'
+                await self.sendCommand(CMD_CREATE_PROFILE, data)
             return
 
         data['success'] = True
         profile = self.__db.create(database.Profile, **params, user_id=user_id)
-        self.__db.create(database.ProfileRole, profile_id=profile.id, user_id=user_id, pending=False, edit=True, view=True)
+        profileRole = self.__db.create(database.ProfileRole, profile_id=profile.id, user_id=user_id, pending=False, edit=True, view=True)
+
+        if defaultProfile:
+            await self.setDefaultProfile(profile.id, False)
+        
+        if not send: return
 
         await self.sendCommand(CMD_CREATE_PROFILE, data)
         await self.getProfiles() # if there is data, sends to user, sends NO_PROFILE_FOUND otherwise
@@ -132,10 +144,11 @@ class FinancesClientHandler:
     
     async def setDefaultProfile(self, profileId:str, send=True):
         sql = """
-        UPDATE profile_role SET is_default = 1 WHERE profile_id = ? AND user_id = ?;
-        """
-
-        self.__db.cursor.execute(sql, (profileId, self.__user.id))
+        UPDATE profile_role SET is_default = 0 WHERE user_id = '%(userId)s';
+        UPDATE profile_role SET is_default = 1 WHERE profile_id = '%(profileId)s' AND user_id = '%(userId)s';
+        """ % { 'profileId': profileId, 'userId': self.__user.id }
+        
+        self.__db.cursor.executescript(sql)
         self.__db.commit()
 
         if send:
@@ -153,7 +166,7 @@ class FinancesClientHandler:
         r = self.__db.cursor.fetchone()
         if not r:
             # updates the default profile to a valid one
-            profile = await self.getProfiles(False, True)[0]
+            profile = (await self.getProfiles(False, True))[0]
             profileId = profile['id']
             await self.setDefaultProfile(profileId, False)
         else:
@@ -235,7 +248,7 @@ class FinancesClientHandler:
             for handler in self.clients[ownerId]: # to all instances
                 await handler.getProfileThridAccesses()
 
-    async def shareProfile(self, username:str, profileId:str, shareType:int):
+    async def shareProfile(self, email:str, profileId:str, shareType:int):
         #TODO: Add transfer property
         if shareType == SHARE_TYPE_PROPERTY:
             await self.sendCommand(CMD_SHARE_PROFILE, { 'success': False })
@@ -244,21 +257,26 @@ class FinancesClientHandler:
         edit = shareType == SHARE_TYPE_EDIT
         view = shareType == SHARE_TYPE_VIEW or shareType == SHARE_TYPE_EDIT
         
-        # getting the user id by username
-        self.__db.cursor.execute(' SELECT id FROM user WHERE username = ? ', (username, ))
+        # getting the user id by email
+        self.__db.cursor.execute(' SELECT id FROM user WHERE email = ? ', (email, ))
         r = self.__db.cursor.fetchone()
         if not r:
-            await self.sendCommand(CMD_SHARE_PROFILE, { 'success': False })
+            await self.sendCommand(CMD_SHARE_PROFILE, { 'success': False, 'msg': 'nenhum usuário encontrado para o E-mail informado!' })
             return
         
         userId = r[0]
 
         # check if the role already exists
         self.__db.cursor.execute('SELECT COUNT(*) FROM profile_role WHERE profile_id=? user_id=? AND view=? AND edit=?')
+        r = self.__db.cursor.fetchone()
+
+        if not r:
+            await self.sendCommand(CMD_SHARE_PROFILE, { 'success': False, 'msg': 'já existe um compartilhamento entre este perfil e usuário!' })
+            return
         
         profileRole = self.__db.create(database.ProfileRole, edit=edit, view=view, pending=True, profile_id=profileId, user_id=userId)
         
-        await self.sendCommand(CMD_SHARE_PROFILE, { 'success': bool(profileRole) })
+        await self.sendCommand(CMD_SHARE_PROFILE, { 'success': bool(profileRole), 'msg': None })
 
         # notifying the owner if connected
         if userId in self.clients:

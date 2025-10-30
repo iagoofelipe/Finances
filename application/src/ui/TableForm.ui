@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>572</width>
-    <height>539</height>
+    <height>515</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -38,6 +38,21 @@
       <enum>QFrame::Raised</enum>
      </property>
      <layout class="QVBoxLayout" name="verticalLayout">
+      <property name="spacing">
+       <number>10</number>
+      </property>
+      <property name="leftMargin">
+       <number>10</number>
+      </property>
+      <property name="topMargin">
+       <number>10</number>
+      </property>
+      <property name="rightMargin">
+       <number>10</number>
+      </property>
+      <property name="bottomMargin">
+       <number>10</number>
+      </property>
       <item>
        <widget class="QWidget" name="widget" native="true">
         <layout class="QHBoxLayout" name="horizontalLayout">
@@ -61,9 +76,6 @@
              <pointsize>13</pointsize>
             </font>
            </property>
-           <property name="styleSheet">
-            <string notr="true">color: #5E5E5E;</string>
-           </property>
            <property name="text">
             <string>TITLE</string>
            </property>
@@ -84,9 +96,12 @@
          </item>
          <item>
           <widget class="QPushButton" name="btnReject">
+           <property name="styleSheet">
+            <string notr="true">background-color: transparent;</string>
+           </property>
            <property name="icon">
             <iconset resource="imgs/resource.qrc">
-             <normaloff>:/root/icons/x.svg</normaloff>:/root/icons/x.svg</iconset>
+             <normaloff>:/root/icons/light_x.svg</normaloff>:/root/icons/light_x.svg</iconset>
            </property>
            <property name="iconSize">
             <size>
@@ -101,9 +116,12 @@
          </item>
          <item>
           <widget class="QPushButton" name="btnAccept">
+           <property name="styleSheet">
+            <string notr="true">background-color: transparent;</string>
+           </property>
            <property name="icon">
             <iconset resource="imgs/resource.qrc">
-             <normaloff>:/root/icons/Vector.svg</normaloff>:/root/icons/Vector.svg</iconset>
+             <normaloff>:/root/icons/light_check.svg</normaloff>:/root/icons/light_check.svg</iconset>
            </property>
            <property name="iconSize">
             <size>
@@ -118,9 +136,12 @@
          </item>
          <item>
           <widget class="QPushButton" name="btnDelete">
+           <property name="styleSheet">
+            <string notr="true">background-color: transparent;</string>
+           </property>
            <property name="icon">
             <iconset resource="imgs/resource.qrc">
-             <normaloff>:/root/icons/minus.svg</normaloff>:/root/icons/minus.svg</iconset>
+             <normaloff>:/root/icons/light_trash.svg</normaloff>:/root/icons/light_trash.svg</iconset>
            </property>
            <property name="iconSize">
             <size>
@@ -135,9 +156,12 @@
          </item>
          <item>
           <widget class="QPushButton" name="btnDetails">
+           <property name="styleSheet">
+            <string notr="true">background-color: transparent;</string>
+           </property>
            <property name="icon">
             <iconset resource="imgs/resource.qrc">
-             <normaloff>:/root/icons/file-text.svg</normaloff>:/root/icons/file-text.svg</iconset>
+             <normaloff>:/root/icons/light_detail.svg</normaloff>:/root/icons/light_detail.svg</iconset>
            </property>
            <property name="iconSize">
             <size>
@@ -152,9 +176,12 @@
          </item>
          <item>
           <widget class="QPushButton" name="btnAdd">
+           <property name="styleSheet">
+            <string notr="true">background-color: transparent;</string>
+           </property>
            <property name="icon">
             <iconset resource="imgs/resource.qrc">
-             <normaloff>:/root/icons/plus.svg</normaloff>:/root/icons/plus.svg</iconset>
+             <normaloff>:/root/icons/light_plus.svg</normaloff>:/root/icons/light_plus.svg</iconset>
            </property>
            <property name="iconSize">
             <size>
@@ -169,9 +196,12 @@
          </item>
          <item>
           <widget class="QPushButton" name="btnParams">
+           <property name="styleSheet">
+            <string notr="true">background-color: transparent;</string>
+           </property>
            <property name="icon">
             <iconset resource="imgs/resource.qrc">
-             <normaloff>:/root/icons/sliders.svg</normaloff>:/root/icons/sliders.svg</iconset>
+             <normaloff>:/root/icons/light_sliders.svg</normaloff>:/root/icons/light_sliders.svg</iconset>
            </property>
            <property name="iconSize">
             <size>
@@ -186,9 +216,12 @@
          </item>
          <item>
           <widget class="QPushButton" name="btnEdit">
+           <property name="styleSheet">
+            <string notr="true">background-color: transparent;</string>
+           </property>
            <property name="icon">
             <iconset resource="imgs/resource.qrc">
-             <normaloff>:/root/icons/edit.svg</normaloff>:/root/icons/edit.svg</iconset>
+             <normaloff>:/root/icons/light_edit.svg</normaloff>:/root/icons/light_edit.svg</iconset>
            </property>
            <property name="iconSize">
             <size>
@@ -205,14 +238,14 @@
        </widget>
       </item>
       <item>
-       <widget class="QFrame" name="frame_2">
+       <widget class="QFrame" name="frameTable">
         <property name="frameShape">
          <enum>QFrame::StyledPanel</enum>
         </property>
         <property name="frameShadow">
          <enum>QFrame::Raised</enum>
         </property>
-        <layout class="QVBoxLayout" name="verticalLayout_3">
+        <layout class="QVBoxLayout" name="frameTableLayout">
          <property name="spacing">
           <number>0</number>
          </property>
@@ -307,9 +340,12 @@
          </item>
          <item>
           <widget class="QPushButton" name="btnPrev">
+           <property name="styleSheet">
+            <string notr="true">background-color: transparent;</string>
+           </property>
            <property name="icon">
             <iconset resource="imgs/resource.qrc">
-             <normaloff>:/root/icons/prev.svg</normaloff>:/root/icons/prev.svg</iconset>
+             <normaloff>:/root/icons/light_prev.svg</normaloff>:/root/icons/light_prev.svg</iconset>
            </property>
            <property name="iconSize">
             <size>
@@ -330,9 +366,6 @@
              <pointsize>12</pointsize>
             </font>
            </property>
-           <property name="styleSheet">
-            <string notr="true">color: #5E5E5E;</string>
-           </property>
            <property name="text">
             <string>0 a 0 de 0 itens</string>
            </property>
@@ -340,9 +373,12 @@
          </item>
          <item>
           <widget class="QPushButton" name="btnNext">
+           <property name="styleSheet">
+            <string notr="true">background-color: transparent;</string>
+           </property>
            <property name="icon">
             <iconset resource="imgs/resource.qrc">
-             <normaloff>:/root/icons/next.svg</normaloff>:/root/icons/next.svg</iconset>
+             <normaloff>:/root/icons/light_next.svg</normaloff>:/root/icons/light_next.svg</iconset>
            </property>
            <property name="iconSize">
             <size>

@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 ################################################################################
-## Form generated from reading UI file 'RegView.ui'
+## Form generated from reading UI file 'RegForm.ui'
 ##
 ## Created by: Qt User Interface Compiler version 6.9.3
 ##
@@ -20,16 +20,16 @@ from PySide6.QtWidgets import (QAbstractSpinBox, QApplication, QComboBox, QDateE
     QLabel, QLineEdit, QPushButton, QSizePolicy,
     QSpacerItem, QVBoxLayout, QWidget)
 
-class Ui_RegView(object):
-    def setupUi(self, RegView):
-        if not RegView.objectName():
-            RegView.setObjectName(u"RegView")
-        RegView.resize(913, 567)
-        self.mainLayout = QVBoxLayout(RegView)
+class Ui_RegForm(object):
+    def setupUi(self, RegForm):
+        if not RegForm.objectName():
+            RegForm.setObjectName(u"RegForm")
+        RegForm.resize(913, 567)
+        self.mainLayout = QVBoxLayout(RegForm)
         self.mainLayout.setSpacing(10)
         self.mainLayout.setObjectName(u"mainLayout")
         self.mainLayout.setContentsMargins(0, 0, 0, 0)
-        self.frameNovoReg = QFrame(RegView)
+        self.frameNovoReg = QFrame(RegForm)
         self.frameNovoReg.setObjectName(u"frameNovoReg")
         sizePolicy = QSizePolicy(QSizePolicy.Policy.Preferred, QSizePolicy.Policy.Fixed)
         sizePolicy.setHorizontalStretch(0)
@@ -42,17 +42,16 @@ class Ui_RegView(object):
         self.verticalLayout_2.setSpacing(10)
         self.verticalLayout_2.setObjectName(u"verticalLayout_2")
         self.verticalLayout_2.setContentsMargins(10, 10, 10, 10)
-        self.label = QLabel(self.frameNovoReg)
-        self.label.setObjectName(u"label")
-        sizePolicy.setHeightForWidth(self.label.sizePolicy().hasHeightForWidth())
-        self.label.setSizePolicy(sizePolicy)
+        self.lbTitleReg = QLabel(self.frameNovoReg)
+        self.lbTitleReg.setObjectName(u"lbTitleReg")
+        sizePolicy.setHeightForWidth(self.lbTitleReg.sizePolicy().hasHeightForWidth())
+        self.lbTitleReg.setSizePolicy(sizePolicy)
         font = QFont()
         font.setFamilies([u"Segoe UI"])
         font.setPointSize(12)
-        self.label.setFont(font)
-        self.label.setStyleSheet(u"color: #5E5E5E;")
+        self.lbTitleReg.setFont(font)
 
-        self.verticalLayout_2.addWidget(self.label)
+        self.verticalLayout_2.addWidget(self.lbTitleReg)
 
         self.widRegInputs = QWidget(self.frameNovoReg)
         self.widRegInputs.setObjectName(u"widRegInputs")
@@ -67,14 +66,18 @@ class Ui_RegView(object):
         font1.setPointSize(11)
         self.widTitulo.setFont(font1)
         self.verticalLayout_3 = QVBoxLayout(self.widTitulo)
+        self.verticalLayout_3.setSpacing(0)
         self.verticalLayout_3.setObjectName(u"verticalLayout_3")
+        self.verticalLayout_3.setContentsMargins(10, 10, 10, 10)
         self.label_2 = QLabel(self.widTitulo)
         self.label_2.setObjectName(u"label_2")
+        self.label_2.setFont(font1)
 
         self.verticalLayout_3.addWidget(self.label_2)
 
         self.leTitulo = QLineEdit(self.widTitulo)
         self.leTitulo.setObjectName(u"leTitulo")
+        self.leTitulo.setFont(font1)
         self.leTitulo.setFrame(True)
 
         self.verticalLayout_3.addWidget(self.leTitulo)
@@ -86,9 +89,12 @@ class Ui_RegView(object):
         self.widContab.setObjectName(u"widContab")
         self.widContab.setFont(font1)
         self.verticalLayout_4 = QVBoxLayout(self.widContab)
+        self.verticalLayout_4.setSpacing(0)
         self.verticalLayout_4.setObjectName(u"verticalLayout_4")
+        self.verticalLayout_4.setContentsMargins(10, 10, 10, 10)
         self.label_11 = QLabel(self.widContab)
         self.label_11.setObjectName(u"label_11")
+        self.label_11.setFont(font1)
 
         self.verticalLayout_4.addWidget(self.label_11)
 
@@ -96,6 +102,7 @@ class Ui_RegView(object):
         self.cbContab.addItem("")
         self.cbContab.addItem("")
         self.cbContab.setObjectName(u"cbContab")
+        self.cbContab.setFont(font1)
         self.cbContab.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
         self.cbContab.setFrame(False)
 
@@ -108,14 +115,18 @@ class Ui_RegView(object):
         self.widDesc.setObjectName(u"widDesc")
         self.widDesc.setFont(font1)
         self.verticalLayout_5 = QVBoxLayout(self.widDesc)
+        self.verticalLayout_5.setSpacing(0)
         self.verticalLayout_5.setObjectName(u"verticalLayout_5")
+        self.verticalLayout_5.setContentsMargins(10, 10, 10, 10)
         self.label_12 = QLabel(self.widDesc)
         self.label_12.setObjectName(u"label_12")
+        self.label_12.setFont(font1)
 
         self.verticalLayout_5.addWidget(self.label_12)
 
         self.leDesc = QLineEdit(self.widDesc)
         self.leDesc.setObjectName(u"leDesc")
+        self.leDesc.setFont(font1)
         self.leDesc.setFrame(True)
 
         self.verticalLayout_5.addWidget(self.leDesc)
@@ -127,14 +138,18 @@ class Ui_RegView(object):
         self.widVal.setObjectName(u"widVal")
         self.widVal.setFont(font1)
         self.verticalLayout_6 = QVBoxLayout(self.widVal)
+        self.verticalLayout_6.setSpacing(0)
         self.verticalLayout_6.setObjectName(u"verticalLayout_6")
+        self.verticalLayout_6.setContentsMargins(10, 10, 10, 10)
         self.label_13 = QLabel(self.widVal)
         self.label_13.setObjectName(u"label_13")
+        self.label_13.setFont(font1)
 
         self.verticalLayout_6.addWidget(self.label_13)
 
         self.dsVal = QDoubleSpinBox(self.widVal)
         self.dsVal.setObjectName(u"dsVal")
+        self.dsVal.setFont(font1)
         self.dsVal.setFrame(True)
         self.dsVal.setButtonSymbols(QAbstractSpinBox.NoButtons)
 
@@ -147,14 +162,18 @@ class Ui_RegView(object):
         self.widData.setObjectName(u"widData")
         self.widData.setFont(font1)
         self.verticalLayout_7 = QVBoxLayout(self.widData)
+        self.verticalLayout_7.setSpacing(0)
         self.verticalLayout_7.setObjectName(u"verticalLayout_7")
+        self.verticalLayout_7.setContentsMargins(10, 10, 10, 10)
         self.label_14 = QLabel(self.widData)
         self.label_14.setObjectName(u"label_14")
+        self.label_14.setFont(font1)
 
         self.verticalLayout_7.addWidget(self.label_14)
 
         self.dtData = QDateEdit(self.widData)
         self.dtData.setObjectName(u"dtData")
+        self.dtData.setFont(font1)
         self.dtData.setFrame(True)
         self.dtData.setButtonSymbols(QAbstractSpinBox.NoButtons)
         self.dtData.setCalendarPopup(False)
@@ -164,26 +183,29 @@ class Ui_RegView(object):
 
         self.gridLayout.addWidget(self.widData, 1, 1, 1, 1)
 
-        self.label_19 = QLabel(self.widRegInputs)
-        self.label_19.setObjectName(u"label_19")
-        self.label_19.setFont(font)
-        self.label_19.setStyleSheet(u"color: #5E5E5E;")
-        self.label_19.setMargin(0)
+        self.lbTitleOp = QLabel(self.widRegInputs)
+        self.lbTitleOp.setObjectName(u"lbTitleOp")
+        self.lbTitleOp.setFont(font)
+        self.lbTitleOp.setMargin(0)
 
-        self.gridLayout.addWidget(self.label_19, 2, 0, 1, 3)
+        self.gridLayout.addWidget(self.lbTitleOp, 2, 0, 1, 3)
 
         self.widOperacao = QWidget(self.widRegInputs)
         self.widOperacao.setObjectName(u"widOperacao")
         self.widOperacao.setFont(font1)
         self.verticalLayout_9 = QVBoxLayout(self.widOperacao)
+        self.verticalLayout_9.setSpacing(0)
         self.verticalLayout_9.setObjectName(u"verticalLayout_9")
+        self.verticalLayout_9.setContentsMargins(10, 10, 10, 10)
         self.label_16 = QLabel(self.widOperacao)
         self.label_16.setObjectName(u"label_16")
+        self.label_16.setFont(font1)
 
         self.verticalLayout_9.addWidget(self.label_16)
 
         self.cbOperacao = QComboBox(self.widOperacao)
         self.cbOperacao.setObjectName(u"cbOperacao")
+        self.cbOperacao.setFont(font1)
         self.cbOperacao.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
         self.cbOperacao.setFrame(False)
 
@@ -196,14 +218,18 @@ class Ui_RegView(object):
         self.widCat.setObjectName(u"widCat")
         self.widCat.setFont(font1)
         self.verticalLayout_8 = QVBoxLayout(self.widCat)
+        self.verticalLayout_8.setSpacing(0)
         self.verticalLayout_8.setObjectName(u"verticalLayout_8")
+        self.verticalLayout_8.setContentsMargins(10, 10, 10, 10)
         self.label_15 = QLabel(self.widCat)
         self.label_15.setObjectName(u"label_15")
+        self.label_15.setFont(font1)
 
         self.verticalLayout_8.addWidget(self.label_15)
 
         self.cbCat = QComboBox(self.widCat)
         self.cbCat.setObjectName(u"cbCat")
+        self.cbCat.setFont(font1)
         self.cbCat.setCursor(QCursor(Qt.CursorShape.IBeamCursor))
         self.cbCat.setEditable(True)
         self.cbCat.setFrame(True)
@@ -249,7 +275,7 @@ class Ui_RegView(object):
 
         self.mainLayout.addWidget(self.frameNovoReg)
 
-        self.frameHistorico = QFrame(RegView)
+        self.frameHistorico = QFrame(RegForm)
         self.frameHistorico.setObjectName(u"frameHistorico")
         self.frameHistorico.setFrameShape(QFrame.StyledPanel)
         self.frameHistorico.setFrameShadow(QFrame.Raised)
@@ -257,26 +283,26 @@ class Ui_RegView(object):
         self.mainLayout.addWidget(self.frameHistorico)
 
 
-        self.retranslateUi(RegView)
+        self.retranslateUi(RegForm)
 
-        QMetaObject.connectSlotsByName(RegView)
+        QMetaObject.connectSlotsByName(RegForm)
     # setupUi
 
-    def retranslateUi(self, RegView):
-        RegView.setWindowTitle(QCoreApplication.translate("RegView", u"Form", None))
-        self.label.setText(QCoreApplication.translate("RegView", u"Novo Registro", None))
-        self.label_2.setText(QCoreApplication.translate("RegView", u"T\u00edtulo", None))
-        self.label_11.setText(QCoreApplication.translate("RegView", u"Contabilizado", None))
-        self.cbContab.setItemText(0, QCoreApplication.translate("RegView", u"Pendente", None))
-        self.cbContab.setItemText(1, QCoreApplication.translate("RegView", u"Contabilizado", None))
+    def retranslateUi(self, RegForm):
+        RegForm.setWindowTitle(QCoreApplication.translate("RegForm", u"Form", None))
+        self.lbTitleReg.setText(QCoreApplication.translate("RegForm", u"Novo Registro", None))
+        self.label_2.setText(QCoreApplication.translate("RegForm", u"T\u00edtulo", None))
+        self.label_11.setText(QCoreApplication.translate("RegForm", u"Contabilizado", None))
+        self.cbContab.setItemText(0, QCoreApplication.translate("RegForm", u"Pendente", None))
+        self.cbContab.setItemText(1, QCoreApplication.translate("RegForm", u"Contabilizado", None))
 
-        self.label_12.setText(QCoreApplication.translate("RegView", u"Descri\u00e7\u00e3o", None))
-        self.label_13.setText(QCoreApplication.translate("RegView", u"Valor", None))
-        self.label_14.setText(QCoreApplication.translate("RegView", u"Data", None))
-        self.label_19.setText(QCoreApplication.translate("RegView", u"Detalhes da Opera\u00e7\u00e3o", None))
-        self.label_16.setText(QCoreApplication.translate("RegView", u"Tipo de Opera\u00e7\u00e3o", None))
-        self.label_15.setText(QCoreApplication.translate("RegView", u"Categoria", None))
-        self.btnLimpar.setText(QCoreApplication.translate("RegView", u"limpar", None))
-        self.btnSalvar.setText(QCoreApplication.translate("RegView", u"salvar", None))
+        self.label_12.setText(QCoreApplication.translate("RegForm", u"Descri\u00e7\u00e3o", None))
+        self.label_13.setText(QCoreApplication.translate("RegForm", u"Valor", None))
+        self.label_14.setText(QCoreApplication.translate("RegForm", u"Data", None))
+        self.lbTitleOp.setText(QCoreApplication.translate("RegForm", u"Detalhes da Opera\u00e7\u00e3o", None))
+        self.label_16.setText(QCoreApplication.translate("RegForm", u"Tipo de Opera\u00e7\u00e3o", None))
+        self.label_15.setText(QCoreApplication.translate("RegForm", u"Categoria", None))
+        self.btnLimpar.setText(QCoreApplication.translate("RegForm", u"limpar", None))
+        self.btnSalvar.setText(QCoreApplication.translate("RegForm", u"salvar", None))
     # retranslateUi
 

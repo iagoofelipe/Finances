@@ -1,10 +1,11 @@
 from PySide6.QtWidgets import QWidget, QLineEdit
+from PySide6.QtGui import QIcon
 from PySide6.QtCore import Signal
 from typing import Sequence
 
 from ..src.ui.auto.ui_ConfigForm import Ui_ConfigForm
 from ..src.structs import User, Profile, ShareProfile
-from ..src.tools import generateStyleSheet
+from ..src.tools import isDarkTheme, generateStyleSheet
 from .components.table import TableWidget
 from .components.shareProfileDialog import ShareProfileDialog
 
@@ -21,12 +22,14 @@ class ConfigView(QWidget):
         self.__user = None
         self.__profiles = None
         self.__profilesByName = {}
+        self.__theme = 'light'
 
         self.__ui.setupUi(self)
         self.setStyleSheet(generateStyleSheet(
             inputs=['QWidget#widNome', 'QWidget#widEmail', 'QWidget#widSenhaAtual', 'QWidget#widSenhaNova', 'QWidget#widSenhaConfirm'],
             highlightBtns=['QPushButton#btnEditarUser', 'QPushButton#btnSalvarUser', 'QPushButton#btnSalvarSenha', 'QPushButton#btnAtualizarSenha'],
-            secondaryButtons=['QPushButton#btnCancelarUser', 'QPushButton#btnCancelarSenha']
+            secondaryButtons=['QPushButton#btnCancelarUser', 'QPushButton#btnCancelarSenha'],
+            title=['QLabel#lbSenhaUsuario', 'QLabel#lbDadosUsuario', 'QLabel#lbTerceiros'],
         ))
         
         self.on_btnCancelarUser_clicked()
@@ -38,10 +41,10 @@ class ConfigView(QWidget):
         # nameWidOld, layout, columns, title, flags
         t = TableWidget
         tables = (
-            ('widPerfis', self.__ui.gridLayout, ['Proprietário', 'Perfil', 'Tipo de Acesso'], 'Perfis', t.ShowNavAsNeeded | t.DeleteJustOne | t.SelectJustOne | t.BtnDelete | t.BtnAdd),
-            ('widShare', self.__ui.gridLayout, ['Proprietário', 'Perfil', 'Compartilhamento'], 'Compartilhamentos Pendentes', t.ShowNavAsNeeded | t.SelectJustOne | t.BtnAccept | t.BtnReject),
-            ('widEdicao', self.__ui.acessoPerfilLayout, ['Usuário', 'Status'], 'Edição', t.ShowNavAsNeeded | t.BtnDelete | t.BtnAdd),
-            ('widVisu', self.__ui.acessoPerfilLayout, ['Usuário', 'Status'], 'Visualização', t.ShowNavAsNeeded | t.BtnDelete | t.BtnAdd),
+            ('widPerfis', self.__ui.gridLayout, ['Proprietário', 'Perfil', 'Tipo de Acesso'], 'Perfis', t.Style.ShowNavAsNeeded | t.Behavior.DeleteJustOne | t.Behavior.SelectJustOne | t.Button.BtnDelete | t.Button.BtnAdd),
+            ('widShare', self.__ui.gridLayout, ['Proprietário', 'Perfil', 'Compartilhamento'], 'Compartilhamentos Pendentes', t.Style.ShowNavAsNeeded | t.Behavior.SelectJustOne | t.Button.BtnAccept | t.Button.BtnReject),
+            ('widEdicao', self.__ui.acessoPerfilLayout, ['Usuário', 'Status'], 'Edição', t.Style.ShowNavAsNeeded | t.Style.InsideNoFrame | t.Button.BtnDelete | t.Button.BtnAdd),
+            ('widVisu', self.__ui.acessoPerfilLayout, ['Usuário', 'Status'], 'Visualização', t.Style.ShowNavAsNeeded | t.Style.InsideNoFrame | t.Button.BtnDelete | t.Button.BtnAdd),
         )
 
         for nameWidOld, layout, columns, title, flags in tables:
@@ -65,6 +68,23 @@ class ConfigView(QWidget):
         self.__ui.cbPerfil.currentTextChanged.connect(self.on_cbPerfil_currentTextChanged)
         self.__ui.widEdicao.addRequired.connect(self.requireShareProfileData)
         self.__ui.widVisu.addRequired.connect(self.requireShareProfileData)
+
+        self.updateTheme()
+
+    def updateTheme(self):
+        isdark = isDarkTheme()
+        
+        # if is up to date
+        if (isdark and self.__theme == 'dark') or (not isdark and self.__theme == 'light'):
+            return
+        
+        prefix = 'dark_' if isdark else 'light_'
+        self.__ui.btnSenhaAtualHide.setIcon(QIcon(f':/root/icons/{prefix}eye-off.svg'))
+        self.__ui.btnSenhaAtualShow.setIcon(QIcon(f':/root/icons/{prefix}eye.svg'))
+        self.__ui.btnSenhaNovaHide.setIcon(QIcon(f':/root/icons/{prefix}eye-off.svg'))
+        self.__ui.btnSenhaNovaShow.setIcon(QIcon(f':/root/icons/{prefix}eye.svg'))
+        self.__ui.btnSenhaConfirmHide.setIcon(QIcon(f':/root/icons/{prefix}eye-off.svg'))
+        self.__ui.btnSenhaConfirmShow.setIcon(QIcon(f':/root/icons/{prefix}eye.svg'))
 
     def getTablePerfis(self) -> TableWidget: return self.__ui.widPerfis
     def getTableShare(self) -> TableWidget: return self.__ui.widShare

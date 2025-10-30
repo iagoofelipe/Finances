@@ -14,6 +14,9 @@
    <string>Form</string>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout_13">
+   <property name="spacing">
+    <number>10</number>
+   </property>
    <property name="leftMargin">
     <number>0</number>
    </property>
@@ -53,6 +56,9 @@
        <property name="bottomMargin">
         <number>0</number>
        </property>
+       <property name="spacing">
+        <number>10</number>
+       </property>
        <item row="0" column="1">
         <widget class="QFrame" name="frame_2">
          <property name="sizePolicy">
@@ -71,8 +77,20 @@
           <property name="spacing">
            <number>10</number>
           </property>
+          <property name="leftMargin">
+           <number>10</number>
+          </property>
+          <property name="topMargin">
+           <number>10</number>
+          </property>
+          <property name="rightMargin">
+           <number>10</number>
+          </property>
+          <property name="bottomMargin">
+           <number>10</number>
+          </property>
           <item>
-           <widget class="QLabel" name="label_5">
+           <widget class="QLabel" name="lbSenhaUsuario">
             <property name="sizePolicy">
              <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
               <horstretch>0</horstretch>
@@ -84,9 +102,6 @@
               <family>Segoe UI</family>
               <pointsize>12</pointsize>
              </font>
-            </property>
-            <property name="styleSheet">
-             <string notr="true">color: #5E5E5E;</string>
             </property>
             <property name="text">
              <string>Senha de usuário</string>
@@ -119,6 +134,12 @@
              </property>
              <item>
               <widget class="QLabel" name="label_6">
+               <property name="font">
+                <font>
+                 <family>Segoe UI</family>
+                 <pointsize>11</pointsize>
+                </font>
+               </property>
                <property name="text">
                 <string>Senha Atual</string>
                </property>
@@ -141,6 +162,12 @@
                 </property>
                 <item>
                  <widget class="QLineEdit" name="leSenhaAtual">
+                  <property name="font">
+                   <font>
+                    <family>Segoe UI</family>
+                    <pointsize>11</pointsize>
+                   </font>
+                  </property>
                   <property name="echoMode">
                    <enum>QLineEdit::Password</enum>
                   </property>
@@ -154,12 +181,27 @@
                 </item>
                 <item>
                  <widget class="QPushButton" name="btnSenhaAtualHide">
+                  <property name="font">
+                   <font>
+                    <family>Segoe UI</family>
+                    <pointsize>12</pointsize>
+                   </font>
+                  </property>
+                  <property name="styleSheet">
+                   <string notr="true">background-color: transparent;</string>
+                  </property>
                   <property name="text">
                    <string/>
                   </property>
                   <property name="icon">
                    <iconset resource="imgs/resource.qrc">
-                    <normaloff>:/root/icons/eye-off.svg</normaloff>:/root/icons/eye-off.svg</iconset>
+                    <normaloff>:/root/icons/light_eye-off.svg</normaloff>:/root/icons/light_eye-off.svg</iconset>
+                  </property>
+                  <property name="iconSize">
+                   <size>
+                    <width>18</width>
+                    <height>18</height>
+                   </size>
                   </property>
                   <property name="flat">
                    <bool>true</bool>
@@ -168,12 +210,27 @@
                 </item>
                 <item>
                  <widget class="QPushButton" name="btnSenhaAtualShow">
+                  <property name="font">
+                   <font>
+                    <family>Segoe UI</family>
+                    <pointsize>12</pointsize>
+                   </font>
+                  </property>
+                  <property name="styleSheet">
+                   <string notr="true">background-color: transparent;</string>
+                  </property>
                   <property name="text">
                    <string/>
                   </property>
                   <property name="icon">
                    <iconset resource="imgs/resource.qrc">
-                    <normaloff>:/root/icons/eye.svg</normaloff>:/root/icons/eye.svg</iconset>
+                    <normaloff>:/root/icons/light_eye.svg</normaloff>:/root/icons/light_eye.svg</iconset>
+                  </property>
+                  <property name="iconSize">
+                   <size>
+                    <width>18</width>
+                    <height>18</height>
+                   </size>
                   </property>
                   <property name="flat">
                    <bool>true</bool>
@@ -195,8 +252,29 @@
              </font>
             </property>
             <layout class="QVBoxLayout" name="verticalLayout_2">
+             <property name="spacing">
+              <number>0</number>
+             </property>
+             <property name="leftMargin">
+              <number>10</number>
+             </property>
+             <property name="topMargin">
+              <number>10</number>
+             </property>
+             <property name="rightMargin">
+              <number>10</number>
+             </property>
+             <property name="bottomMargin">
+              <number>10</number>
+             </property>
              <item>
               <widget class="QLabel" name="label_7">
+               <property name="font">
+                <font>
+                 <family>Segoe UI</family>
+                 <pointsize>11</pointsize>
+                </font>
+               </property>
                <property name="text">
                 <string>Nova Senha</string>
                </property>
@@ -219,6 +297,12 @@
                 </property>
                 <item>
                  <widget class="QLineEdit" name="leSenhaNova">
+                  <property name="font">
+                   <font>
+                    <family>Segoe UI</family>
+                    <pointsize>11</pointsize>
+                   </font>
+                  </property>
                   <property name="echoMode">
                    <enum>QLineEdit::Password</enum>
                   </property>
@@ -232,12 +316,26 @@
                 </item>
                 <item>
                  <widget class="QPushButton" name="btnSenhaNovaHide">
+                  <property name="font">
+                   <font>
+                    <pointsize>12</pointsize>
+                   </font>
+                  </property>
+                  <property name="styleSheet">
+                   <string notr="true">background-color: transparent;</string>
+                  </property>
                   <property name="text">
                    <string/>
                   </property>
                   <property name="icon">
                    <iconset resource="imgs/resource.qrc">
-                    <normaloff>:/root/icons/eye-off.svg</normaloff>:/root/icons/eye-off.svg</iconset>
+                    <normaloff>:/root/icons/light_eye-off.svg</normaloff>:/root/icons/light_eye-off.svg</iconset>
+                  </property>
+                  <property name="iconSize">
+                   <size>
+                    <width>18</width>
+                    <height>18</height>
+                   </size>
                   </property>
                   <property name="flat">
                    <bool>true</bool>
@@ -246,12 +344,26 @@
                 </item>
                 <item>
                  <widget class="QPushButton" name="btnSenhaNovaShow">
+                  <property name="font">
+                   <font>
+                    <pointsize>12</pointsize>
+                   </font>
+                  </property>
+                  <property name="styleSheet">
+                   <string notr="true">background-color: transparent;</string>
+                  </property>
                   <property name="text">
                    <string/>
                   </property>
                   <property name="icon">
                    <iconset resource="imgs/resource.qrc">
-                    <normaloff>:/root/icons/eye.svg</normaloff>:/root/icons/eye.svg</iconset>
+                    <normaloff>:/root/icons/light_eye.svg</normaloff>:/root/icons/light_eye.svg</iconset>
+                  </property>
+                  <property name="iconSize">
+                   <size>
+                    <width>18</width>
+                    <height>18</height>
+                   </size>
                   </property>
                   <property name="flat">
                    <bool>true</bool>
@@ -273,8 +385,29 @@
              </font>
             </property>
             <layout class="QVBoxLayout" name="verticalLayout_5">
+             <property name="spacing">
+              <number>0</number>
+             </property>
+             <property name="leftMargin">
+              <number>10</number>
+             </property>
+             <property name="topMargin">
+              <number>10</number>
+             </property>
+             <property name="rightMargin">
+              <number>10</number>
+             </property>
+             <property name="bottomMargin">
+              <number>10</number>
+             </property>
              <item>
               <widget class="QLabel" name="label_8">
+               <property name="font">
+                <font>
+                 <family>Segoe UI</family>
+                 <pointsize>11</pointsize>
+                </font>
+               </property>
                <property name="text">
                 <string>Confirmar Senha</string>
                </property>
@@ -297,6 +430,12 @@
                 </property>
                 <item>
                  <widget class="QLineEdit" name="leSenhaConfirm">
+                  <property name="font">
+                   <font>
+                    <family>Segoe UI</family>
+                    <pointsize>11</pointsize>
+                   </font>
+                  </property>
                   <property name="echoMode">
                    <enum>QLineEdit::Password</enum>
                   </property>
@@ -310,12 +449,27 @@
                 </item>
                 <item>
                  <widget class="QPushButton" name="btnSenhaConfirmHide">
+                  <property name="font">
+                   <font>
+                    <family>Segoe UI</family>
+                    <pointsize>12</pointsize>
+                   </font>
+                  </property>
+                  <property name="styleSheet">
+                   <string notr="true">background-color: transparent;</string>
+                  </property>
                   <property name="text">
                    <string/>
                   </property>
                   <property name="icon">
                    <iconset resource="imgs/resource.qrc">
-                    <normaloff>:/root/icons/eye-off.svg</normaloff>:/root/icons/eye-off.svg</iconset>
+                    <normaloff>:/root/icons/light_eye-off.svg</normaloff>:/root/icons/light_eye-off.svg</iconset>
+                  </property>
+                  <property name="iconSize">
+                   <size>
+                    <width>18</width>
+                    <height>18</height>
+                   </size>
                   </property>
                   <property name="flat">
                    <bool>true</bool>
@@ -324,12 +478,27 @@
                 </item>
                 <item>
                  <widget class="QPushButton" name="btnSenhaConfirmShow">
+                  <property name="font">
+                   <font>
+                    <family>Segoe UI</family>
+                    <pointsize>12</pointsize>
+                   </font>
+                  </property>
+                  <property name="styleSheet">
+                   <string notr="true">background-color: transparent;</string>
+                  </property>
                   <property name="text">
                    <string/>
                   </property>
                   <property name="icon">
                    <iconset resource="imgs/resource.qrc">
-                    <normaloff>:/root/icons/eye.svg</normaloff>:/root/icons/eye.svg</iconset>
+                    <normaloff>:/root/icons/light_eye.svg</normaloff>:/root/icons/light_eye.svg</iconset>
+                  </property>
+                  <property name="iconSize">
+                   <size>
+                    <width>18</width>
+                    <height>18</height>
+                   </size>
                   </property>
                   <property name="flat">
                    <bool>true</bool>
@@ -426,8 +595,20 @@
           <property name="spacing">
            <number>10</number>
           </property>
+          <property name="leftMargin">
+           <number>10</number>
+          </property>
+          <property name="topMargin">
+           <number>10</number>
+          </property>
+          <property name="rightMargin">
+           <number>10</number>
+          </property>
+          <property name="bottomMargin">
+           <number>10</number>
+          </property>
           <item>
-           <widget class="QLabel" name="label">
+           <widget class="QLabel" name="lbDadosUsuario">
             <property name="sizePolicy">
              <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
               <horstretch>0</horstretch>
@@ -439,9 +620,6 @@
               <family>Segoe UI</family>
               <pointsize>12</pointsize>
              </font>
-            </property>
-            <property name="styleSheet">
-             <string notr="true">color: #5E5E5E;</string>
             </property>
             <property name="text">
              <string>Dados de usuário</string>
@@ -474,13 +652,26 @@
              </property>
              <item>
               <widget class="QLabel" name="label_2">
+               <property name="font">
+                <font>
+                 <family>Segoe UI</family>
+                 <pointsize>11</pointsize>
+                </font>
+               </property>
                <property name="text">
                 <string>Nome</string>
                </property>
               </widget>
              </item>
              <item>
-              <widget class="QLineEdit" name="leNome"/>
+              <widget class="QLineEdit" name="leNome">
+               <property name="font">
+                <font>
+                 <family>Segoe UI</family>
+                 <pointsize>11</pointsize>
+                </font>
+               </property>
+              </widget>
              </item>
             </layout>
            </widget>
@@ -511,13 +702,26 @@
              </property>
              <item>
               <widget class="QLabel" name="label_4">
+               <property name="font">
+                <font>
+                 <family>Segoe UI</family>
+                 <pointsize>11</pointsize>
+                </font>
+               </property>
                <property name="text">
                 <string>Email</string>
                </property>
               </widget>
              </item>
              <item>
-              <widget class="QLineEdit" name="leEmail"/>
+              <widget class="QLineEdit" name="leEmail">
+               <property name="font">
+                <font>
+                 <family>Segoe UI</family>
+                 <pointsize>11</pointsize>
+                </font>
+               </property>
+              </widget>
              </item>
             </layout>
            </widget>
@@ -625,15 +829,12 @@
               <number>0</number>
              </property>
              <item>
-              <widget class="QLabel" name="label_10">
+              <widget class="QLabel" name="lbTerceiros">
                <property name="font">
                 <font>
                  <family>Segoe UI</family>
                  <pointsize>12</pointsize>
                 </font>
-               </property>
-               <property name="styleSheet">
-                <string notr="true">color: #5E5E5E;</string>
                </property>
                <property name="text">
                 <string>Acessos de Terceiros</string>
@@ -654,7 +855,14 @@
               </spacer>
              </item>
              <item>
-              <widget class="QComboBox" name="cbPerfil"/>
+              <widget class="QComboBox" name="cbPerfil">
+               <property name="font">
+                <font>
+                 <family>Segoe UI</family>
+                 <pointsize>12</pointsize>
+                </font>
+               </property>
+              </widget>
              </item>
             </layout>
            </widget>

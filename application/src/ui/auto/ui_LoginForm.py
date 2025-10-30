@@ -151,6 +151,7 @@ class Ui_LoginForm(object):
 
         self.retranslateUi(LoginForm)
         self.lePassword.returnPressed.connect(self.btnAcessar.click)
+        self.leUsername.returnPressed.connect(self.btnAcessar.click)
 
         QMetaObject.connectSlotsByName(LoginForm)
     # setupUi

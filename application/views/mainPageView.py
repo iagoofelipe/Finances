@@ -1,9 +1,12 @@
-from PySide6.QtCore import Signal
 from PySide6.QtWidgets import QWidget, QButtonGroup
+from PySide6.QtGui import QIcon
+from PySide6.QtCore import Signal
 
 from ..src.ui.auto.ui_MainPage import Ui_MainPage
 from .regView import RegView
 from .configView import ConfigView
+from ..src.tools import isDarkTheme, generateStyleSheet
+from ..src.consts import STYLE_PROPERTIES_LIGHT, STYLE_PROPERTIES_DARK
 
 class MainPageView(QWidget):
     logoutRequired = Signal()
@@ -20,6 +23,7 @@ class MainPageView(QWidget):
         self.__ui = Ui_MainPage()
         self.__currentUi = None
         self.__profileIdByIndex = []
+        self.__theme = 'light'
 
         self.__ui.setupUi(self)
         self.setUserName('Usuário')
@@ -45,6 +49,31 @@ class MainPageView(QWidget):
         self.__ui.btnSair.clicked.connect(self.logoutRequired)
         self.__ui.cbProfile.currentTextChanged.connect(self.on_cbProfile_currentTextChanged)
 
+        self.setStyleSheet(generateStyleSheet(
+            title=['QLabel#lbMainTitle'],
+        ))
+
+        self.updateTheme()
+        self.__updateNavStyle()
+        
+
+    def updateTheme(self):
+        isdark = isDarkTheme()
+        
+        # if is up to date
+        if (isdark and self.__theme == 'dark') or (not isdark and self.__theme == 'light'):
+            return
+        
+        prefix = 'dark_' if isdark else 'light_'
+        self.__ui.btnNotificacoes.setIcon(QIcon(f":/root/icons/{prefix}bell.svg"))
+        self.__ui.btnNav.setIcon(QIcon(f":/root/icons/{prefix}bars-solid-full.svg"))
+        self.__ui.btnQuantitativos.setIcon(QIcon(f":/root/icons/{prefix}pie-chart.svg"))
+        self.__ui.btnRegs.setIcon(QIcon(f":/root/icons/{prefix}list.svg"))
+        self.__ui.btnCartoes.setIcon(QIcon(f":/root/icons/{prefix}credit-card.svg"))
+        self.__ui.btnConfig.setIcon(QIcon(f":/root/icons/{prefix}settings.svg"))
+        self.__ui.btnSair.setIcon(QIcon(f":/root/icons/{prefix}log-out.svg"))
+        self.__updateNavStyle()
+
     def getConfigView(self):
         return self.__configView if self.isCurrentView(self.UI_CONFIG) else None
     
@@ -62,7 +91,7 @@ class MainPageView(QWidget):
         self.__ui.lbTextUser.setText(f'Olá, {name}!')
 
     def setTitle(self, text:str):
-        self.__ui.lbTitle.setText(text)
+        self.__ui.lbMainTitle.setText(text)
 
     def setWaitMode(self, arg:bool):
         self.setDisabled(arg)
@@ -133,3 +162,31 @@ class MainPageView(QWidget):
     def on_cbProfile_currentTextChanged(self, text:str):
         self.__ui.cbProfile.setToolTip(text)
         self.currentProfileChanged.emit(self.getCurrentProfileId())
+
+    def __updateNavStyle(self):
+        self.__ui.frameNav.setStyleSheet(
+            """
+            QWidget {
+                color: %(COLOR_SUBTITLE)s;
+            }
+
+            QPushButton {
+                border: none;
+                padding: 10;
+                border-radius: 10;
+                border-top-left-radius: 0;
+                border-bottom-left-radius: 0;
+            }
+                
+            QPushButton::hover, QPushButton:checked {
+                border-left:4px solid %(BG_HIGHLIGHT)s;
+                background-color: %(BG_NAV_BUTTON)s;
+            }
+                
+            /* botões para não aplicar cores */
+            QPushButton#btnSair::hover, QPushButton#btnNav::hover {
+                background-color: transparent;
+                border: none;
+            }
+            """ % (STYLE_PROPERTIES_DARK if isDarkTheme() else STYLE_PROPERTIES_LIGHT)
+        )

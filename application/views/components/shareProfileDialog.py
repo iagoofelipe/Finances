@@ -13,9 +13,11 @@ class ShareProfileDialog(Dialog):
         wid = QWidget(self.getParent())
         font = self.getFont()
         widPerfil, self.__comboPerfil, _ = generateComboBox('Perfil', wid, font)
+        
         label = QLabel(MSG_SHARE_PROFILE, wid, wordWrap=True)
+        label.setFont(font)
 
-        widUsuario, self.__leUsuario, _ = generateInputForm('Usuário (login de acesso)', wid, font)
+        widUsuario, self.__leUsuario, _ = generateInputForm('E-mail do Usuário', wid, font)
         if profiles: self.setProfiles(profiles)
         if currentProfile: self.setData(ShareProfile(None, currentProfile, None))
 
@@ -49,7 +51,7 @@ class ShareProfileDialog(Dialog):
         if d.profile not in self.__profileByIndex:
             raise ValueError('the profile is not a valid option')
         
-        if d.username is not None : self.__leUsuario.setText(d.username)
+        if d.email is not None : self.__leUsuario.setText(d.email)
         if d.shareType is not None: self.__comboShareType.setCurrentText(self.__shareTypeTextFromId(d.shareType))
         self.__comboPerfil.setCurrentIndex(self.__profileByIndex.index(d.profile))
 

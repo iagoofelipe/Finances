@@ -2,4 +2,5 @@
 [ ] adicionar mais opções de filtragem
 [ ] adicionar limite total e dia de vencimento do cartão (ajustável mensalmente)
 [ ] adicionar mês/ano da fatura (caso em cartão) nos registros
-[ ] ajustar tema escuro
+[X] ajustar tema escuro
+[ ] verificar erro near "user_id": syntax error gerado ao compartilhar perfil

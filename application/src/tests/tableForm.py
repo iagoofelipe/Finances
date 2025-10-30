@@ -6,7 +6,7 @@ def tableForm():
     view = TableWidget(
         ['Título', 'Valor'],
         'Histórico',
-        TableWidget.BtnAdd | TableWidget.BtnEdit | TableWidget.ShowNavAsNeeded,
+        TableWidget.Button.BtnAdd | TableWidget.Button.BtnEdit | TableWidget.Style.ShowNavAsNeeded,
     )
 
     view.setData({

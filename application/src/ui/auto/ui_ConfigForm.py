@@ -27,6 +27,7 @@ class Ui_ConfigForm(object):
             ConfigForm.setObjectName(u"ConfigForm")
         ConfigForm.resize(743, 699)
         self.verticalLayout_13 = QVBoxLayout(ConfigForm)
+        self.verticalLayout_13.setSpacing(10)
         self.verticalLayout_13.setObjectName(u"verticalLayout_13")
         self.verticalLayout_13.setContentsMargins(0, 0, 0, 0)
         self.scrollArea = QScrollArea(ConfigForm)
@@ -36,6 +37,7 @@ class Ui_ConfigForm(object):
         self.scrollAreaWidgetContents.setObjectName(u"scrollAreaWidgetContents")
         self.scrollAreaWidgetContents.setGeometry(QRect(0, 0, 741, 697))
         self.gridLayout = QGridLayout(self.scrollAreaWidgetContents)
+        self.gridLayout.setSpacing(10)
         self.gridLayout.setObjectName(u"gridLayout")
         self.gridLayout.setContentsMargins(0, 0, 0, 0)
         self.frame_2 = QFrame(self.scrollAreaWidgetContents)
@@ -50,20 +52,20 @@ class Ui_ConfigForm(object):
         self.verticalLayout_8 = QVBoxLayout(self.frame_2)
         self.verticalLayout_8.setSpacing(10)
         self.verticalLayout_8.setObjectName(u"verticalLayout_8")
-        self.label_5 = QLabel(self.frame_2)
-        self.label_5.setObjectName(u"label_5")
+        self.verticalLayout_8.setContentsMargins(10, 10, 10, 10)
+        self.lbSenhaUsuario = QLabel(self.frame_2)
+        self.lbSenhaUsuario.setObjectName(u"lbSenhaUsuario")
         sizePolicy1 = QSizePolicy(QSizePolicy.Policy.Preferred, QSizePolicy.Policy.Fixed)
         sizePolicy1.setHorizontalStretch(0)
         sizePolicy1.setVerticalStretch(0)
-        sizePolicy1.setHeightForWidth(self.label_5.sizePolicy().hasHeightForWidth())
-        self.label_5.setSizePolicy(sizePolicy1)
+        sizePolicy1.setHeightForWidth(self.lbSenhaUsuario.sizePolicy().hasHeightForWidth())
+        self.lbSenhaUsuario.setSizePolicy(sizePolicy1)
         font = QFont()
         font.setFamilies([u"Segoe UI"])
         font.setPointSize(12)
-        self.label_5.setFont(font)
-        self.label_5.setStyleSheet(u"color: #5E5E5E;")
+        self.lbSenhaUsuario.setFont(font)
 
-        self.verticalLayout_8.addWidget(self.label_5)
+        self.verticalLayout_8.addWidget(self.lbSenhaUsuario)
 
         self.widSenhaAtual = QWidget(self.frame_2)
         self.widSenhaAtual.setObjectName(u"widSenhaAtual")
@@ -74,6 +76,10 @@ class Ui_ConfigForm(object):
         self.verticalLayout_4.setContentsMargins(10, 10, 10, 10)
         self.label_6 = QLabel(self.widSenhaAtual)
         self.label_6.setObjectName(u"label_6")
+        font1 = QFont()
+        font1.setFamilies([u"Segoe UI"])
+        font1.setPointSize(11)
+        self.label_6.setFont(font1)
 
         self.verticalLayout_4.addWidget(self.label_6)
 
@@ -84,6 +90,7 @@ class Ui_ConfigForm(object):
         self.horizontalLayout_3.setContentsMargins(0, 0, 0, 0)
         self.leSenhaAtual = QLineEdit(self.widget_2)
         self.leSenhaAtual.setObjectName(u"leSenhaAtual")
+        self.leSenhaAtual.setFont(font1)
         self.leSenhaAtual.setEchoMode(QLineEdit.Password)
         self.leSenhaAtual.setDragEnabled(False)
         self.leSenhaAtual.setClearButtonEnabled(False)
@@ -92,18 +99,24 @@ class Ui_ConfigForm(object):
 
         self.btnSenhaAtualHide = QPushButton(self.widget_2)
         self.btnSenhaAtualHide.setObjectName(u"btnSenhaAtualHide")
+        self.btnSenhaAtualHide.setFont(font)
+        self.btnSenhaAtualHide.setStyleSheet(u"background-color: transparent;")
         icon = QIcon()
-        icon.addFile(u":/root/icons/eye-off.svg", QSize(), QIcon.Mode.Normal, QIcon.State.Off)
+        icon.addFile(u":/root/icons/light_eye-off.svg", QSize(), QIcon.Mode.Normal, QIcon.State.Off)
         self.btnSenhaAtualHide.setIcon(icon)
+        self.btnSenhaAtualHide.setIconSize(QSize(18, 18))
         self.btnSenhaAtualHide.setFlat(True)
 
         self.horizontalLayout_3.addWidget(self.btnSenhaAtualHide)
 
         self.btnSenhaAtualShow = QPushButton(self.widget_2)
         self.btnSenhaAtualShow.setObjectName(u"btnSenhaAtualShow")
+        self.btnSenhaAtualShow.setFont(font)
+        self.btnSenhaAtualShow.setStyleSheet(u"background-color: transparent;")
         icon1 = QIcon()
-        icon1.addFile(u":/root/icons/eye.svg", QSize(), QIcon.Mode.Normal, QIcon.State.Off)
+        icon1.addFile(u":/root/icons/light_eye.svg", QSize(), QIcon.Mode.Normal, QIcon.State.Off)
         self.btnSenhaAtualShow.setIcon(icon1)
+        self.btnSenhaAtualShow.setIconSize(QSize(18, 18))
         self.btnSenhaAtualShow.setFlat(True)
 
         self.horizontalLayout_3.addWidget(self.btnSenhaAtualShow)
@@ -118,9 +131,12 @@ class Ui_ConfigForm(object):
         self.widSenhaNova.setObjectName(u"widSenhaNova")
         self.widSenhaNova.setFont(font)
         self.verticalLayout_2 = QVBoxLayout(self.widSenhaNova)
+        self.verticalLayout_2.setSpacing(0)
         self.verticalLayout_2.setObjectName(u"verticalLayout_2")
+        self.verticalLayout_2.setContentsMargins(10, 10, 10, 10)
         self.label_7 = QLabel(self.widSenhaNova)
         self.label_7.setObjectName(u"label_7")
+        self.label_7.setFont(font1)
 
         self.verticalLayout_2.addWidget(self.label_7)
 
@@ -131,6 +147,7 @@ class Ui_ConfigForm(object):
         self.horizontalLayout_4.setContentsMargins(0, 0, 0, 0)
         self.leSenhaNova = QLineEdit(self.widget_3)
         self.leSenhaNova.setObjectName(u"leSenhaNova")
+        self.leSenhaNova.setFont(font1)
         self.leSenhaNova.setEchoMode(QLineEdit.Password)
         self.leSenhaNova.setDragEnabled(False)
         self.leSenhaNova.setClearButtonEnabled(False)
@@ -139,14 +156,22 @@ class Ui_ConfigForm(object):
 
         self.btnSenhaNovaHide = QPushButton(self.widget_3)
         self.btnSenhaNovaHide.setObjectName(u"btnSenhaNovaHide")
+        font2 = QFont()
+        font2.setPointSize(12)
+        self.btnSenhaNovaHide.setFont(font2)
+        self.btnSenhaNovaHide.setStyleSheet(u"background-color: transparent;")
         self.btnSenhaNovaHide.setIcon(icon)
+        self.btnSenhaNovaHide.setIconSize(QSize(18, 18))
         self.btnSenhaNovaHide.setFlat(True)
 
         self.horizontalLayout_4.addWidget(self.btnSenhaNovaHide)
 
         self.btnSenhaNovaShow = QPushButton(self.widget_3)
         self.btnSenhaNovaShow.setObjectName(u"btnSenhaNovaShow")
+        self.btnSenhaNovaShow.setFont(font2)
+        self.btnSenhaNovaShow.setStyleSheet(u"background-color: transparent;")
         self.btnSenhaNovaShow.setIcon(icon1)
+        self.btnSenhaNovaShow.setIconSize(QSize(18, 18))
         self.btnSenhaNovaShow.setFlat(True)
 
         self.horizontalLayout_4.addWidget(self.btnSenhaNovaShow)
@@ -161,9 +186,12 @@ class Ui_ConfigForm(object):
         self.widSenhaConfirm.setObjectName(u"widSenhaConfirm")
         self.widSenhaConfirm.setFont(font)
         self.verticalLayout_5 = QVBoxLayout(self.widSenhaConfirm)
+        self.verticalLayout_5.setSpacing(0)
         self.verticalLayout_5.setObjectName(u"verticalLayout_5")
+        self.verticalLayout_5.setContentsMargins(10, 10, 10, 10)
         self.label_8 = QLabel(self.widSenhaConfirm)
         self.label_8.setObjectName(u"label_8")
+        self.label_8.setFont(font1)
 
         self.verticalLayout_5.addWidget(self.label_8)
 
@@ -174,6 +202,7 @@ class Ui_ConfigForm(object):
         self.horizontalLayout_5.setContentsMargins(0, 0, 0, 0)
         self.leSenhaConfirm = QLineEdit(self.widget_4)
         self.leSenhaConfirm.setObjectName(u"leSenhaConfirm")
+        self.leSenhaConfirm.setFont(font1)
         self.leSenhaConfirm.setEchoMode(QLineEdit.Password)
         self.leSenhaConfirm.setDragEnabled(False)
         self.leSenhaConfirm.setClearButtonEnabled(False)
@@ -182,14 +211,20 @@ class Ui_ConfigForm(object):
 
         self.btnSenhaConfirmHide = QPushButton(self.widget_4)
         self.btnSenhaConfirmHide.setObjectName(u"btnSenhaConfirmHide")
+        self.btnSenhaConfirmHide.setFont(font)
+        self.btnSenhaConfirmHide.setStyleSheet(u"background-color: transparent;")
         self.btnSenhaConfirmHide.setIcon(icon)
+        self.btnSenhaConfirmHide.setIconSize(QSize(18, 18))
         self.btnSenhaConfirmHide.setFlat(True)
 
         self.horizontalLayout_5.addWidget(self.btnSenhaConfirmHide)
 
         self.btnSenhaConfirmShow = QPushButton(self.widget_4)
         self.btnSenhaConfirmShow.setObjectName(u"btnSenhaConfirmShow")
+        self.btnSenhaConfirmShow.setFont(font)
+        self.btnSenhaConfirmShow.setStyleSheet(u"background-color: transparent;")
         self.btnSenhaConfirmShow.setIcon(icon1)
+        self.btnSenhaConfirmShow.setIconSize(QSize(18, 18))
         self.btnSenhaConfirmShow.setFlat(True)
 
         self.horizontalLayout_5.addWidget(self.btnSenhaConfirmShow)
@@ -240,14 +275,14 @@ class Ui_ConfigForm(object):
         self.verticalLayout_7 = QVBoxLayout(self.frame)
         self.verticalLayout_7.setSpacing(10)
         self.verticalLayout_7.setObjectName(u"verticalLayout_7")
-        self.label = QLabel(self.frame)
-        self.label.setObjectName(u"label")
-        sizePolicy1.setHeightForWidth(self.label.sizePolicy().hasHeightForWidth())
-        self.label.setSizePolicy(sizePolicy1)
-        self.label.setFont(font)
-        self.label.setStyleSheet(u"color: #5E5E5E;")
+        self.verticalLayout_7.setContentsMargins(10, 10, 10, 10)
+        self.lbDadosUsuario = QLabel(self.frame)
+        self.lbDadosUsuario.setObjectName(u"lbDadosUsuario")
+        sizePolicy1.setHeightForWidth(self.lbDadosUsuario.sizePolicy().hasHeightForWidth())
+        self.lbDadosUsuario.setSizePolicy(sizePolicy1)
+        self.lbDadosUsuario.setFont(font)
 
-        self.verticalLayout_7.addWidget(self.label)
+        self.verticalLayout_7.addWidget(self.lbDadosUsuario)
 
         self.widNome = QWidget(self.frame)
         self.widNome.setObjectName(u"widNome")
@@ -258,11 +293,13 @@ class Ui_ConfigForm(object):
         self.verticalLayout.setContentsMargins(10, 10, 10, 10)
         self.label_2 = QLabel(self.widNome)
         self.label_2.setObjectName(u"label_2")
+        self.label_2.setFont(font1)
 
         self.verticalLayout.addWidget(self.label_2)
 
         self.leNome = QLineEdit(self.widNome)
         self.leNome.setObjectName(u"leNome")
+        self.leNome.setFont(font1)
 
         self.verticalLayout.addWidget(self.leNome)
 
@@ -278,11 +315,13 @@ class Ui_ConfigForm(object):
         self.verticalLayout_3.setContentsMargins(10, 10, 10, 10)
         self.label_4 = QLabel(self.widEmail)
         self.label_4.setObjectName(u"label_4")
+        self.label_4.setFont(font1)
 
         self.verticalLayout_3.addWidget(self.label_4)
 
         self.leEmail = QLineEdit(self.widEmail)
         self.leEmail.setObjectName(u"leEmail")
+        self.leEmail.setFont(font1)
 
         self.verticalLayout_3.addWidget(self.leEmail)
 
@@ -339,12 +378,11 @@ class Ui_ConfigForm(object):
         self.horizontalLayout_7 = QHBoxLayout(self.widget_15)
         self.horizontalLayout_7.setObjectName(u"horizontalLayout_7")
         self.horizontalLayout_7.setContentsMargins(0, 0, 0, 0)
-        self.label_10 = QLabel(self.widget_15)
-        self.label_10.setObjectName(u"label_10")
-        self.label_10.setFont(font)
-        self.label_10.setStyleSheet(u"color: #5E5E5E;")
+        self.lbTerceiros = QLabel(self.widget_15)
+        self.lbTerceiros.setObjectName(u"lbTerceiros")
+        self.lbTerceiros.setFont(font)
 
-        self.horizontalLayout_7.addWidget(self.label_10)
+        self.horizontalLayout_7.addWidget(self.lbTerceiros)
 
         self.horizontalSpacer_7 = QSpacerItem(0, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
 
@@ -352,6 +390,7 @@ class Ui_ConfigForm(object):
 
         self.cbPerfil = QComboBox(self.widget_15)
         self.cbPerfil.setObjectName(u"cbPerfil")
+        self.cbPerfil.setFont(font)
 
         self.horizontalLayout_7.addWidget(self.cbPerfil)
 
@@ -425,7 +464,7 @@ class Ui_ConfigForm(object):
 
     def retranslateUi(self, ConfigForm):
         ConfigForm.setWindowTitle(QCoreApplication.translate("ConfigForm", u"Form", None))
-        self.label_5.setText(QCoreApplication.translate("ConfigForm", u"Senha de usu\u00e1rio", None))
+        self.lbSenhaUsuario.setText(QCoreApplication.translate("ConfigForm", u"Senha de usu\u00e1rio", None))
         self.label_6.setText(QCoreApplication.translate("ConfigForm", u"Senha Atual", None))
         self.btnSenhaAtualHide.setText("")
         self.btnSenhaAtualShow.setText("")
@@ -438,12 +477,12 @@ class Ui_ConfigForm(object):
         self.btnCancelarSenha.setText(QCoreApplication.translate("ConfigForm", u"cancelar", None))
         self.btnSalvarSenha.setText(QCoreApplication.translate("ConfigForm", u"salvar", None))
         self.btnAtualizarSenha.setText(QCoreApplication.translate("ConfigForm", u"atualizar", None))
-        self.label.setText(QCoreApplication.translate("ConfigForm", u"Dados de usu\u00e1rio", None))
+        self.lbDadosUsuario.setText(QCoreApplication.translate("ConfigForm", u"Dados de usu\u00e1rio", None))
         self.label_2.setText(QCoreApplication.translate("ConfigForm", u"Nome", None))
         self.label_4.setText(QCoreApplication.translate("ConfigForm", u"Email", None))
         self.btnCancelarUser.setText(QCoreApplication.translate("ConfigForm", u"cancelar", None))
         self.btnSalvarUser.setText(QCoreApplication.translate("ConfigForm", u"salvar", None))
         self.btnEditarUser.setText(QCoreApplication.translate("ConfigForm", u"editar", None))
-        self.label_10.setText(QCoreApplication.translate("ConfigForm", u"Acessos de Terceiros", None))
+        self.lbTerceiros.setText(QCoreApplication.translate("ConfigForm", u"Acessos de Terceiros", None))
     # retranslateUi
 

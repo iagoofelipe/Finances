@@ -1,16 +1,34 @@
 from PySide6.QtGui import QFont as __qfont
 import os as __os
 
-STYLE_PROPERTIES = {
+STYLE_PROPERTIES_LIGHT = {
     'BG_HIGHLIGHT': '#59A1FF',
     'BG_HIGHLIGHT_HOVER': "#2E70C7",
+    'BG_APP': 'white',
     'BG_PRIMARY': '#FFFFFF',
     'BG_SECONDARY': '#F6F6F6',
+    'BG_NAV_BUTTON': '#F7F7F7',
     'BORDER': '1px solid #EDEDED',
     'BORDER_RADIUS': 15,
     'COLOR_HIGHLIGHT': '#006FFF',
     'COLOR_TITLE': '#5E5E5E',
     'COLOR_SUBTITLE': '#636363',
+    'ICON_DOWN': ':/root/icons/light_down.svg',
+}
+
+STYLE_PROPERTIES_DARK = {
+    'BG_HIGHLIGHT': '#59A1FF',
+    'BG_HIGHLIGHT_HOVER': "#2E70C7",
+    'BG_APP': '#1E1E1E',
+    'BG_PRIMARY': '#323232',
+    'BG_SECONDARY': '#F6F6F6',
+    'BG_NAV_BUTTON': '#4f4e4e',
+    'BORDER': '1px solid #585858',
+    'BORDER_RADIUS': 15,
+    'COLOR_HIGHLIGHT': '#006FFF',
+    'COLOR_TITLE': "#D6D6D6",
+    'COLOR_SUBTITLE': "#A5A5A5",
+    'ICON_DOWN': ':/root/icons/dark_down.svg',
 }
 
 FONT = __qfont('Segoe UI')

@@ -16,6 +16,8 @@ class AppController(QObject):
         self.__mainController = MainController(self)
 
         view.uiChanged.connect(self.on_view_uiChanged)
+        view.themeChanged.connect(self.on_view_themeChanged)
+
         model.initializationFinished.connect(self.on_model_initializationFinished)
         model.authenticationFinished.connect(self.on_model_authenticationFinished)
         model.logoutFinished.connect(self.on_model_logoutFinished)
@@ -74,8 +76,12 @@ class AppController(QObject):
         #         self.__model.createProfile(dialog.getValues())
         #         break
 
-    def on_model_shareProfileFinished(self, success:bool):
+    def on_model_shareProfileFinished(self, success:bool, msg:str|None):
         if success: return
             
-        QMessageBox(QMessageBox.Warning, 'Compartilhamento de Perfil', 'não foi possível realizar o compartilhamento do perfil, tente novamente.').exec()
+        QMessageBox(QMessageBox.Warning, 'Compartilhamento de Perfil', msg if msg else 'não foi possível realizar o compartilhamento do perfil, tente novamente.').exec()
     
+    def on_view_themeChanged(self, theme:AppView.Theme):
+        print('Theme changed to', 'Dark' if theme == AppView.Theme.Dark else 'Light')
+        #TODO: verificar se há trabalho a ser salvo
+        self.__view.setUi(self.__view.getCurrentUiId())

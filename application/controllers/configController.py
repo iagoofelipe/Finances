@@ -1,6 +1,6 @@
 from PySide6.QtCore import QObject, Signal
 
-from ..src.structs import Profile, ShareProfile
+from ..src.structs import Profile
 from ..models.appModel import AppModel
 from ..models.configModel import ConfigModel
 from ..views.configView import ConfigView
@@ -43,7 +43,6 @@ class ConfigController(QObject):
         if profiles: self.__model.on_model_profilesUpdated(profiles)
         if thirds: self.__model.on_model_thirdAccessesUpdated(thirds)
 
-
     def on_view_destroyed(self):
         self.__view = None
 
@@ -70,7 +69,7 @@ class ConfigController(QObject):
         tableView = self.__view.getTableVisualizacao()
         tableView.setData(self.__model.getVisualizationProfiles())
 
-    def on_AppModel_shareProfileFinished(self, success:bool):
+    def on_AppModel_shareProfileFinished(self, success:bool, msg:str|None):
         if not success or not self.__view: return
 
         self.__appmodel.requireProfileThirdAcesses()

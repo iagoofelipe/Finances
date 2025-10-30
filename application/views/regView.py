@@ -2,7 +2,7 @@ from PySide6.QtWidgets import QWidget
 from PySide6.QtCore import QDate
 
 from .components.table import TableWidget
-from ..src.ui.auto.ui_RegView import Ui_RegView
+from ..src.ui.auto.ui_RegForm import Ui_RegForm
 from ..src.tools import generateStyleSheet, generateComboBox, generateSpinBox
 from ..src.consts import *
 from ..src.structs import Registry, Account, Card
@@ -15,7 +15,7 @@ class RegView(QWidget):
         super().__init__(parent)
         
         # GUI
-        self.__ui = Ui_RegView()
+        self.__ui = Ui_RegForm()
         self.__cbAccount = None
         self.__cbDestinyAccount = None
         self.__cbCard = None
@@ -23,7 +23,7 @@ class RegView(QWidget):
         self.__widOp1 = None
         self.__widOp2 = None
         columns = ['Título', 'Valor', 'Data', 'Operação', 'Contabilizado', 'Categoria']
-        flags = TableWidget.BtnDelete | TableWidget.BtnDetails | TableWidget.BtnAdd | TableWidget.BtnParams | TableWidget.BtnEdit | TableWidget.ShowNavAsNeeded
+        flags = TableWidget.Button.BtnDelete | TableWidget.Button.BtnDetails | TableWidget.Button.BtnAdd | TableWidget.Button.BtnParams | TableWidget.Button.BtnEdit | TableWidget.Style.ShowNavAsNeeded
         self.__tableHistoric = TableWidget(columns, 'Histórico', flags, parent=self)
 
         # Control
@@ -48,7 +48,8 @@ class RegView(QWidget):
             highlightBtns=['QPushButton#btnSalvar'],
             secondaryButtons=['QPushButton#btnLimpar'],
             combobox=['QWidget#widContab', 'QWidget#widCat', 'QWidget#widOperacao'],
-            abstractSpin=['QWidget#widVal', 'QWidget#widData']
+            abstractSpin=['QWidget#widVal', 'QWidget#widData'],
+            title=['QLabel#lbTitleReg', 'QLabel#lbTitleOp'],
         ))
 
         # events

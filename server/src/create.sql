@@ -23,7 +23,8 @@ CREATE TABLE `profile_role` (
     `view` BOOLEAN DEFAULT (1),
     `pending` BOOLEAN DEFAULT (1),
     `profile_id` TEXT NOT NULL REFERENCES `profile`(`id`),
-    `user_id` TEXT NOT NULL REFERENCES `user`(`id`)
+    `user_id` TEXT NOT NULL REFERENCES `user`(`id`),
+    `is_default` BOOLEAN DEFAULT (0)
 );
 
 CREATE TABLE `profile_transfer` (

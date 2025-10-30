@@ -29,7 +29,7 @@ class AppModel(QObject):
     defaultProfileUpdated = Signal(structs.Profile)
     noProfileFound = Signal()
     pendingShareFinished = Signal()
-    shareProfileFinished = Signal(bool)
+    shareProfileFinished = Signal(bool, str)
     
     # Third Parties
     thirdAccessesUpdated = Signal(list) # list[ProfileThirdAccess]
@@ -188,7 +188,7 @@ class AppModel(QObject):
         elif cmd == CMD_UPDATE_DEF_PROFILE: ...
         elif cmd == CMD_NO_PROFILE_FOUND: self.noProfileFound.emit()
         elif cmd == CMD_PENDING_SHARE: self.__responsePendingShare(params)
-        elif cmd == CMD_SHARE_PROFILE: self.shareProfileFinished.emit(params['success'])
+        elif cmd == CMD_SHARE_PROFILE: self.shareProfileFinished.emit(params['success'], params['msg'])
 
         # Third Parties
         elif cmd == CMD_GET_PROFILE_THIRD_ACCESSES: self.__responseGetProfileThirdAccesses(params)

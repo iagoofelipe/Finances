@@ -300,5 +300,21 @@
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>leUsername</sender>
+   <signal>returnPressed()</signal>
+   <receiver>btnAcessar</receiver>
+   <slot>click()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>199</x>
+     <y>53</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>199</x>
+     <y>200</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
 </ui>
