@@ -1,5 +1,5 @@
 from PySide6.QtWidgets import (
-    QWidget, QDialog, QLineEdit, QLabel, QVBoxLayout, QHBoxLayout,
+    QWidget, QDialog, QLabel, QVBoxLayout, QHBoxLayout,
     QPushButton, QMessageBox, QSizePolicy
 )
 from PySide6.QtGui import QFont
@@ -115,27 +115,7 @@ class MessageDialog(Dialog):
 class NewProfileDialog(Dialog):
     def __init__(self, parent:QWidget=None):
         super().__init__('Novo Perfil', self.BtnSave | self.BtnCancel, width=400, parent=parent)
-        # widName = QWidget(self.getParent())
-        # widName.setObjectName('widName')
-
-        # nameLayout = QVBoxLayout(widName)
-        # nameLayout.setContentsMargins(10, 10, 10, 10)
-        # nameLayout.setSpacing(0)
-
-        # lbName = QLabel('Nome', widName)
-        # nameLayout.addWidget(lbName)
-        
-        # self.__leName = leName = QLineEdit(widName)
-        # leName.setFont(self.getFont())
-        # nameLayout.addWidget(leName)
-
-        # self.setWidget(widName)
-
-        # widName.setStyleSheet(generateStyleSheet(
-        #     inputs=['QWidget#widName']
-        # ))
-
-        widName, leName, layoutName = generateInputForm('Nome', self.getParent(), self.getFont())
+        widName, self.__leName, _ = generateInputForm('Nome', self.getParent(), self.getFont())
         self.setWidget(widName)
 
     def isValid(self):
