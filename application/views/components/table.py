@@ -12,13 +12,13 @@ class TableWidget(QWidget):
 
     class Button:
         NoFlags = 0
-        BtnAdd = 2
-        BtnEdit = 4
-        BtnDelete = 8
-        BtnAccept = 16
-        BtnReject = 32
-        BtnParams = 64
-        BtnDetails = 128
+        Add = 2
+        Edit = 4
+        Delete = 8
+        Accept = 16
+        Reject = 32
+        Params = 64
+        Details = 128
     
     class Style:
         ShowNavAsNeeded = 256
@@ -96,13 +96,13 @@ class TableWidget(QWidget):
         self.__flags = flags
 
         # Buttons
-        self.__ui.btnAdd.setVisible(flags & self.Button.BtnAdd)
-        self.__ui.btnEdit.setVisible(flags & self.Button.BtnEdit)
-        self.__ui.btnDelete.setVisible(flags & self.Button.BtnDelete)
-        self.__ui.btnAccept.setVisible(flags & self.Button.BtnAccept)
-        self.__ui.btnReject.setVisible(flags & self.Button.BtnReject)
-        self.__ui.btnParams.setVisible(flags & self.Button.BtnParams)
-        self.__ui.btnDetails.setVisible(flags & self.Button.BtnDetails)
+        self.__ui.btnAdd.setVisible(flags & self.Button.Add)
+        self.__ui.btnEdit.setVisible(flags & self.Button.Edit)
+        self.__ui.btnDelete.setVisible(flags & self.Button.Delete)
+        self.__ui.btnAccept.setVisible(flags & self.Button.Accept)
+        self.__ui.btnReject.setVisible(flags & self.Button.Reject)
+        self.__ui.btnParams.setVisible(flags & self.Button.Params)
+        self.__ui.btnDetails.setVisible(flags & self.Button.Details)
         
         # Style
         self.__showNavAsNeeded = flags & self.Style.ShowNavAsNeeded
@@ -119,7 +119,7 @@ class TableWidget(QWidget):
 
         self.on_itemSelectionChanged()
 
-    def setData(self, data:dict[Any, Iterable]):
+    def setData(self, data:dict[str, Iterable]):
         self.__nav.setData(data)
         self.updateValues()
 
@@ -174,28 +174,28 @@ class TableWidget(QWidget):
         numRows = len({ item.row() for item in self.__ui.tableWid.selectedItems() })
 
         if numRows == 0:
-            if self.__flags & self.Button.BtnReject: self.__ui.btnReject.hide()
-            if self.__flags & self.Button.BtnAccept: self.__ui.btnAccept.hide()
-            if self.__flags & self.Button.BtnDelete: self.__ui.btnDelete.hide()
-            if self.__flags & self.Button.BtnDetails: self.__ui.btnDetails.hide()
-            # if self.__flags & self.Button.BtnAdd: Always visible
-            # if self.__flags & self.Button.BtnParams: Always visible
-            if self.__flags & self.Button.BtnEdit: self.__ui.btnEdit.hide()
+            if self.__flags & self.Button.Reject: self.__ui.btnReject.hide()
+            if self.__flags & self.Button.Accept: self.__ui.btnAccept.hide()
+            if self.__flags & self.Button.Delete: self.__ui.btnDelete.hide()
+            if self.__flags & self.Button.Details: self.__ui.btnDetails.hide()
+            # if self.__flags & self.Button.Add: Always visible
+            # if self.__flags & self.Button.Params: Always visible
+            if self.__flags & self.Button.Edit: self.__ui.btnEdit.hide()
 
         elif numRows == 1:
-            if self.__flags & self.Button.BtnReject: self.__ui.btnReject.show()
-            if self.__flags & self.Button.BtnAccept: self.__ui.btnAccept.show()
-            if self.__flags & self.Button.BtnDelete: self.__ui.btnDelete.show()
-            if self.__flags & self.Button.BtnDetails: self.__ui.btnDetails.show()
-            # if self.__flags & self.Button.BtnAdd: Always visible
-            # if self.__flags & self.Button.BtnParams: Always visible
-            if self.__flags & self.Button.BtnEdit: self.__ui.btnEdit.show()
+            if self.__flags & self.Button.Reject: self.__ui.btnReject.show()
+            if self.__flags & self.Button.Accept: self.__ui.btnAccept.show()
+            if self.__flags & self.Button.Delete: self.__ui.btnDelete.show()
+            if self.__flags & self.Button.Details: self.__ui.btnDetails.show()
+            # if self.__flags & self.Button.Add: Always visible
+            # if self.__flags & self.Button.Params: Always visible
+            if self.__flags & self.Button.Edit: self.__ui.btnEdit.show()
 
         else: # > 1
-            if self.__flags & self.Button.BtnReject: self.__ui.btnReject.hide()
-            if self.__flags & self.Button.BtnAccept: self.__ui.btnAccept.hide()
-            if self.__flags & self.Button.BtnDelete: self.__ui.btnDelete.setVisible(not self.__flags & self.Behavior.DeleteJustOne)
-            if self.__flags & self.Button.BtnDetails: self.__ui.btnDetails.hide()
-            # if self.__flags & self.Button.BtnAdd: Always visible
-            # if self.__flags & self.Button.BtnParams: Always visible
-            if self.__flags & self.Button.BtnEdit: self.__ui.btnEdit.hide()
+            if self.__flags & self.Button.Reject: self.__ui.btnReject.hide()
+            if self.__flags & self.Button.Accept: self.__ui.btnAccept.hide()
+            if self.__flags & self.Button.Delete: self.__ui.btnDelete.setVisible(not self.__flags & self.Behavior.DeleteJustOne)
+            if self.__flags & self.Button.Details: self.__ui.btnDetails.hide()
+            # if self.__flags & self.Button.Add: Always visible
+            # if self.__flags & self.Button.Params: Always visible
+            if self.__flags & self.Button.Edit: self.__ui.btnEdit.hide()

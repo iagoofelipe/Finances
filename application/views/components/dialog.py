@@ -7,13 +7,17 @@ from PySide6.QtGui import QFont
 from ...src.tools import generateStyleSheet, generateInputForm
 
 class Dialog:
-    BtnCancel = 2
-    BtnSave = 4
-    BtnContinue = 8
-    LeftSpace = 16
-    HideTitle = 32
     
-    def __init__(self, title:str, btns:int=None, flags:int=0, width:int=None, parent:QWidget=None):
+    class Button:
+        Cancel = 2
+        Save = 4
+        Continue = 8
+
+    class Style:
+        LeftSpace = 16
+        HideTitle = 32
+    
+    def __init__(self, title:str, flags:int=0, width:int=None, parent:QWidget=None):
         self.__dialog = QDialog(parent)
         self.__dialog.setMinimumWidth(width if width else 450)
         self.__dialog.setWindowTitle(title)
@@ -24,7 +28,7 @@ class Dialog:
         
         self.__layout = QVBoxLayout(self.__dialog)
 
-        if not (flags & self.HideTitle):
+        if not (flags & self.Style.HideTitle):
             lbTitle = QLabel(title, self.__dialog)
             lbTitle.setObjectName('lbTitle')
             lbTitle.setFont(QFont('Segoe UI', 15))
@@ -34,8 +38,8 @@ class Dialog:
 
         self.__layout.addWidget(self.__widContent)
 
-        if btns is not None:
-            self.__generateBtns(btns, flags)
+        if (flags & self.Button.Cancel) or (flags & self.Button.Save) or (flags & self.Button.Continue):
+            self.__generateBtns(flags)
 
         self.__dialog.setStyleSheet(generateStyleSheet(
             title=['QLabel#lbTitle'],
@@ -67,8 +71,8 @@ class Dialog:
     def exec(self) -> bool:
         return self.__dialog.exec() == QDialog.DialogCode.Accepted
 
-    def __generateBtns(self, btns:int, flags:int):
-        if btns & self.BtnSave and btns & self.BtnContinue:
+    def __generateBtns(self, flags:int):
+        if flags & self.Button.Save and flags & self.Button.Continue:
             raise ValueError('Save and Continue cannot be passed together')
         
         widBtns = QWidget(self.__dialog)
@@ -78,24 +82,24 @@ class Dialog:
         btnsLayout.setContentsMargins(0, 0, 0, 0)
         btnsLayout.setSpacing(6)
         
-        if flags & self.LeftSpace:
+        if flags & self.Style.LeftSpace:
             btnsLayout.addStretch()
 
-        if btns & self.BtnCancel:
+        if flags & self.Button.Cancel:
             btnCancel = QPushButton('cancelar', widBtns)
             btnCancel.setObjectName('btnCancel')
             btnCancel.setFont(self.__font)
             btnCancel.clicked.connect(self.__dialog.reject)
             btnsLayout.addWidget(btnCancel)
         
-        if btns & self.BtnSave:
+        if flags & self.Button.Save:
             btnSave = QPushButton('salvar', widBtns)
             btnSave.setObjectName('btnSave')
             btnSave.setFont(self.__font)
             btnSave.clicked.connect(self.validate)
             btnsLayout.addWidget(btnSave)
 
-        if btns & self.BtnContinue:
+        if flags & self.Button.Continue:
             btnContinue = QPushButton('continuar', widBtns)
             btnContinue.setObjectName('btnContinue')
             btnContinue.setFont(self.__font)
@@ -106,7 +110,7 @@ class Dialog:
 
 class MessageDialog(Dialog):
     def __init__(self, title:str, content:str, width:int=None, parent:QWidget=None):
-        super().__init__(title, self.BtnContinue | self.BtnCancel | self.HideTitle | self.LeftSpace, width, parent=parent)
+        super().__init__(title, self.Button.Continue | self.Button.Cancel | self.Style.HideTitle | self.Style.LeftSpace, width=width, parent=parent)
         lb = QLabel(content, self.getParent())
         lb.setFont(self.getFont())
         lb.setWordWrap(True)
@@ -114,7 +118,7 @@ class MessageDialog(Dialog):
 
 class NewProfileDialog(Dialog):
     def __init__(self, parent:QWidget=None):
-        super().__init__('Novo Perfil', self.BtnSave | self.BtnCancel, width=400, parent=parent)
+        super().__init__('Novo Perfil', self.Button.Save | self.Button.Cancel, width=400, parent=parent)
         widName, self.__leName, _ = generateInputForm('Nome', self.getParent(), self.getFont())
         self.setWidget(widName)
 

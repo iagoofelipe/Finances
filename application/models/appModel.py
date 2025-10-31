@@ -38,7 +38,6 @@ class AppModel(QObject):
 
     def __init__(self):
         super().__init__()
-        print('AppModel.__init__')
         self.__profileNames = {}
         self.__thirdAcessesByProfileId = {}
         self.__server = server.ServerClient(self)

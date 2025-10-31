@@ -23,7 +23,7 @@ class RegView(QWidget):
         self.__widOp1 = None
         self.__widOp2 = None
         columns = ['Título', 'Valor', 'Data', 'Operação', 'Contabilizado', 'Categoria']
-        flags = TableWidget.Button.BtnDelete | TableWidget.Button.BtnDetails | TableWidget.Button.BtnAdd | TableWidget.Button.BtnParams | TableWidget.Button.BtnEdit | TableWidget.Style.ShowNavAsNeeded
+        flags = TableWidget.Button.Delete | TableWidget.Button.Details | TableWidget.Button.Add | TableWidget.Button.Params | TableWidget.Button.Edit | TableWidget.Style.ShowNavAsNeeded
         self.__tableHistoric = TableWidget(columns, 'Histórico', flags, parent=self)
 
         # Control

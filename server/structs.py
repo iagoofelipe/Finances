@@ -33,6 +33,13 @@ class ProfileRole(AbstractTable):
     is_default: bool
     __table__ = 'profile_role'
 
+@dataclass
+class Card(AbstractTable):
+    id: str
+    name: str
+    user_id: str
+    __table__ = 'card'
+
 # @dataclass
 # class Category(AbstractTable):
 #     id: str
@@ -41,13 +48,6 @@ class ProfileRole(AbstractTable):
 #     description: str = ''
 #     userId: str = None
 #     __table__ = 'category'
-
-# @dataclass
-# class Card(AbstractTable):
-#     id: str
-#     name: str
-#     userId: str = None
-#     __table__ = 'card'
 
 # @dataclass
 # class Third(AbstractTable):

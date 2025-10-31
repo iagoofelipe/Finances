@@ -38,6 +38,10 @@ if __name__ == '__main__':
             from .src.tests.regView import regView
             regView()
 
+        elif mode == 'test.cardAccountForm':
+            from .src.tests.cardAccountForm import cardAccountForm
+            cardAccountForm()
+
     else:
         app = FinancesApp()
         sys.exit(app.exec())

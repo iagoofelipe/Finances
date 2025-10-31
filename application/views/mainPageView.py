@@ -5,6 +5,7 @@ from PySide6.QtCore import Signal
 from ..src.ui.auto.ui_MainPage import Ui_MainPage
 from .regView import RegView
 from .configView import ConfigView
+from .cardAccountView import CardAccountView
 from ..src.tools import isDarkTheme, generateStyleSheet
 from ..src.consts import STYLE_PROPERTIES_LIGHT, STYLE_PROPERTIES_DARK
 
@@ -79,6 +80,9 @@ class MainPageView(QWidget):
     
     def getRegView(self):
         return self.__regView if self.isCurrentView(self.UI_REG) else None
+    
+    def getCardAccountView(self):
+        return self.__cardAccountView if self.isCurrentView(self.UI_CARD) else None
 
     def getCurrentProfileId(self) -> str | None:
         index = self.__ui.cbProfile.currentIndex()
@@ -129,7 +133,7 @@ class MainPageView(QWidget):
 
             case self.UI_CARD:
                 navBtn = self.__ui.btnCartoes
-                widNew = QWidget(self)
+                widNew = self.__cardAccountView = CardAccountView(self)
 
             case self.UI_CONFIG:
                 navBtn = self.__ui.btnConfig
@@ -137,7 +141,6 @@ class MainPageView(QWidget):
 
             case _:
                 raise ValueError('undefined UI')
-
 
         widOld = self.__ui.widContent
         self.__ui.widContent = widNew

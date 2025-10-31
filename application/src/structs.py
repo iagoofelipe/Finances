@@ -66,8 +66,31 @@ class Account:
     name: str
 
 @dataclass
+class AccountBalance:
+    accountId: str
+    currentValue: float
+    expected: float
+
+@dataclass
+class AccountTableItem:
+    account: Account
+    balance: AccountBalance
+
+@dataclass
 class Card:
     id: str
     name: str
     dueDay: int
-    limit: int
+    closingDay: int
+
+@dataclass
+class CardLimit:
+    cardId: str
+    total: int
+    available: float
+    used: float
+
+@dataclass
+class CardTableItem:
+    card: Card
+    limit: CardLimit

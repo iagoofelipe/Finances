@@ -8,8 +8,8 @@ from ...src.structs import ShareProfile, Profile
 
 class ShareProfileDialog(Dialog):
 
-    def __init__(self, parent:QWidget=None, profiles:Sequence[Profile]=None, currentProfile:Profile=None):
-        super().__init__('Compartilhar Perfil', self.BtnCancel | self.BtnSave, parent=parent)
+    def __init__(self, parent:QWidget=None, profiles:Sequence[Profile]=None, currentProfile:Profile=None, shareType:int=None):
+        super().__init__('Compartilhar Perfil', self.Button.Cancel | self.Button.Save, parent=parent)
         wid = QWidget(self.getParent())
         font = self.getFont()
         widPerfil, self.__comboPerfil, _ = generateComboBox('Perfil', wid, font)
@@ -18,9 +18,6 @@ class ShareProfileDialog(Dialog):
         label.setFont(font)
 
         widUsuario, self.__leUsuario, _ = generateInputForm('E-mail do Usuário', wid, font)
-        if profiles: self.setProfiles(profiles)
-        if currentProfile: self.setData(ShareProfile(None, currentProfile, None))
-
         widShareType, self.__comboShareType, _ = generateComboBox('Tipo de Compartilhamento', wid, font)
         self.__comboShareType.addItems(['Edição', 'Visualização', 'Transferência de Propriedade'])
 
@@ -31,6 +28,9 @@ class ShareProfileDialog(Dialog):
         layout.addWidget(label)
 
         self.setWidget(wid)
+
+        if profiles: self.setProfiles(profiles)
+        if currentProfile or (shareType is not None): self.setData(ShareProfile(None, currentProfile, shareType))
 
     def isValid(self):
         return self.__leUsuario.text() and self.__comboPerfil.currentText()
@@ -48,12 +48,10 @@ class ShareProfileDialog(Dialog):
         )
 
     def setData(self, d:ShareProfile):
-        if d.profile not in self.__profileByIndex:
-            raise ValueError('the profile is not a valid option')
-        
+        if d.profile is not None: self.__comboPerfil.setCurrentIndex(self.__profileByIndex.index(d.profile))
         if d.email is not None : self.__leUsuario.setText(d.email)
         if d.shareType is not None: self.__comboShareType.setCurrentText(self.__shareTypeTextFromId(d.shareType))
-        self.__comboPerfil.setCurrentIndex(self.__profileByIndex.index(d.profile))
+        
 
     def setProfiles(self, options:Sequence[Profile]):
         self.__comboPerfil.clear()

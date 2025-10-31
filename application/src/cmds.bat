@@ -6,3 +6,4 @@ pyside6-uic application/src/ui/MainPage.ui -o application/src/ui/auto/ui_MainPag
 pyside6-uic application/src/ui/ConfigForm.ui -o application/src/ui/auto/ui_ConfigForm.py
 pyside6-uic application/src/ui/TableForm.ui -o application/src/ui/auto/ui_TableForm.py
 pyside6-uic application/src/ui/RegForm.ui -o application/src/ui/auto/ui_RegForm.py
+pyside6-uic application/src/ui/CardAccountForm.ui -o application/src/ui/auto/ui_CardAccountForm.py

@@ -6,6 +6,7 @@ from typing import Sequence
 from ..src.ui.auto.ui_ConfigForm import Ui_ConfigForm
 from ..src.structs import User, Profile, ShareProfile
 from ..src.tools import isDarkTheme, generateStyleSheet
+from ..src.consts import SHARE_TYPE_EDIT, SHARE_TYPE_VIEW
 from .components.table import TableWidget
 from .components.shareProfileDialog import ShareProfileDialog
 
@@ -41,10 +42,10 @@ class ConfigView(QWidget):
         # nameWidOld, layout, columns, title, flags
         t = TableWidget
         tables = (
-            ('widPerfis', self.__ui.gridLayout, ['Proprietário', 'Perfil', 'Tipo de Acesso'], 'Perfis', t.Style.ShowNavAsNeeded | t.Behavior.DeleteJustOne | t.Behavior.SelectJustOne | t.Button.BtnDelete | t.Button.BtnAdd),
-            ('widShare', self.__ui.gridLayout, ['Proprietário', 'Perfil', 'Compartilhamento'], 'Compartilhamentos Pendentes', t.Style.ShowNavAsNeeded | t.Behavior.SelectJustOne | t.Button.BtnAccept | t.Button.BtnReject),
-            ('widEdicao', self.__ui.acessoPerfilLayout, ['Usuário', 'Status'], 'Edição', t.Style.ShowNavAsNeeded | t.Style.InsideNoFrame | t.Button.BtnDelete | t.Button.BtnAdd),
-            ('widVisu', self.__ui.acessoPerfilLayout, ['Usuário', 'Status'], 'Visualização', t.Style.ShowNavAsNeeded | t.Style.InsideNoFrame | t.Button.BtnDelete | t.Button.BtnAdd),
+            ('widPerfis', self.__ui.gridLayout, ['Proprietário', 'Perfil', 'Tipo de Acesso'], 'Perfis', t.Style.ShowNavAsNeeded | t.Behavior.DeleteJustOne | t.Behavior.SelectJustOne | t.Button.Delete | t.Button.Add),
+            ('widShare', self.__ui.gridLayout, ['Proprietário', 'Perfil', 'Compartilhamento'], 'Compartilhamentos Pendentes', t.Style.ShowNavAsNeeded | t.Behavior.SelectJustOne | t.Button.Accept | t.Button.Reject),
+            ('widEdicao', self.__ui.acessoPerfilLayout, ['Usuário', 'Status'], 'Edição', t.Style.ShowNavAsNeeded | t.Style.InsideNoFrame | t.Button.Delete | t.Button.Add),
+            ('widVisu', self.__ui.acessoPerfilLayout, ['Usuário', 'Status'], 'Visualização', t.Style.ShowNavAsNeeded | t.Style.InsideNoFrame | t.Button.Delete | t.Button.Add),
         )
 
         for nameWidOld, layout, columns, title, flags in tables:
@@ -66,8 +67,8 @@ class ConfigView(QWidget):
         self.__ui.btnSenhaConfirmHide.clicked.connect(self.on_btnSenhaConfirmHide_clicked)
         self.__ui.btnSenhaConfirmShow.clicked.connect(self.on_btnSenhaConfirmShow_clicked)
         self.__ui.cbPerfil.currentTextChanged.connect(self.on_cbPerfil_currentTextChanged)
-        self.__ui.widEdicao.addRequired.connect(self.requireShareProfileData)
-        self.__ui.widVisu.addRequired.connect(self.requireShareProfileData)
+        self.__ui.widEdicao.addRequired.connect(lambda: self.requireShareProfileData(SHARE_TYPE_EDIT))
+        self.__ui.widVisu.addRequired.connect(lambda: self.requireShareProfileData(SHARE_TYPE_VIEW))
 
         self.updateTheme()
 
@@ -118,8 +119,8 @@ class ConfigView(QWidget):
         if text in values:
             cb.setCurrentText(text)
 
-    def requireShareProfileData(self):
-        dialog = ShareProfileDialog(self.__ui.widget_16, self.__profiles, self.getCurrentProfile())
+    def requireShareProfileData(self, shareType:int=None):
+        dialog = ShareProfileDialog(self.__ui.widget_16, self.__profiles, self.getCurrentProfile(), shareType)
         if dialog.exec():
             self.shareProfileRequired.emit(dialog.getData())
 
