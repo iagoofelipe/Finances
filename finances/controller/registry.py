@@ -1,0 +1,25 @@
+from PySide6.QtCore import QObject, Signal
+
+from finances.model import AppModel
+from finances.view.form import RegistryForm
+from finances.core.structs import Profile
+
+class RegistryController(QObject):
+    def __init__(self, parent:QObject=None):
+        super().__init__(parent)
+        self.__model = AppModel.instance()
+        self.__view = None
+
+    def setView(self, view:RegistryForm):
+        self.__view = view
+        
+        self.__view.destroyed.connect(self.on_view_destroyed)
+
+    def on_view_destroyed(self):
+        self.__view = None
+
+    def on_model_currentProfileChanged(self, profile:Profile|None):
+        #TODO: adicionar alerta para criação de perfil
+        if profile is None: return
+
+        

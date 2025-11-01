@@ -1,4 +1,4 @@
-from .server import FinancesServer
+from server.core.server import FinancesServer
 
 if __name__ == '__main__':
     server = FinancesServer()
